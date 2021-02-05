@@ -1,10 +1,11 @@
 {
 	"expo": {
-		"name": "clubito",
+		"entryPoint": "./src/App.tsx",
+        "name": "clubito",
 		"slug": "clubito",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/icon.png",
+		"icon": "./src/assets/icon.png",
 		"updates": {
 			"fallbackToCacheTimeout": 0
 		},
