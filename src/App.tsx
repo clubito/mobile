@@ -1,14 +1,14 @@
 import React from "react";
-
 import { registerRootComponent } from "expo";
+import { NavigationContainer } from "@react-navigation/native";
 
-import MainTabNavigator from "./navigation/MainTabNavigator";
+import InitNavigator from "./navigation/InitNavigator";
 
 function App() {
 	return (
-		<>
-			<MainTabNavigator />
-		</>
+		<NavigationContainer>
+			<InitNavigator />
+		</NavigationContainer>
 	);
 }
 
