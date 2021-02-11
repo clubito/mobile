@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import AuthNavigator from "./AuthNavigator";
+import AuthNavigator from "../screens/auth/AuthNavigator";
 import SplashScreen from "../screens/SplashScreen";
 import MainNavigator from "./MainNavigator";
 
