@@ -7,7 +7,7 @@ import HomeScreen from "../screens/home/HomeScreen";
 import ChatListScreen from "../screens/home/ChatListScreen";
 import EventListScreen from "../screens/home/EventListScreen";
 import ProfileScreen from "../screens/home/ProfileScreen";
-import SearchScreen from "../screens/home/SearchScreen";
+import SearchNavigator from "../screens/search/SearchNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +39,7 @@ const MainNavigator = () => (
 		<Tab.Screen name="Chats" component={ChatListScreen} />
 		<Tab.Screen name="Events" component={EventListScreen} />
 		<Tab.Screen name="Profile" component={ProfileScreen} />
-		<Tab.Screen name="Search" component={SearchScreen} />
+		<Tab.Screen name="Search" component={SearchNavigator} />
 	</Tab.Navigator>
 );
 
