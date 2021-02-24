@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
+import { Layout } from "@ui-kitten/components";
 import { TextInput } from "react-native-gesture-handler";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
@@ -21,11 +22,9 @@ const SearchScreen = () => {
 
 	if (isLoading) {
 		return (
-			<View>
-				<View style={{ justifyContent: "center" }}>
-					<ActivityIndicator size="large" />
-				</View>
-			</View>
+			<Layout style={styles.loadingContainer}>
+				<ActivityIndicator size="large" />
+			</Layout>
 		);
 	}
 
@@ -47,5 +46,12 @@ const SearchScreen = () => {
 		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	loadingContainer: {
+		flex: 1,
+		justifyContent: "center",
+	},
+});
 
 export default SearchScreen;
