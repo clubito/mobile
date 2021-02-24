@@ -8,14 +8,14 @@ import ClubService from "../../services/ClubService";
 
 const SearchScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [filters, setFilters] = useState([] as string[]);
+	const [clubs, setClubs] = useState([] as Club[]);
 	const query = useRef("");
-	const filters = useRef([] as string[]);
-	const clubs = useRef([] as Club[]);
 
 	const handleSearch = () => {
 		setIsLoading(true);
-		ClubService.search(query.current, filters.current).then((clubList) => {
-			clubs.current = clubList;
+		ClubService.search(query.current, filters).then((clubList) => {
+			setClubs(clubList);
 			setIsLoading(false);
 		});
 	};
@@ -39,7 +39,7 @@ const SearchScreen = () => {
 				}}
 			/>
 			<FlatList
-				data={clubs.current}
+				data={clubs}
 				keyExtractor={(item) => item.objectId}
 				renderItem={({ item }) => <ClubListItem club={item} />}
 			/>
