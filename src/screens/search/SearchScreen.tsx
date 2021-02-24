@@ -1,23 +1,51 @@
-import React, { useRef, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
-import { Input, Layout } from "@ui-kitten/components";
+import React, { useEffect, useRef, useState } from "react";
+import {
+	ActivityIndicator,
+	Button,
+	FlatList,
+	StyleSheet,
+	Text,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+	IndexPath,
+	Input,
+	Layout,
+	Select,
+	SelectItem,
+} from "@ui-kitten/components";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
 
 const SearchScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
-	const [filters, setFilters] = useState([] as string[]);
 	const [clubs, setClubs] = useState([] as Club[]);
 	const query = useRef("");
 
+	const [filters, setFilters] = useState([] as string[]);
+	const [filterSelection, setFilterSelection] = useState([] as IndexPath[]);
+
+	useEffect(() => {
+		ClubService.getAllTags().then((tagList) => setFilters(tagList));
+	});
+
 	const handleSearch = () => {
 		setIsLoading(true);
-		ClubService.search(query.current, filters).then((clubList) => {
-			setClubs(clubList);
-			setIsLoading(false);
+		ClubService.search(query.current, mapFilterSelections()).then(
+			(clubList) => {
+				setClubs(clubList);
+				setIsLoading(false);
+			}
+		);
+	};
+
+	const mapFilterSelections = () => {
+		const list: string[] = [];
+		filterSelection.forEach((index) => {
+			list.join(filters[index.row]);
 		});
+		return list;
 	};
 
 	if (isLoading) {
@@ -40,7 +68,28 @@ const SearchScreen = () => {
 					handleSearch();
 				}}
 			/>
-            
+
+			<Select
+				placeholder="Select Filters"
+				multiSelect={true}
+				style={styles.select}
+				value={() => (
+					<Text>
+						{filterSelection.length == 0
+							? "Select Filters"
+							: filterSelection.length + " selected"}
+					</Text>
+				)}
+				size="small"
+				selectedIndex={filterSelection}
+				onSelect={(index) => setFilterSelection(index)}
+			>
+				{filters.map((filter) => {
+					return <SelectItem title={filter} key={filter} />;
+				})}
+				<Button title="Apply" onPress={() => handleSearch()} />
+			</Select>
+
 			<FlatList
 				data={clubs}
 				keyExtractor={(item) => item.objectId}
@@ -52,6 +101,9 @@ const SearchScreen = () => {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
+	},
+	select: {
 		flex: 1,
 	},
 	loadingContainer: {
