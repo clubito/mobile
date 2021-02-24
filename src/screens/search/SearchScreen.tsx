@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
-import { Layout } from "@ui-kitten/components";
-import { TextInput } from "react-native-gesture-handler";
+import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import { Input, Layout } from "@ui-kitten/components";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
@@ -29,8 +29,10 @@ const SearchScreen = () => {
 	}
 
 	return (
-		<View>
-			<TextInput
+		<Layout style={styles.container}>
+			<SafeAreaView edges={["top"]} />
+
+			<Input
 				placeholder="Search"
 				defaultValue={query.current}
 				onSubmitEditing={(event) => {
@@ -38,16 +40,20 @@ const SearchScreen = () => {
 					handleSearch();
 				}}
 			/>
+            
 			<FlatList
 				data={clubs}
 				keyExtractor={(item) => item.objectId}
 				renderItem={({ item }) => <ClubListItem club={item} />}
 			/>
-		</View>
+		</Layout>
 	);
 };
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	loadingContainer: {
 		flex: 1,
 		justifyContent: "center",
