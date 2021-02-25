@@ -26,6 +26,9 @@ const SearchScreen = () => {
 	const [filters, setFilters] = useState([] as string[]);
 	const [filterSelection, setFilterSelection] = useState([] as IndexPath[]);
 
+	const sorts: string[] = ["Default", "Tag"];
+	const [sortSelection, setSortSelection] = useState<IndexPath>();
+
 	useEffect(() => {
 		ClubService.getAllTags().then((tagList) => setFilters(tagList));
 	});
@@ -46,6 +49,10 @@ const SearchScreen = () => {
 			list.join(filters[index.row]);
 		});
 		return list;
+	};
+
+	const mapSortSelection = () => {
+		return sorts[sortSelection?.row ?? 0];
 	};
 
 	if (isLoading) {
@@ -69,26 +76,41 @@ const SearchScreen = () => {
 				}}
 			/>
 
-			<Select
-				placeholder="Select Filters"
-				multiSelect={true}
-				style={styles.select}
-				value={() => (
-					<Text>
-						{filterSelection.length == 0
-							? "Select Filters"
-							: filterSelection.length + " selected"}
-					</Text>
-				)}
-				size="small"
-				selectedIndex={filterSelection}
-				onSelect={(index) => setFilterSelection(index)}
-			>
-				{filters.map((filter) => {
-					return <SelectItem title={filter} key={filter} />;
-				})}
-				<Button title="Apply" onPress={() => handleSearch()} />
-			</Select>
+			<Layout style={styles.selectContainer}>
+				<Select
+					placeholder="Select Filters"
+					multiSelect={true}
+					style={styles.select}
+					value={() => (
+						<Text>
+							{filterSelection.length == 0
+								? "Select Filters"
+								: filterSelection.length + " selected"}
+						</Text>
+					)}
+					size="small"
+					selectedIndex={filterSelection}
+					onSelect={(index) => setFilterSelection(index)}
+				>
+					{filters.map((filter) => {
+						return <SelectItem title={filter} key={filter} />;
+					})}
+					<Button title="Apply" onPress={() => handleSearch()} />
+				</Select>
+
+				<Select
+					placeholder="Sort By"
+					style={styles.select}
+					value={mapSortSelection()}
+					size="small"
+					selectedIndex={sortSelection}
+					onSelect={(index) => setSortSelection(index)}
+				>
+					{sorts.map((filter) => {
+						return <SelectItem title={filter} key={filter} />;
+					})}
+				</Select>
+			</Layout>
 
 			<FlatList
 				data={clubs}
@@ -102,6 +124,9 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	selectContainer: {
+		flexDirection: "row",
 	},
 	select: {
 		flex: 1,
