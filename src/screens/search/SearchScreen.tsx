@@ -35,12 +35,14 @@ const SearchScreen = () => {
 
 	const handleSearch = () => {
 		setIsLoading(true);
-		ClubService.search(query.current, mapFilterSelections()).then(
-			(clubList) => {
-				setClubs(clubList);
-				setIsLoading(false);
-			}
-		);
+		ClubService.search(
+			query.current,
+			mapSortSelection(),
+			mapFilterSelections()
+		).then((clubList) => {
+			setClubs(clubList);
+			setIsLoading(false);
+		});
 	};
 
 	const mapFilterSelections = () => {

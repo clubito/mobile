@@ -6,12 +6,17 @@ export default class ClubService {
 	/**
 	 * Search for clubs based on given query and optional filter (tags)
 	 */
-	static async search(searchQuery: string, tagFilter?: string[]) {
+	static async search(
+		searchQuery: string,
+		sort: string,
+		tagFilter: string[]
+	) {
 		const response: AxiosResponse<Club[]> = await API.get<Club[]>(
 			"/clubs/search",
 			{
 				params: {
 					query: searchQuery,
+					sortBy: sort,
 					filter: tagFilter,
 				},
 			}
