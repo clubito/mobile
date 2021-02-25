@@ -69,7 +69,9 @@ const SearchScreen = () => {
 
 			<Input
 				placeholder="Search"
+				returnKeyType="search"
 				defaultValue={query.current}
+				clearButtonMode="always"
 				onSubmitEditing={(event) => {
 					query.current = event.nativeEvent.text;
 					handleSearch();
@@ -115,6 +117,8 @@ const SearchScreen = () => {
 			<FlatList
 				data={clubs}
 				keyExtractor={(item) => item.objectId}
+				keyboardDismissMode="on-drag"
+				contentContainerStyle={styles.clubList}
 				renderItem={({ item }) => <ClubListItem club={item} />}
 			/>
 		</Layout>
@@ -134,6 +138,9 @@ const styles = StyleSheet.create({
 	loadingContainer: {
 		flex: 1,
 		justifyContent: "center",
+	},
+	clubList: {
+		flexGrow: 1,
 	},
 });
 
