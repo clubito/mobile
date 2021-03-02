@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-	baseURL: "https://base.url",
+	baseURL: "https://server.clubito.me",
 });
 
 /**
