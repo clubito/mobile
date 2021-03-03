@@ -27,6 +27,12 @@ const ContainerStyles = StyleSheet.create({
 	modalBackdrop: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
 	//Standard margin all around for separating things
 	extraMargin: { margin: 10 },
+	// Center container on screen
+	center: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
 });
 
 export { TextStyle, ContainerStyles };
