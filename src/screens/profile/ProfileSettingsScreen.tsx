@@ -9,7 +9,8 @@ import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import UserService from "../../services/UserService";
 import { MaterialIcons } from "@expo/vector-icons";
 import GeneralModal from "../../components/GeneralModal";
-import ImagePickerExample from "../../components/ImagePicker";
+import ProfilePicturePicker from "../../components/ProfilePicturePicker";
+
 const ProfileScreen = () => {
 	const [name, setName] = React.useState("");
 	const [curPassword, setCurPassword] = React.useState("");
@@ -31,6 +32,7 @@ const ProfileScreen = () => {
 			/>
 		</TouchableWithoutFeedback>
 	);
+
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>
@@ -74,27 +76,8 @@ const ProfileScreen = () => {
 				<Text category="h4" style={TextStyle.subheader}>
 					Update Profile Picture
 				</Text>
-				<ImagePickerExample />
-				<GeneralModal
-					visible={modalVisible}
-					closeFunction={() => setModalVisible(false)}
-					header={
-						modalType == 0
-							? "Are you sure you want to log out?"
-							: "Are you sure you want to delete your account?"
-					}
-					functionOnConfirm={
-						modalType == 0
-							? UserService.logout
-							: UserService.deleteAccount
-					}
-					content={
-						modalType == 0
-							? "Are you sure you want to log out? Your user data will be removed from this device."
-							: "Are you sure you want to delete your account? Your user data will be removed from the database and you will no longer be able to log in. This action is irreversible."
-					}
-					modalType={modalType == 0 ? "warning" : "danger"}
-				/>
+				<ProfilePicturePicker />
+
 				<Layout style={ContainerStyles.containerStart}>
 					<Button
 						appearance="ghost"
@@ -119,6 +102,26 @@ const ProfileScreen = () => {
 						Delete Account
 					</Button>
 				</Layout>
+				<GeneralModal
+					visible={modalVisible}
+					closeFunction={() => setModalVisible(false)}
+					header={
+						modalType == 0
+							? "Are you sure you want to log out?"
+							: "Are you sure you want to delete your account?"
+					}
+					functionOnConfirm={
+						modalType == 0
+							? UserService.logout
+							: UserService.deleteAccount
+					}
+					content={
+						modalType == 0
+							? "Are you sure you want to log out? Your user data will be removed from this device."
+							: "Are you sure you want to delete your account? Your user data will be removed from the database and you will no longer be able to log in. This action is irreversible."
+					}
+					modalType={modalType == 0 ? "warning" : "danger"}
+				/>
 			</ScrollView>
 		</SafeAreaView>
 	);

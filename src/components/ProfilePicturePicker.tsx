@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-	Button,
-	Image,
-	View,
-	Platform,
-	TouchableHighlight,
-} from "react-native";
+import { Image, View, Platform, TouchableHighlight } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
-export default function ImagePickerExample() {
+const ProfilePicturePicker = () => {
 	const [image, setImage] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -56,4 +50,6 @@ export default function ImagePickerExample() {
 			</TouchableHighlight>
 		</View>
 	);
-}
+};
+
+export default ProfilePicturePicker;
