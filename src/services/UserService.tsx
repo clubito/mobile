@@ -54,8 +54,14 @@ export default class UserService {
 	}
 
 	/**
-	 * Register new user
+	 * Register new user.
 	 */
 	static async register(email: string, password: string) {
 	}
+
+	/**
+	 * Send password reset request to backend.
+	 */
+	static async forgotPassword(email: string) {
+    }
 }
