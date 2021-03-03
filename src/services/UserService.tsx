@@ -14,8 +14,11 @@ export default class UserService {
 		}
 
 		setUserToken(token);
-		const response: AxiosResponse = await API.get("/auth/url");
+		const response: AxiosResponse = await API.post("/token/verify", {
+			token: token,
+		});
 
+		// Invalid token
 		if (response.status !== 200) {
 			this.logout();
 			return false;
@@ -29,18 +32,18 @@ export default class UserService {
 	 * save the new user token to the local data store.
 	 */
 	static async login(email: string, password: string) {
-		const response: AxiosResponse = await API.get("/login/url", {
-			params: { email, password },
+		const response: AxiosResponse = await API.post("/login", {
+			email: email,
+			password: password,
 		});
 
 		if (response.status !== 200) {
-			return false;
+			throw new Error();
 		}
 
 		// TODO: figure out token access in response after backend is setup
 		AsyncStorage.setItem("user_token", response.data);
 		setUserToken(response.data);
-		return true;
 	}
 
 	/**

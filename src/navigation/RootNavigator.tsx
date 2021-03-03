@@ -13,16 +13,14 @@ const RootNavigator = () => {
 	});
 
 	useEffect(() => {
-		// UI delay while we code network calls
-		setTimeout(() => {
+		if (state.isLoading)
 			UserService.isAnyoneLoggedIn().then((loggedIn) =>
 				setState({
 					isLoading: false,
 					isLoggedIn: loggedIn,
 				})
 			);
-		}, 2000);
-	}, []);
+	});
 
 	if (state.isLoading) {
 		return <SplashScreen />;
