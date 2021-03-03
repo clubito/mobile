@@ -8,6 +8,7 @@ const TextStyle = StyleSheet.create({
 		justifyContent: "center",
 	},
 });
+
 const ContainerStyles = StyleSheet.create({
 	// container style to add padding to biggest container so that items do not hit edge of screen
 	flexContainer: {
@@ -27,4 +28,5 @@ const ContainerStyles = StyleSheet.create({
 	//Standard margin all around for separating things
 	extraMargin: { margin: 10 },
 });
+
 export { TextStyle, ContainerStyles };

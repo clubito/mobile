@@ -47,12 +47,20 @@ export default class UserService {
 	 * Clear local data store (user_token etc).
 	 */
 	static async logout() {
+		console.log("yahaha");
 		await AsyncStorage.clear();
 	}
+
 	/**
 	 * Delete account for user and log out TODO
 	 */
 	static async deleteAccount() {
+		console.log("yohoho");
 		await AsyncStorage.clear();
 	}
+
+	/**
+	 * Get user's profile data from backend and return TODO
+	 */
+	static async getUserData() {}
 }

@@ -13,6 +13,7 @@ interface ModalSettings {
 }
 
 type FunctionNull = () => void;
+
 const GeneralModal = (props: ModalSettings) => (
 	<Modal
 		visible={props.visible}
