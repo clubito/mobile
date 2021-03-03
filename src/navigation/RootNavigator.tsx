@@ -15,12 +15,12 @@ const RootNavigator = () => {
 	useEffect(() => {
 		// UI delay while we code network calls
 		setTimeout(() => {
-			UserService.isAnyoneLoggedIn().then((loggedIn) =>
-				setState({
-					isLoading: false,
-					isLoggedIn: loggedIn,
-				})
-			);
+			// UserService.isAnyoneLoggedIn().then((loggedIn) =>
+			setState({
+				isLoading: false,
+				isLoggedIn: true,
+			});
+			// );
 		}, 2000);
 	}, []);
 

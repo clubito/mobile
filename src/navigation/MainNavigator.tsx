@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/home/HomeScreen";
 import ChatListScreen from "../screens/home/ChatListScreen";
 import EventListScreen from "../screens/home/EventListScreen";
-import ProfileScreen from "../screens/home/ProfileScreen";
+import ProfileScreen from "../screens/profile/ProfileNavigator";
 import SearchNavigator from "../screens/search/SearchNavigator";
 
 const Tab = createBottomTabNavigator();
