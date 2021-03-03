@@ -52,4 +52,10 @@ export default class UserService {
 	static async logout() {
 		await AsyncStorage.clear();
 	}
+
+	/**
+	 * Signup new user
+	 */
+	static async signup(email: string, password: string) {
+    }
 }
