@@ -24,6 +24,13 @@ const ContainerStyles = StyleSheet.create({
 	containerStart: { alignSelf: "flex-start", marginTop: 10 },
 	//Standard darkened backdrop for modal
 	modalBackdrop: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+
+    // Center container on screen
+	center: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
 });
 export { TextStyle };
 export { ContainerStyles };
