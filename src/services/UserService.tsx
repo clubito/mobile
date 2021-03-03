@@ -57,5 +57,11 @@ export default class UserService {
 	 * Signup new user
 	 */
 	static async signup(email: string, password: string) {
+	}
+
+	/**
+	 * Send password reset request to backend.
+	 */
+	static async forgotPassword(email: string) {
     }
 }
