@@ -49,4 +49,10 @@ export default class UserService {
 	static async logout() {
 		await AsyncStorage.clear();
 	}
+	/**
+	 * Delete account for user and log out TODO
+	 */
+	static async deleteAccount() {
+		await AsyncStorage.clear();
+	}
 }

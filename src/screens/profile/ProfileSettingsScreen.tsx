@@ -1,24 +1,19 @@
 import React from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
-import {
-	Text,
-	Input,
-	Button,
-	Layout,
-	Modal,
-	Card,
-} from "@ui-kitten/components";
+import { Text, Input, Button, Layout } from "@ui-kitten/components";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import UserService from "../../services/UserService";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ModalSettings } from "../../types";
+import GeneralModal from "../../components/GeneralModal";
 
 const ProfileScreen = () => {
 	const [name, setName] = React.useState("");
+	const [curPassword, setCurPassword] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [confirm, setConfirm] = React.useState("");
 	const [secureText, setSecureText] = React.useState(true);
-	const [logoutModalVisible, setLogoutVisible] = React.useState(false);
+	const [modalVisible, setModalVisible] = React.useState(false);
+	const [modalType, setModalType] = React.useState(0);
 
 	const toggleVisibleText = () => {
 		setSecureText(!secureText);
@@ -31,34 +26,6 @@ const ProfileScreen = () => {
 				size={20}
 			/>
 		</TouchableWithoutFeedback>
-	);
-	const GeneralModal = (props: ModalSettings) => (
-		<Modal
-			visible={logoutModalVisible}
-			backdropStyle={ContainerStyles.modalBackdrop}
-			onBackdropPress={() => setLogoutVisible(false)}
-		>
-			<Card
-				header={() => (
-					<View>
-						<Text category="h6">{props.header}</Text>
-					</View>
-				)}
-				footer={() => (
-					<View>
-						<Button onPress={() => setLogoutVisible(false)}>
-							Cancel
-						</Button>
-						<Button onPress={props.functionOnConfirm}>
-							Confirm
-						</Button>
-					</View>
-				)}
-				status={props.modalType}
-			>
-				<Text>{props.content}</Text>
-			</Card>
-		</Modal>
 	);
 	return (
 		<Layout style={ContainerStyles.flexContainer}>
@@ -80,6 +47,14 @@ const ProfileScreen = () => {
 				Change Password
 			</Text>
 			<Input
+				placeholder="Current Password"
+				label="Current Password"
+				value={curPassword}
+				onChangeText={(passUpdate) => setCurPassword(passUpdate)}
+				accessoryRight={visibleIcon}
+				secureTextEntry={secureText}
+			/>
+			<Input
 				placeholder="Password"
 				label="Password"
 				value={password}
@@ -99,26 +74,49 @@ const ProfileScreen = () => {
 			<Layout style={ContainerStyles.containerStart}>
 				<Button
 					appearance="ghost"
-					onPress={() => setLogoutVisible(true)}
+					onPress={() => {
+						setModalType(0);
+						setModalVisible(true);
+					}}
+					status="warning"
 				>
 					Logout
 				</Button>
 			</Layout>
+			<Layout style={ContainerStyles.containerStart}>
+				<Button
+					appearance="ghost"
+					onPress={() => {
+						setModalType(1);
+						setModalVisible(true);
+					}}
+					status="danger"
+				>
+					Delete Account
+				</Button>
+			</Layout>
 			<GeneralModal
-				header="stringy"
-				functionOnConfirm={UserService.logout}
-				content="yohoh"
-				modalType="basic"
+				visible={modalVisible}
+				closeFunction={() => setModalVisible(false)}
+				header={
+					modalType == 0
+						? "Are you sure you want to log out?"
+						: "Are you sure you want to delete your account?"
+				}
+				functionOnConfirm={
+					modalType == 0
+						? UserService.logout
+						: UserService.deleteAccount
+				}
+				content={
+					modalType == 0
+						? "Are you sure you want to log out? Your user data will be removed from this device."
+						: "Are you sure you want to delete your account? This action is irreversible and your user data will be removed from the database."
+				}
+				modalType={modalType == 0 ? "warning" : "danger"}
 			/>
 		</Layout>
 	);
 };
-interface ModalSettings {
-	header: string;
-	functionOnConfirm: FunctionNull;
-	content: string;
-	modalType: string;
-}
 
-type FunctionNull = () => void;
 export default ProfileScreen;

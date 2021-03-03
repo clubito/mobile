@@ -14,7 +14,7 @@ const ContainerStyles = StyleSheet.create({
 		padding: 10,
 		flex: 1,
 	},
-	// Standardized margin to separate items
+	// Standardized margin to separate vertical items
 	upperMargin: { marginTop: 10 },
 	// Standardized margins for separating headers from items
 	lowerMargin: { marginBottom: 5 },
@@ -22,8 +22,9 @@ const ContainerStyles = StyleSheet.create({
 	containerCenter: { alignSelf: "center", marginTop: 10 },
 	//Overwrite flex and align start
 	containerStart: { alignSelf: "flex-start", marginTop: 10 },
-	//Standard darkened backdrop for modal
+	//Darkened backdrop for modal
 	modalBackdrop: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+	//Standard margin all around for separating things
+	extraMargin: { margin: 10 },
 });
-export { TextStyle };
-export { ContainerStyles };
+export { TextStyle, ContainerStyles };

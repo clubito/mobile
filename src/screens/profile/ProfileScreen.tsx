@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { TextStyle } from "../../styles/CommonStyles";
 
-const ProfileScreen = ({ navigation }) => (
+const ProfileScreen = () => (
 	<View style={TextStyle.center}>
 		<Text>Profile</Text>
 	</View>
