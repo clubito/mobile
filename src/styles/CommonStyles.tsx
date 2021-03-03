@@ -7,18 +7,18 @@ const TextStyle = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
+	subheader: { marginTop: 10, marginBottom: 5 },
 });
 
 const ContainerStyles = StyleSheet.create({
-	// container style to add padding to biggest container so that items do not hit edge of screen
-	flexContainer: {
-		padding: 10,
-		flex: 1,
-	},
+	// container style to stretch across screen
+	flexContainer: { flex: 1 },
 	// Standardized margin to separate vertical items
-	upperMargin: { marginTop: 10 },
+	upperMargin: { marginTop: 100 },
 	// Standardized margins for separating headers from items
 	lowerMargin: { marginBottom: 5 },
+	//Horizontal margin to prevent items from hitting edge of screen
+	horizMargin: { marginHorizontal: 10 },
 	//Overwrite flex and center things
 	containerCenter: { alignSelf: "center", marginTop: 10 },
 	//Overwrite flex and align start
