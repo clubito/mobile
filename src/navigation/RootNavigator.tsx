@@ -4,6 +4,7 @@ import AuthNavigator from "../screens/auth/AuthNavigator";
 import SplashScreen from "../screens/SplashScreen";
 import MainNavigator from "./MainNavigator";
 
+import { AuthContext } from "../context/AuthContext";
 import UserService from "../services/UserService";
 
 const RootNavigator = () => {
@@ -22,11 +23,26 @@ const RootNavigator = () => {
 			);
 	});
 
+    const authContext = React.useMemo(() => {
+		return {
+			signInSuccess: () => {
+				setState({
+					isLoading: false,
+					isLoggedIn: true,
+				});
+			},
+		};
+	}, []);
+
 	if (state.isLoading) {
 		return <SplashScreen />;
 	}
 
-	return state.isLoggedIn ? <MainNavigator /> : <AuthNavigator />;
+	return (
+		<AuthContext.Provider value={authContext}>
+			{state.isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
+		</AuthContext.Provider>
+	);
 };
 
 export default RootNavigator;
