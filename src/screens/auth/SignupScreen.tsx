@@ -4,17 +4,24 @@ import { Button, Input, Layout } from "@ui-kitten/components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import UserService from "../../services/UserService";
+import NotifyScreen from "../../components/NotifyScreen";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const SignupScreen = () => {
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [isSuccessful, setIsSuccessful] = React.useState(false);
+
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [confirmPassword, setConfirmPassword] = React.useState("");
 	const [secureText, setSecureText] = React.useState(true);
 
 	const signup = () => {
+		setIsLoading(true);
 		UserService.signup(email, password)
-			.then(() => {})
-			.catch(() => {});
+			.then(() => setIsSuccessful(true))
+			.catch(() => {})
+			.finally(() => setIsLoading(false));
 	};
 
 	const visibleIcon = () => (
@@ -25,6 +32,14 @@ const SignupScreen = () => {
 			/>
 		</TouchableWithoutFeedback>
 	);
+
+	if (isLoading) {
+		return <LoadingScreen />;
+	}
+
+	if (isSuccessful) {
+		return <NotifyScreen message="Click on link in verification email" />;
+	}
 
 	return (
 		<Layout style={ContainerStyles.center}>

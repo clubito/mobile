@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
+import { Club, Profile } from "../types";
 import API, { setUserToken } from "./API";
-import { Profile, Club } from "../types";
 
 export default class UserService {
 	/**
@@ -57,11 +57,26 @@ export default class UserService {
 	}
 
 	/**
-	 * Delete account for user and log out TODO
+	 * Signup new user
 	 */
-	static async deleteAccount() {
-		await AsyncStorage.clear();
+	static async signup(email: string, password: string) {
+		const response: AxiosResponse = await API.post("/register", {
+			email: email,
+			password: password,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
 	}
+
+	/**
+	 * Send password reset request to backend.
+	 */
+	static async forgotPassword(email: string) {}
 
 	/**
 	 * TODO: Get user's profile data from backend and return
@@ -106,14 +121,4 @@ export default class UserService {
 		};
 		return response;
 	}
-
-	/**
-	 * Signup new user
-	 */
-	static async signup(email: string, password: string) {}
-
-	/**
-	 * Send password reset request to backend.
-	 */
-	static async forgotPassword(email: string) {}
 }
