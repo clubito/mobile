@@ -1,37 +1,32 @@
 import React from "react";
-import { StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Button, Input, Layout } from "@ui-kitten/components";
-import { MaterialIcons } from "@expo/vector-icons";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import { Formik } from "formik";
+import { StyleSheet } from "react-native";
+import { Button, Layout, Text } from "@ui-kitten/components";
+import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import UserService from "../../services/UserService";
+import { SignupModel, SignupSchema } from "../../data/SignupData";
 import NotifyScreen from "../../components/NotifyScreen";
 import LoadingScreen from "../../components/LoadingScreen";
+import FormInput from "../../components/FormInput";
+import FormSecureInput from "../../components/FormSecureInput";
 
 const SignupScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [isSuccessful, setIsSuccessful] = React.useState(false);
 
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
-	const [confirmPassword, setConfirmPassword] = React.useState("");
-	const [secureText, setSecureText] = React.useState(true);
+    const savedModel = React.useRef(SignupModel.empty());
+	const [submitted, setSubmitted] = React.useState(false);
+	const [responseError, setResponseError] = React.useState();
 
-	const signup = () => {
+	const signup = (model: SignupModel) => {
+        savedModel.current = model;
 		setIsLoading(true);
-		UserService.signup(email, password)
+        
+		UserService.signup(model.email, model.password)
 			.then(() => setIsSuccessful(true))
-			.catch(() => {})
+			.catch((error) => setResponseError(error.message))
 			.finally(() => setIsLoading(false));
 	};
-
-	const visibleIcon = () => (
-		<TouchableWithoutFeedback onPress={() => setSecureText(!secureText)}>
-			<MaterialIcons
-				name={secureText ? "visibility" : "visibility-off"}
-				size={20}
-			/>
-		</TouchableWithoutFeedback>
-	);
 
 	if (isLoading) {
 		return <LoadingScreen />;
@@ -42,36 +37,42 @@ const SignupScreen = () => {
 	}
 
 	return (
-		<Layout style={ContainerStyles.center}>
-			<Input
-				placeholder="Email"
-				label="Email"
-				value={email}
-				style={styles.input}
-				onChangeText={(text) => setEmail(text)}
-			/>
-			<Input
-				placeholder="Password"
-				label="Password"
-				value={password}
-				style={styles.input}
-				onChangeText={(text) => setPassword(text)}
-				accessoryRight={visibleIcon}
-				secureTextEntry={secureText}
-			/>
-			<Input
-				placeholder="Confirm Password"
-				label="Confirm Password"
-				value={confirmPassword}
-				style={styles.input}
-				onChangeText={(text) => setConfirmPassword(text)}
-				accessoryRight={visibleIcon}
-				secureTextEntry={secureText}
-			/>
-			<Button style={styles.input} onPress={() => signup()}>
-				Signup
-			</Button>
-		</Layout>
+		<Formik
+			initialValues={savedModel.current}
+			validationSchema={SignupSchema}
+			onSubmit={signup}
+			validateOnChange={submitted}
+		>
+			{({ handleSubmit }) => (
+				<Layout style={ContainerStyles.center}>
+					<FormInput id="email" label="Email" style={styles.input} />
+
+					<FormSecureInput
+						id="password"
+						label="Password"
+						style={styles.input}
+					/>
+
+					<FormSecureInput
+						id="confirmPassword"
+						label="Confirm Password"
+						style={styles.input}
+					/>
+
+					<Button
+						style={styles.input}
+						onPress={() => {
+							setSubmitted(true);
+							handleSubmit();
+						}}
+					>
+						Signup
+					</Button>
+
+					<Text style={TextStyle.error}>{responseError!}</Text>
+				</Layout>
+			)}
+		</Formik>
 	);
 };
 
