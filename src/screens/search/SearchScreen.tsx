@@ -31,7 +31,7 @@ const SearchScreen = () => {
 
 	useEffect(() => {
 		ClubService.getAllTags().then((tagList) => setFilters(tagList));
-	});
+	}, []);
 
 	const handleSearch = () => {
 		setIsLoading(true);
@@ -96,10 +96,10 @@ const SearchScreen = () => {
 					selectedIndex={filterSelection}
 					onSelect={(index) => setFilterSelection(index)}
 				>
+                    <Button title="Apply" onPress={() => handleSearch()} />
 					{filters.map((filter) => {
 						return <SelectItem title={filter} key={filter} />;
 					})}
-					<Button title="Apply" onPress={() => handleSearch()} />
 				</Select>
 
 				<Select
