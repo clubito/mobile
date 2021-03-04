@@ -9,4 +9,12 @@ interface Club {
 	description: string;
 }
 
-export { Club };
+interface Profile {
+	name: string;
+	email: string;
+	profile_picture: string | null;
+	tags: string[];
+	clubs: Club[];
+}
+
+export { Club, Profile };

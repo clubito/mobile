@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API, { setUserToken } from "./API";
+import { Profile, Club } from "../types";
 
 export default class UserService {
 	/**
@@ -63,9 +64,48 @@ export default class UserService {
 	}
 
 	/**
-	 * Get user's profile data from backend and return TODO
+	 * TODO: Get user's profile data from backend and return
 	 */
-	static async getUserData() {}
+	static async getUserProfile() {
+		// const token = await AsyncStorage.getItem("user_token");
+
+		// if (token === null) {
+		// 	return null;
+		// }
+
+		// setUserToken(token);
+		//TODO: Get data from backend presumably using token
+		//Fake data for testing for now
+		const club0: Club = {
+			objectId: "0000",
+			name: "club0name",
+			logo: "lsnjkdl",
+			description: "this is a clubity yeah",
+		};
+		const club1: Club = {
+			objectId: "0000",
+			name: "club1name",
+			logo: "lsnjdskdl",
+			description: "this is a clubity yeah 1",
+		};
+		const response: Profile = {
+			name: "Bobert Boberty",
+			email: "bobert@boberty.bob",
+			profile_picture: "string",
+			tags: [
+				"tag0",
+				"tag1",
+				"tag2",
+				"tag3",
+				"tag4",
+				"tag5",
+				"tag6",
+				"tag7",
+			],
+			clubs: [club0, club1],
+		};
+		return response;
+	}
 
 	/**
 	 * Signup new user

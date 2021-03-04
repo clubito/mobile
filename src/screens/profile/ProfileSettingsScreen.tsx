@@ -3,8 +3,9 @@ import {
 	SafeAreaView,
 	TouchableWithoutFeedback,
 	ScrollView,
+	View,
 } from "react-native";
-import { Text, Input, Button, Layout } from "@ui-kitten/components";
+import { Text, Input, Button } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import UserService from "../../services/UserService";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -78,7 +79,7 @@ const ProfileScreen = () => {
 				</Text>
 				<ProfilePicturePicker />
 
-				<Layout style={ContainerStyles.containerStart}>
+				<View style={ContainerStyles.containerStart}>
 					<Button
 						appearance="ghost"
 						onPress={() => {
@@ -89,8 +90,8 @@ const ProfileScreen = () => {
 					>
 						Logout
 					</Button>
-				</Layout>
-				<Layout style={ContainerStyles.containerStart}>
+				</View>
+				<View style={ContainerStyles.containerStart}>
 					<Button
 						appearance="ghost"
 						onPress={() => {
@@ -101,7 +102,7 @@ const ProfileScreen = () => {
 					>
 						Delete Account
 					</Button>
-				</Layout>
+				</View>
 				<GeneralModal
 					visible={modalVisible}
 					closeFunction={() => setModalVisible(false)}
