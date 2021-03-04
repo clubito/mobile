@@ -1,20 +1,23 @@
 import React from "react";
 import { StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Button, Input, Layout } from "@ui-kitten/components";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ContainerStyles } from "../../styles/CommonStyles";
+import { AuthContext } from "../../context/AuthContext";
 import UserService from "../../services/UserService";
-import { useNavigation } from "@react-navigation/native";
 
 const LoginScreen = () => {
+	const { signInSuccess } = React.useContext(AuthContext);
 	const navigation = useNavigation();
+
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [secureText, setSecureText] = React.useState(true);
 
 	const login = () => {
 		UserService.login(email, password)
-			.then(() => {})
+			.then(signInSuccess())
 			.catch(() => {});
 	};
 
