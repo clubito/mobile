@@ -57,6 +57,13 @@ export default class UserService {
 	}
 
 	/**
+	 * Delete account from database. TODO
+	 */
+	static async deleteAccount() {
+		await AsyncStorage.clear();
+	}
+
+	/**
 	 * Signup new user
 	 */
 	static async signup(email: string, password: string) {
@@ -77,17 +84,17 @@ export default class UserService {
 	 * Send password reset request to backend.
 	 */
 	static async forgotPassword(email: string) {
-        const response: AxiosResponse = await API.post("/forgot", {
+		const response: AxiosResponse = await API.post("/forgot", {
 			email: email,
 		});
 
-        if (response.status !== 200) {
+		if (response.status !== 200) {
 			throw {
 				code: response.status,
 				message: response.data.error,
 			};
 		}
-    }
+	}
 
 	/**
 	 * TODO: Get user's profile data from backend and return
