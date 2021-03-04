@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, ListRenderItemInfo } from "react-native";
-import {
-	Text,
-	Button,
-	Modal,
-	Card,
-	CheckBox,
-	List,
-	ListItem,
-} from "@ui-kitten/components";
-import { ContainerStyles } from "../styles/CommonStyles";
+import { View, FlatList, ListRenderItemInfo, StyleProp } from "react-native";
+import { CheckBox, List } from "@ui-kitten/components";
 
 interface TagSettings {
 	functionOnConfirm: StrFunc;
-	closeFunction: FunctionNull;
 	content: string[];
 	checked: string[];
+	style: StyleProp<any> | null;
 }
 
 type FunctionNull = () => void;
@@ -52,7 +43,7 @@ const TagPicker = (props: TagSettings) => {
 		<List
 			data={props.content}
 			renderItem={renderItem}
-			style={{ maxHeight: 500 }}
+			style={props.style}
 		/>
 	);
 };

@@ -14,7 +14,6 @@ import TagPicker from "../../components/TagPicker";
 
 const ProfileScreen = () => {
 	const [profile, setProfile] = useState<Profile | null>(null);
-	const [modalVisible, setModalVisible] = React.useState(false);
 	const [checked, setChecked] = useState([] as string[]);
 	useEffect(() => {
 		if (profile === null) {
@@ -32,9 +31,7 @@ const ProfileScreen = () => {
 		);
 	}
 	const onTagsChange = (checkedTags: string[]) => {
-		if (checkedTags != checked) {
-			setChecked(checkedTags);
-		}
+		setChecked(checkedTags);
 	};
 	const submitChecklist = () => {
 		console.log(checked);
@@ -87,64 +84,27 @@ const ProfileScreen = () => {
 					</View>
 				</View>
 				<Divider style={TextStyle.divider} />
-				<View style={{ flexDirection: "row", marginTop: 10 }}>
-					<View style={{ flexDirection: "column", flex: 1 }}>
-						<Text category="h6" style={ContainerStyles.lowerMargin}>
-							Tags
-						</Text>
-						<Text appearance="hint">{profile.tags.join(", ")}</Text>
-					</View>
-					<Button
-						onPress={() => {
-							setModalVisible(true);
-						}}
-						accessoryLeft={() => (
-							<MaterialIcons name="create" size={20} />
-						)}
-						style={{
-							aspectRatio: 1,
-							marginVertical: "auto",
-						}}
-					/>
+				<View style={{ marginTop: 10 }}>
+					<Text category="h6" style={ContainerStyles.lowerMargin}>
+						Tags
+					</Text>
+					<Text appearance="hint">{profile.tags.join(", ")}</Text>
 				</View>
+
 				<Divider style={TextStyle.divider} />
-				<Modal
-					visible={modalVisible}
-					backdropStyle={ContainerStyles.modalBackdrop}
-					onBackdropPress={() => setModalVisible(false)}
+
+				<TagPicker
+					functionOnConfirm={onTagsChange}
+					content={tagListTotal}
+					checked={profile.tags}
+					style={{ maxHeight: 200 }}
+				/>
+				<Button
+					onPress={submitChecklist}
+					style={{ flex: 1, margin: 10 }}
 				>
-					<Card
-						header={() => (
-							<View style={{ margin: 10 }}>
-								<Text category="h6">Edit Tags</Text>
-							</View>
-						)}
-						footer={() => (
-							<View style={{ flex: 1, flexDirection: "row" }}>
-								<Button
-									onPress={() => setModalVisible(false)}
-									style={{ flex: 1, margin: 10 }}
-								>
-									Cancel
-								</Button>
-								<Button
-									onPress={submitChecklist}
-									style={{ flex: 1, margin: 10 }}
-								>
-									Confirm
-								</Button>
-							</View>
-						)}
-						style={{ minWidth: "80%" }}
-					>
-						<TagPicker
-							closeFunction={() => setModalVisible(false)}
-							functionOnConfirm={onTagsChange}
-							content={tagListTotal}
-							checked={profile.tags}
-						/>
-					</Card>
-				</Modal>
+					Confirm
+				</Button>
 			</View>
 		</SafeAreaView>
 	);
