@@ -59,6 +59,17 @@ export default class UserService {
 	 * Signup new user
 	 */
 	static async signup(email: string, password: string) {
+        const response: AxiosResponse = await API.post("/register", {
+			email: email,
+			password: password,
+		});
+
+        if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
 	}
 
 	/**
