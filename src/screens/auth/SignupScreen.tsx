@@ -8,16 +8,11 @@ import UserService from "../../services/UserService";
 const SignupScreen = () => {
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
-    const [confirmPassword, setConfirmPassword] = React.useState("");
+	const [confirmPassword, setConfirmPassword] = React.useState("");
 	const [secureText, setSecureText] = React.useState(true);
 
-<<<<<<< HEAD
-	const register = () => {
-		UserService.register(email, password)
-=======
 	const signup = () => {
 		UserService.signup(email, password)
->>>>>>> 8ead4f769d0fabc06b63fefefef69248914f272a
 			.then(() => {})
 			.catch(() => {});
 	};
@@ -58,13 +53,8 @@ const SignupScreen = () => {
 				accessoryRight={visibleIcon}
 				secureTextEntry={secureText}
 			/>
-<<<<<<< HEAD
-			<Button style={styles.input} onPress={() => register()}>
-				Register
-=======
 			<Button style={styles.input} onPress={() => signup()}>
 				Signup
->>>>>>> 8ead4f769d0fabc06b63fefefef69248914f272a
 			</Button>
 		</Layout>
 	);
