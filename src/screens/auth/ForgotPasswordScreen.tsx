@@ -1,31 +1,68 @@
 import React from "react";
+import { Formik } from "formik";
 import { StyleSheet } from "react-native";
-import { Button, Input, Layout } from "@ui-kitten/components";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import { Button, Input, Layout, Text } from "@ui-kitten/components";
+import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import UserService from "../../services/UserService";
+import {
+	ForgotPasswordModel,
+	ForgotPasswordSchema,
+} from "../../data/ForgotPasswordData";
+import LoadingScreen from "../../components/LoadingScreen";
+import NotifyScreen from "../../components/NotifyScreen";
+import FormInput from "../../components/FormInput";
 
 const ForgotPasswordScreen = () => {
-	const [email, setEmail] = React.useState("");
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [isSuccessful, setIsSuccessful] = React.useState(false);
 
-	const login = () => {
-		UserService.forgotPassword(email)
-			.then(() => {})
-			.catch(() => {});
+	const savedModel = React.useRef(ForgotPasswordModel.empty());
+	const [submitted, setSubmitted] = React.useState(false);
+	const [responseError, setResponseError] = React.useState();
+
+	const forgotPassword = (model: ForgotPasswordModel) => {
+		savedModel.current = model;
+		setIsLoading(true);
+
+		UserService.forgotPassword(model.email)
+			.then(() => setIsSuccessful(true))
+			.catch((error) => setResponseError(error.message))
+			.finally(() => setIsLoading(false));
 	};
 
+	if (isLoading) {
+		return <LoadingScreen />;
+	}
+
+	if (isSuccessful) {
+		return <NotifyScreen message="Click on link in email" />;
+	}
+
 	return (
-		<Layout style={ContainerStyles.center}>
-			<Input
-				placeholder="Email"
-				label="Email"
-				value={email}
-				style={styles.input}
-				onChangeText={(nameUpdate) => setEmail(nameUpdate)}
-			/>
-			<Button style={styles.input} onPress={() => login()}>
-				Forgot Password
-			</Button>
-		</Layout>
+		<Formik
+			initialValues={savedModel.current}
+			validationSchema={ForgotPasswordSchema}
+			onSubmit={forgotPassword}
+			validateOnChange={submitted}
+		>
+			{({ handleSubmit }) => (
+				<Layout style={ContainerStyles.center}>
+					<FormInput id="email" label="Email" style={styles.input} />
+
+					<Button
+						style={styles.input}
+						onPress={() => {
+							setSubmitted(true);
+							handleSubmit();
+						}}
+					>
+						Forgot Password
+					</Button>
+
+					<Text style={TextStyle.error}>{responseError!}</Text>
+				</Layout>
+			)}
+		</Formik>
 	);
 };
 

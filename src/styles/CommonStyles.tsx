@@ -17,6 +17,9 @@ const TextStyle = StyleSheet.create({
 		backgroundColor: "#cccccc",
 		marginTop: 10,
 	},
+	error: {
+		color: "#FF3D71",
+	}
 });
 
 const ContainerStyles = StyleSheet.create({

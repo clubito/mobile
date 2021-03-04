@@ -1,58 +1,76 @@
 import React from "react";
-import { StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { Button, Input, Layout } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Button, Layout, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import { Formik } from "formik";
+import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { AuthContext } from "../../context/AuthContext";
 import UserService from "../../services/UserService";
+import { LoginModel, LoginSchema } from "../../data/LoginData";
+import FormInput from "../../components/FormInput";
+import FormSecureInput from "../../components/FormSecureInput";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const LoginScreen = () => {
+	const [isLoading, setIsLoading] = React.useState(false);
+
 	const { signInSuccess } = React.useContext(AuthContext);
 	const navigation = useNavigation();
 
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
-	const [secureText, setSecureText] = React.useState(true);
+	const savedModel = React.useRef(LoginModel.empty());
+	const [submitted, setSubmitted] = React.useState(false);
+	const [responseError, setResponseError] = React.useState();
 
-	const login = () => {
-		UserService.login(email, password)
+	const login = (model: LoginModel) => {
+		savedModel.current = model;
+		setIsLoading(true);
+
+		UserService.login(model.email, model.password)
 			.then(() => signInSuccess())
-			.catch((error) => {});
+			.catch((error) => setResponseError(error.message))
+			.finally(() => setIsLoading(false));
 	};
 
-	const visibleIcon = () => (
-		<TouchableWithoutFeedback onPress={() => setSecureText(!secureText)}>
-			<MaterialIcons
-				name={secureText ? "visibility" : "visibility-off"}
-				size={20}
-			/>
-		</TouchableWithoutFeedback>
-	);
+	if (isLoading) {
+		return <LoadingScreen />;
+	}
 
 	return (
 		<Layout style={ContainerStyles.flexContainer}>
-			<Layout style={ContainerStyles.center}>
-				<Input
-					placeholder="Email"
-					label="Email"
-					value={email}
-					style={styles.input}
-					onChangeText={(nameUpdate) => setEmail(nameUpdate)}
-				/>
-				<Input
-					placeholder="Password"
-					label="Password"
-					value={password}
-					style={styles.input}
-					onChangeText={(passUpdate) => setPassword(passUpdate)}
-					accessoryRight={visibleIcon}
-					secureTextEntry={secureText}
-				/>
-				<Button style={styles.input} onPress={() => login()}>
-					Login
-				</Button>
-			</Layout>
+			<Formik
+				initialValues={savedModel.current}
+				validationSchema={LoginSchema}
+				onSubmit={login}
+				validateOnChange={submitted}
+			>
+				{({ handleSubmit }) => (
+					<Layout style={ContainerStyles.center}>
+						<FormInput
+							id="email"
+							label="Email"
+							style={styles.input}
+						/>
+
+						<FormSecureInput
+							id="password"
+							label="Password"
+							style={styles.input}
+						/>
+
+						<Button
+							style={styles.input}
+							onPress={() => {
+								setSubmitted(true);
+								handleSubmit();
+							}}
+						>
+							Login
+						</Button>
+
+						<Text style={TextStyle.error}>{responseError!}</Text>
+					</Layout>
+				)}
+			</Formik>
 
 			<Layout style={styles.buttonRow}>
 				<Button
@@ -62,6 +80,7 @@ const LoginScreen = () => {
 				>
 					Forgot Password
 				</Button>
+
 				<Button
 					appearance="ghost"
 					style={styles.button}
