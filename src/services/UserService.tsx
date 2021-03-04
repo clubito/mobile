@@ -76,5 +76,15 @@ export default class UserService {
 	 * Send password reset request to backend.
 	 */
 	static async forgotPassword(email: string) {
+        const response: AxiosResponse = await API.post("/forgot", {
+			email: email,
+		});
+
+        if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
     }
 }
