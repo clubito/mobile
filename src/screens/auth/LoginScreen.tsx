@@ -17,8 +17,8 @@ const LoginScreen = () => {
 
 	const login = () => {
 		UserService.login(email, password)
-			.then(signInSuccess())
-			.catch(() => {});
+			.then(() => signInSuccess())
+			.catch((error) => {});
 	};
 
 	const visibleIcon = () => (

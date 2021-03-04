@@ -38,12 +38,14 @@ export default class UserService {
 		});
 
 		if (response.status !== 200) {
-			throw new Error();
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
 		}
 
-		// TODO: figure out token access in response after backend is setup
-		AsyncStorage.setItem("user_token", response.data);
-		setUserToken(response.data);
+		AsyncStorage.setItem("user_token", response.data.token);
+		setUserToken(response.data.token);
 	}
 
 	/**
