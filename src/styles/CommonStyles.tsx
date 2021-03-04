@@ -7,7 +7,11 @@ const TextStyle = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
+	error: {
+		color: "#FF3D71",
+	},
 });
+
 const ContainerStyles = StyleSheet.create({
 	// container style to add padding to biggest container so that items do not hit edge of screen
 	flexContainer: {
@@ -25,12 +29,12 @@ const ContainerStyles = StyleSheet.create({
 	//Standard darkened backdrop for modal
 	modalBackdrop: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
 
-    // Center container on screen
+	// Center container on screen
 	center: {
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
 	},
 });
-export { TextStyle };
-export { ContainerStyles };
+
+export { TextStyle, ContainerStyles };
