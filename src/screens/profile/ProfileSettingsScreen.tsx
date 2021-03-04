@@ -12,7 +12,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import GeneralModal from "../../components/GeneralModal";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 
-const ProfileScreen = () => {
+const ProfileSettingsScreen = () => {
 	const [name, setName] = React.useState("");
 	const [curPassword, setCurPassword] = React.useState("");
 	const [password, setPassword] = React.useState("");
@@ -117,9 +117,19 @@ const ProfileScreen = () => {
 							: UserService.deleteAccount
 					}
 					content={
-						modalType == 0
-							? "Are you sure you want to log out? Your user data will be removed from this device."
-							: "Are you sure you want to delete your account? Your user data will be removed from the database and you will no longer be able to log in. This action is irreversible."
+						modalType == 0 ? (
+							<Text>
+								"Are you sure you want to log out? Your user
+								data will be removed from this device."
+							</Text>
+						) : (
+							<Text>
+								"Are you sure you want to delete your account?
+								Your user data will be removed from the database
+								and you will no longer be able to log in. This
+								action is irreversible."
+							</Text>
+						)
 					}
 					modalType={modalType == 0 ? "warning" : "danger"}
 				/>
@@ -128,4 +138,4 @@ const ProfileScreen = () => {
 	);
 };
 
-export default ProfileScreen;
+export default ProfileSettingsScreen;

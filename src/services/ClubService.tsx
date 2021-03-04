@@ -29,10 +29,11 @@ export default class ClubService {
 	 * Get all club tags (sorted alphabetically)
 	 */
 	static async getAllTags() {
-		const response: AxiosResponse<string[]> = await API.get<string[]>(
+		const response: AxiosResponse<{tags: string[]}> = await API.get<{tags: string[]}>(
 			"/clubs/tags"
 		);
+		console.log(response.data);
 
-		return response.data;
+		return response.data.tags;
 	}
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@ui-kitten/components";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
-import ProfileSettings from "./ProfileSettingsScreen";
+import ProfileSettingsScreen from "./ProfileSettingsScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -38,7 +38,7 @@ const SearchNavigator = () => (
 		/>
 		<Stack.Screen
 			name="Settings"
-			component={ProfileSettings}
+			component={ProfileSettingsScreen}
 			options={{ title: "Profile Settings" }}
 		/>
 	</Stack.Navigator>

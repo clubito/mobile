@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import {
+	SafeAreaView,
+	ScrollView,
+	View,
+	TouchableHighlight,
+} from "react-native";
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Divider, Button } from "@ui-kitten/components";
+import { Text, Card, Divider, Button, Modal } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { Profile } from "../../types";
 import { MaterialIcons } from "@expo/vector-icons";
+import TagPicker from "../../components/TagPicker";
 
 const ProfileScreen = () => {
 	const [profile, setProfile] = useState<Profile | null>(null);
+	const [modalVisible, setModalVisible] = React.useState(false);
+	const [checked, setChecked] = useState([] as string[]);
 	useEffect(() => {
-		UserService.getUserProfile().then((data) => {
-			setProfile(data);
-		});
+		if (profile === null) {
+			UserService.getUserProfile().then((data) => {
+				setProfile(data);
+				setChecked(data.tags);
+			});
+		}
 	});
 	if (profile === null) {
 		return (
@@ -20,6 +31,36 @@ const ProfileScreen = () => {
 			</View>
 		);
 	}
+	const onTagsChange = (checkedTags: string[]) => {
+		if (checkedTags != checked) {
+			setChecked(checkedTags);
+		}
+	};
+	const submitChecklist = () => {
+		console.log(checked);
+	};
+	const tagListTotal = [
+		"tag0",
+		"tag1",
+		"tag2",
+		"tag3",
+		"tag4",
+		"tag5",
+		"tag6",
+		"tag7",
+		"tag8",
+		"tag9",
+		"tag10",
+		"tag11",
+		"tag12",
+		"tag13",
+		"tag14",
+		"tag15",
+		"tag16",
+		"tag17",
+		"tag18",
+		"tag19",
+	];
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
@@ -36,35 +77,75 @@ const ProfileScreen = () => {
 						}}
 					>
 						<Text>
-							<b>Name:</b> {profile.name}
+							<Text style={{ fontWeight: "bold" }}>Name:</Text>{" "}
+							{profile.name}
 						</Text>
 						<Text>
-							<b>Email:</b> {profile.email}
+							<Text style={{ fontWeight: "bold" }}>Email:</Text>{" "}
+							{profile.email}
 						</Text>
 					</View>
 				</View>
 				<Divider style={TextStyle.divider} />
-				<Text category="h6" style={TextStyle.subheader}>
-					Tags
-				</Text>
-				<ScrollView horizontal={true} style={{ flexDirection: "row" }}>
-					{profile.tags.map((tag) => {
-						return (
-							<Card
-								key={tag}
-								style={{
-									marginHorizontal: 2,
-									flexDirection: "row",
-								}}
-							>
-								<Text>{tag}</Text>
-							</Card>
-						);
-					})}
-				</ScrollView>
+				<View style={{ flexDirection: "row", marginTop: 10 }}>
+					<View style={{ flexDirection: "column", flex: 1 }}>
+						<Text category="h6" style={ContainerStyles.lowerMargin}>
+							Tags
+						</Text>
+						<Text appearance="hint">{profile.tags.join(", ")}</Text>
+					</View>
+					<Button
+						onPress={() => {
+							setModalVisible(true);
+						}}
+						accessoryLeft={() => (
+							<MaterialIcons name="create" size={20} />
+						)}
+						style={{
+							aspectRatio: 1,
+							marginVertical: "auto",
+						}}
+					/>
+				</View>
 				<Divider style={TextStyle.divider} />
+				<Modal
+					visible={modalVisible}
+					backdropStyle={ContainerStyles.modalBackdrop}
+					onBackdropPress={() => setModalVisible(false)}
+				>
+					<Card
+						header={() => (
+							<View style={{ margin: 10 }}>
+								<Text category="h6">Edit Tags</Text>
+							</View>
+						)}
+						footer={() => (
+							<View style={{ flex: 1, flexDirection: "row" }}>
+								<Button
+									onPress={() => setModalVisible(false)}
+									style={{ flex: 1, margin: 10 }}
+								>
+									Cancel
+								</Button>
+								<Button
+									onPress={submitChecklist}
+									style={{ flex: 1, margin: 10 }}
+								>
+									Confirm
+								</Button>
+							</View>
+						)}
+						style={{ minWidth: "80%" }}
+					>
+						<TagPicker
+							closeFunction={() => setModalVisible(false)}
+							functionOnConfirm={onTagsChange}
+							content={tagListTotal}
+							checked={profile.tags}
+						/>
+					</Card>
+				</Modal>
 			</View>
-			<ScrollView style={ContainerStyles.horizMargin}></ScrollView>
 		</SafeAreaView>
 	);
 };
