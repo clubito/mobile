@@ -54,9 +54,11 @@ const ProfileSettingsScreen = () => {
 	const toggleVisibleText = () => {
 		setSecureText(!secureText);
 	};
+
 	const imageCallback = (image: string) => {
 		setPFP(image);
 	};
+
 	const visibleIcon = () => (
 		<TouchableWithoutFeedback onPress={toggleVisibleText}>
 			<MaterialIcons
@@ -65,6 +67,7 @@ const ProfileSettingsScreen = () => {
 			/>
 		</TouchableWithoutFeedback>
 	);
+
 	if (profile === null) {
 		return (
 			<View style={TextStyle.center}>
@@ -72,6 +75,7 @@ const ProfileSettingsScreen = () => {
 			</View>
 		);
 	}
+	
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>

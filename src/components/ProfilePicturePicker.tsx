@@ -4,12 +4,14 @@ import * as ImagePicker from "expo-image-picker";
 import { Avatar, Icon } from "@ui-kitten/components";
 
 interface ProfilePictureSettings {
-	functionOnConfirm: Function;
-	pfp: string | null;
+	functionOnConfirm: StrFunction;
+	pfp?: string;
 }
 
+type StrFunction = (arg0: string) => void;
+
 const ProfilePicturePicker = (props: ProfilePictureSettings) => {
-	const [image, setImage] = useState<string | null>(null);
+	const [image, setImage] = useState<string>("");
 
 	useEffect(() => {
 		(async () => {
@@ -24,10 +26,10 @@ const ProfilePicturePicker = (props: ProfilePictureSettings) => {
 				}
 			}
 		})();
-		if (props.pfp !== null) setImage(props.pfp);
+		if (props.pfp !== undefined) setImage(props.pfp);
 	}, []);
 	useEffect(() => {
-		props.functionOnConfirm(image);
+		if (image !== "") props.functionOnConfirm(image);
 	}, [image]);
 
 	const pickImage = async () => {
