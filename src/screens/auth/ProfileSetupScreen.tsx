@@ -39,8 +39,10 @@ const ProfileSetupScreen = () => {
 			tags: mapTagSelections(model.tags),
 		})
 			.then(() => profileSetupSuccess())
-			.catch((error) => setResponseError(error.message))
-			.finally(() => setIsLoading(false));
+			.catch((error) => {
+				setResponseError(error.message);
+				setIsLoading(false);
+			});
 	};
 
 	const mapTagSelections = (selectedTags: IndexPath[]) => {
