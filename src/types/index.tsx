@@ -42,4 +42,4 @@ interface User {
 	role?: string;
 }
 
-export { Club, User };
+export { Club, User, Announcement, Event };

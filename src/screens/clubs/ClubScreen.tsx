@@ -4,14 +4,18 @@ import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Card, Layout, Button, Icon } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Club } from "../../types";
+import { Announcement, Club, Event } from "../../types";
 import ClubService from "../../services/ClubService";
 import GeneralModal from "../../components/GeneralModal";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import AnnouncementList from "./AnnouncementList";
+import EventList from "./EventList";
 
 type ProfileParamList = {
 	Profile: undefined;
 	Settings: undefined;
 	Club: { clubId: string; clubName: string };
+	ClubSettings: { clubId: string };
 };
 type ProfileScreenRouteProp = RouteProp<ProfileParamList, "Club">;
 
@@ -24,7 +28,13 @@ type Props = {
 	route: ProfileScreenRouteProp;
 	navigation: ProfileScreenNavigationProp;
 };
-const SettingsIcon = () => <Icon name="settings" size={20} color="white" />;
+
+export type ClubTabsParamList = {
+	AnnouncementList: { announcementList: Announcement[] };
+	EventList: { eventList: Event[] };
+};
+
+const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
 
 const ClubScreen = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState<Club | null>(null);
@@ -105,6 +115,7 @@ const ClubScreen = (props: Props) => {
 						<Text>{message}</Text>
 					</Card>
 				) : null}
+
 				<GeneralModal
 					visible={modalVisible}
 					closeFunction={() => setModalVisible(false)}
@@ -117,6 +128,22 @@ const ClubScreen = (props: Props) => {
 					}
 					modalType={"basic"}
 				/>
+				<Tab.Navigator>
+					<Tab.Screen
+						name="AnnouncementList"
+						component={AnnouncementList}
+						initialParams={{
+							announcementList: clubInfo.announcements,
+						}}
+						options={{ title: "Announcements" }}
+					/>
+					<Tab.Screen
+						name="EventList"
+						component={EventList}
+						initialParams={{ eventList: clubInfo.events }}
+						options={{ title: "Events" }}
+					/>
+				</Tab.Navigator>
 			</View>
 		</SafeAreaView>
 	);
