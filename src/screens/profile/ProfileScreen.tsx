@@ -28,13 +28,13 @@ const ProfileScreen = () => {
 	const getUserData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
+			setLoading(false);
 		});
 	};
 
 	useEffect(() => {
 		const unsubscribe = nav.addListener("focus", () => {
 			getUserData();
-			setLoading(false);
 		});
 		return unsubscribe;
 	}, [nav]);

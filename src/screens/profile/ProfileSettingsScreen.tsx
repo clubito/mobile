@@ -38,8 +38,10 @@ import {
 	ChangePasswordSchema,
 } from "../../data/ChangePasswordData";
 import FormSecureInput from "../../components/FormSecureInput";
+import { useNavigation } from "@react-navigation/core";
 
 const ProfileSettingsScreen = () => {
+	const nav = useNavigation();
 	const [modalVisible, setModalVisible] = React.useState(false);
 	const [modalType, setModalType] = React.useState(0);
 	const { logOutSuccess } = React.useContext(AuthContext);
@@ -81,7 +83,7 @@ const ProfileSettingsScreen = () => {
 					userProfile.profilePicture,
 					maptoIndexPath(userProfile.tags, data)
 				);
-                setLoading(false);
+				setLoading(false);
 			});
 		});
 	};
@@ -265,12 +267,16 @@ const ProfileSettingsScreen = () => {
 					functionOnConfirm={
 						modalType == 0
 							? () => {
-									AuthService.logout().then(logOutSuccess());
+									AuthService.logout().then(() => {
+										nav.navigate("Home");
+										logOutSuccess();
+									});
 							  }
 							: () => {
-									UserService.deleteUser().then(
-										logOutSuccess()
-									);
+									UserService.deleteUser().then(() => {
+										nav.navigate("Home");
+										logOutSuccess();
+									});
 							  }
 					}
 					content={

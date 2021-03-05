@@ -13,7 +13,6 @@ export default class AuthService {
 			return [false, false];
 		}
 
-		setUserToken(token);
 		const response: AxiosResponse = await API.post("/token/verify", {
 			token: token,
 		});
@@ -23,6 +22,8 @@ export default class AuthService {
 			this.logout();
 			return [false, false];
 		}
+
+		setUserToken(token);
 
 		const isUserProfileSetup = await AsyncStorage.getItem(
 			"is_user_profile_setup"
