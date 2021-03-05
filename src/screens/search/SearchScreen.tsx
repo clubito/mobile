@@ -29,13 +29,17 @@ const SearchScreen = () => {
 	const [filters, setFilters] = useState([] as string[]);
 	const [filterSelection, setFilterSelection] = useState([] as IndexPath[]);
 
-	const sorts: string[] = ["Default", "Tag"];
+	const sorts: string[] = ["Default", "Name"];
 	const [sortSelection, setSortSelection] = useState<IndexPath>();
 
 	useEffect(() => {
 		ClubService.getAllTags().then((tagList) => setFilters(tagList));
 		handleSearch();
 	}, []);
+
+    useEffect(() => {
+		handleSearch();
+	}, [sortSelection]);
 
 	const handleSearch = () => {
 		setIsLoading(true);
@@ -113,7 +117,9 @@ const SearchScreen = () => {
 					value={mapSortSelection()}
 					size="small"
 					selectedIndex={sortSelection}
-					onSelect={(index) => setSortSelection(index)}
+					onSelect={(index) => {
+						setSortSelection(index);
+					}}
 				>
 					{sorts.map((filter) => {
 						return <SelectItem title={filter} key={filter} />;
@@ -129,7 +135,6 @@ const SearchScreen = () => {
 				renderItem={({ item }) => (
 					<TouchableHighlight
 						onPress={() => {
-							console.log(item);
 							navigation.navigate("Club", {
 								clubId: item.id,
 								clubName: item.name,
