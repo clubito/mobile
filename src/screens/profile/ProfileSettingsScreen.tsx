@@ -30,26 +30,40 @@ const ProfileSettingsScreen = () => {
 	const [checked, setChecked] = useState([] as string[]);
 	const [allTags, setAllTags] = useState([] as string[]);
 	const [profilePic, setPFP] = useState("");
+	const [tagsChanged, setTagsChanged] = useState(false);
+	const [pfpChanged, setPFPChanged] = useState(false);
 
 	useEffect(() => {
 		if (profile === null) {
 			pullAllData();
 		}
 	}, [profile]);
-
 	const pullAllData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
 			setChecked(data.tags);
 			setName(data.name);
+			setTagsChanged(false);
+			setPFPChanged(false);
 		});
 		ClubService.getAllTags().then((data) => {
 			setAllTags(data);
 		});
 	};
 
+	if (profile === null) {
+		return (
+			<View style={TextStyle.center}>
+				<Text>An error has occurred, no user data could be found</Text>
+			</View>
+		);
+	}
+
 	const onTagsChange = (checkedTags: string[]) => {
-		setChecked(checkedTags);
+		if (checkedTags != checked) {
+			setChecked(checkedTags);
+			setTagsChanged(true);
+		}
 	};
 
 	const submitChecklist = () => {
@@ -58,15 +72,21 @@ const ProfileSettingsScreen = () => {
 			profilePicture?: string;
 			tags?: string[];
 		};
-		if (newName != "") props.name = newName;
-		if (profilePic !== "") props.profilePicture = profilePic;
-		if (checked !== null) props.tags = checked;
-		UserService.updateCurrentUser(props)
-			.then(() => {
-				console.log("Success");
-				pullAllData();
-			})
-			.catch((error) => console.log(error.message));
+		if (newName !== "" && profile && newName !== profile.name)
+			props.name = newName;
+		if (pfpChanged) props.profilePicture = profilePic;
+		if (tagsChanged) props.tags = checked;
+		if (props.name || props.profilePicture || props.tags) {
+			console.log(props);
+			UserService.updateCurrentUser(props)
+				.then(() => {
+					console.log("Success");
+					pullAllData();
+				})
+				.catch((error) => console.log(error.message));
+		} else {
+			console.log("Nothing was changed");
+		}
 	};
 
 	const submitChangePassword = () => {
@@ -80,7 +100,10 @@ const ProfileSettingsScreen = () => {
 	};
 
 	const imageCallback = (image: string) => {
-		setPFP(image);
+		if (image != profilePic) {
+			setPFP(image);
+			setPFPChanged(true);
+		}
 	};
 
 	const visibleIcon = () => (
@@ -91,14 +114,6 @@ const ProfileSettingsScreen = () => {
 			/>
 		</TouchableWithoutFeedback>
 	);
-
-	if (profile === null) {
-		return (
-			<View style={TextStyle.center}>
-				<Text>An error has occurred, no user data could be found</Text>
-			</View>
-		);
-	}
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>

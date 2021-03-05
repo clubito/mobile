@@ -9,7 +9,6 @@ interface TagSettings {
 	style: StyleProp<any> | null;
 }
 
-type FunctionNull = () => void;
 type StrFunc = (arg0: string[]) => void;
 
 const TagPicker = (props: TagSettings) => {
