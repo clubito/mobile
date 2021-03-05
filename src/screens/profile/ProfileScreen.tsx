@@ -53,10 +53,7 @@ const ProfileScreen = () => {
 				No tags yet. Add tags in your profile settings.
 			</Text>
 		) : (
-			<ScrollView
-				style={{ flex: 1, flexDirection: "row" }}
-				horizontal={true}
-			>
+			<ScrollView style={{ flexDirection: "row" }} horizontal={true}>
 				{profile.tags.map((item) => {
 					return (
 						<Card key={item}>

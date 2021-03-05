@@ -34,7 +34,7 @@ const FormInput = ({ id, ...inputProps }: FormInputProps): InputElement => {
 		<Input
 			{...inputProps}
 			{...fieldProps}
-            placeholder={inputProps.placeholder ?? inputProps.label}
+			placeholder={inputProps.placeholder ?? inputProps.label}
 			value={value}
 			caption={error}
 			onChangeText={formContext.handleChange(id)}
