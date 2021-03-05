@@ -39,9 +39,16 @@ const ClubScreen = (props: Props) => {
 			});
 		}
 	}, []);
+	if (clubInfo === null) {
+		return (
+			<View>
+				<Text>An error has occurred</Text>
+			</View>
+		);
+	}
 	return (
 		<View style={ContainerStyles.horizMargin}>
-			<Text>{props.route.params.clubName}</Text>
+			<Text>{clubInfo?.description}</Text>
 		</View>
 	);
 };

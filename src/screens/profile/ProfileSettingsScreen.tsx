@@ -18,7 +18,7 @@ import TagPicker from "../../components/TagPicker";
 import ClubService from "../../services/ClubService";
 
 const ProfileSettingsScreen = () => {
-	const [name, setName] = React.useState("");
+	const [newName, setName] = React.useState("");
 	const [curPassword, setCurPassword] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [confirm, setConfirm] = React.useState("");
@@ -33,22 +33,46 @@ const ProfileSettingsScreen = () => {
 
 	useEffect(() => {
 		if (profile === null) {
-			UserService.getCurrentUser().then((data) => {
-				setProfile(data);
-				setChecked(data.tags);
-			});
-			ClubService.getAllTags().then((data) => {
-				setAllTags(data);
-			});
+			pullAllData();
 		}
-	}, []);
+	}, [profile]);
+
+	const pullAllData = () => {
+		UserService.getCurrentUser().then((data) => {
+			setProfile(data);
+			setChecked(data.tags);
+			setName(data.name);
+		});
+		ClubService.getAllTags().then((data) => {
+			setAllTags(data);
+		});
+	};
+
 	const onTagsChange = (checkedTags: string[]) => {
 		setChecked(checkedTags);
 	};
+
 	const submitChecklist = () => {
-		console.log(name);
-		console.log(profilePic);
-		console.log(checked);
+		let props = {} as {
+			name?: string;
+			profilePicture?: string;
+			tags?: string[];
+		};
+		if (newName != "") props.name = newName;
+		if (profilePic !== "") props.profilePicture = profilePic;
+		if (checked !== null) props.tags = checked;
+		UserService.updateCurrentUser(props)
+			.then(() => {
+				console.log("Success");
+				pullAllData();
+			})
+			.catch((error) => console.log(error.message));
+	};
+
+	const submitChangePassword = () => {
+		console.log(curPassword);
+		console.log(password);
+		console.log(confirm);
 	};
 
 	const toggleVisibleText = () => {
@@ -75,7 +99,7 @@ const ProfileSettingsScreen = () => {
 			</View>
 		);
 	}
-	
+
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>
@@ -90,7 +114,7 @@ const ProfileSettingsScreen = () => {
 					<Input
 						placeholder="Name"
 						label="Name"
-						value={name}
+						value={newName}
 						onChangeText={(nameUpdate) => setName(nameUpdate)}
 					/>
 					<View style={{ marginTop: 10 }}>
@@ -113,9 +137,14 @@ const ProfileSettingsScreen = () => {
 					</Text>
 					<ProfilePicturePicker
 						functionOnConfirm={(image) => imageCallback(image)}
+						pfp={profile.profilePicture}
 					/>
 				</Card>
-				<Card>
+				<Card
+					footer={() => (
+						<Button onPress={submitChangePassword}>Submit</Button>
+					)}
+				>
 					<Text category="h4" style={TextStyle.subheader}>
 						Change Password
 					</Text>
@@ -145,7 +174,6 @@ const ProfileSettingsScreen = () => {
 						accessoryRight={visibleIcon}
 						secureTextEntry={secureText}
 					/>
-					<Button>Submit</Button>
 				</Card>
 
 				<View style={ContainerStyles.containerStart}>

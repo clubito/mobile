@@ -36,9 +36,24 @@ const ProfileScreen = () => {
 				No tags yet. Add tags in your profile settings.
 			</Text>
 		) : (
-			<ScrollView horizontal={true}>
+			<ScrollView
+				style={{ flex: 1, flexDirection: "row" }}
+				horizontal={true}
+			>
 				{profile.tags.map((item) => {
-					<Card>{item}</Card>;
+					console.log(item);
+					return (
+						<Card key={item}>
+							<Text
+								style={{
+									marginHorizontal: -16,
+									marginVertical: -10,
+								}}
+							>
+								{item}
+							</Text>
+						</Card>
+					);
 				})}
 			</ScrollView>
 		);
