@@ -15,7 +15,7 @@ export default class ClubService {
 			"/clubs/search",
 			{
 				params: {
-					query: searchQuery,
+					name: searchQuery,
 					sortBy: sort,
 					filter: tagFilter,
 				},

@@ -39,16 +39,17 @@ const SearchScreen = () => {
 			query.current,
 			mapSortSelection(),
 			mapFilterSelections()
-		).then((clubList) => {
-			setClubs(clubList);
-			setIsLoading(false);
-		});
+		)
+			.then((clubList) => {
+				setClubs(clubList);
+			})
+			.finally(() => setIsLoading(false));
 	};
 
 	const mapFilterSelections = () => {
 		const list: string[] = [];
 		filterSelection.forEach((index) => {
-			list.join(filters[index.row]);
+			list.push(filters[index.row]);
 		});
 		return list;
 	};
@@ -74,8 +75,8 @@ const SearchScreen = () => {
 				returnKeyType="search"
 				defaultValue={query.current}
 				clearButtonMode="always"
+				onChangeText={(text) => (query.current = text)}
 				onSubmitEditing={(event) => {
-					query.current = event.nativeEvent.text;
 					handleSearch();
 				}}
 			/>
@@ -96,7 +97,7 @@ const SearchScreen = () => {
 					selectedIndex={filterSelection}
 					onSelect={(index) => setFilterSelection(index)}
 				>
-                    <Button title="Apply" onPress={() => handleSearch()} />
+					<Button title="Apply" onPress={() => handleSearch()} />
 					{filters.map((filter) => {
 						return <SelectItem title={filter} key={filter} />;
 					})}
@@ -118,7 +119,7 @@ const SearchScreen = () => {
 
 			<FlatList
 				data={clubs}
-				keyExtractor={(item) => item.objectId}
+				keyExtractor={(item) => item.id}
 				keyboardDismissMode="on-drag"
 				contentContainerStyle={styles.clubList}
 				renderItem={({ item }) => <ClubListItem club={item} />}
