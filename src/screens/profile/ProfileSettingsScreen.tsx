@@ -1,27 +1,108 @@
-import React from "react";
-import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
+import React, { useEffect, useState } from "react";
 import {
-	Text,
-	Input,
-	Button,
-	Layout,
-	Modal,
-	Card,
-} from "@ui-kitten/components";
-import { ContainerStyles } from "../../styles/CommonStyles";
-import UserService from "../../services/UserService";
+	SafeAreaView,
+	TouchableWithoutFeedback,
+	ScrollView,
+	View,
+} from "react-native";
+import { Text, Input, Button, Card, Divider } from "@ui-kitten/components";
+import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ModalSettings } from "../../types";
+import { User } from "../../types";
+import UserService from "../../services/UserService";
+import GeneralModal from "../../components/GeneralModal";
+import ProfilePicturePicker from "../../components/ProfilePicturePicker";
+import { AuthContext } from "../../context/AuthContext";
+import AuthService from "../../services/AuthService";
+import TagPicker from "../../components/TagPicker";
+import ClubService from "../../services/ClubService";
 
-const ProfileScreen = () => {
-	const [name, setName] = React.useState("");
+const ProfileSettingsScreen = () => {
+	const [newName, setName] = React.useState("");
+	const [curPassword, setCurPassword] = React.useState("");
 	const [password, setPassword] = React.useState("");
 	const [confirm, setConfirm] = React.useState("");
 	const [secureText, setSecureText] = React.useState(true);
-	const [logoutModalVisible, setLogoutVisible] = React.useState(false);
+	const [modalVisible, setModalVisible] = React.useState(false);
+	const [modalType, setModalType] = React.useState(0);
+	const { logOutSuccess } = React.useContext(AuthContext);
+	const [profile, setProfile] = useState<User | null>(null);
+	const [checked, setChecked] = useState([] as string[]);
+	const [allTags, setAllTags] = useState([] as string[]);
+	const [profilePic, setPFP] = useState("");
+	const [tagsChanged, setTagsChanged] = useState(false);
+	const [pfpChanged, setPFPChanged] = useState(false);
+
+	useEffect(() => {
+		if (profile === null) {
+			pullAllData();
+		}
+	}, [profile]);
+
+	const pullAllData = () => {
+		UserService.getCurrentUser().then((data) => {
+			setProfile(data);
+			setChecked(data.tags);
+			setName(data.name);
+			setTagsChanged(false);
+			setPFPChanged(false);
+		});
+		ClubService.getAllTags().then((data) => {
+			setAllTags(data);
+		});
+	};
+
+	if (profile === null) {
+		return (
+			<View style={TextStyle.center}>
+				<Text>An error has occurred, no user data could be found</Text>
+			</View>
+		);
+	}
+
+	const onTagsChange = (checkedTags: string[]) => {
+		if (checkedTags != checked) {
+			setChecked(checkedTags);
+			setTagsChanged(true);
+		}
+	};
+
+	const submitChecklist = () => {
+		let props = {} as {
+			name?: string;
+			profilePicture?: string;
+			tags?: string[];
+		};
+		if (newName !== "" && profile && newName !== profile.name)
+			props.name = newName;
+		if (pfpChanged) props.profilePicture = profilePic;
+		if (tagsChanged) props.tags = checked;
+		if (props.name || props.profilePicture || props.tags) {
+			console.log(props);
+			UserService.updateCurrentUser(props)
+				.then(() => {
+					console.log("Success");
+					pullAllData();
+				})
+				.catch((error) => console.log(error.message));
+		} else {
+			console.log("Nothing was changed");
+		}
+	};
+
+	const submitChangePassword = () => {
+		console.log(curPassword);
+		console.log(password);
+		console.log(confirm);
+	};
 
 	const toggleVisibleText = () => {
 		setSecureText(!secureText);
+	};
+
+	const imageCallback = (image: string) => {
+		setPFP(image);
+		setPFPChanged(true);
 	};
 
 	const visibleIcon = () => (
@@ -32,93 +113,136 @@ const ProfileScreen = () => {
 			/>
 		</TouchableWithoutFeedback>
 	);
-	const GeneralModal = (props: ModalSettings) => (
-		<Modal
-			visible={logoutModalVisible}
-			backdropStyle={ContainerStyles.modalBackdrop}
-			onBackdropPress={() => setLogoutVisible(false)}
-		>
-			<Card
-				header={() => (
-					<View>
-						<Text category="h6">{props.header}</Text>
-					</View>
-				)}
-				footer={() => (
-					<View>
-						<Button onPress={() => setLogoutVisible(false)}>
-							Cancel
-						</Button>
-						<Button onPress={props.functionOnConfirm}>
-							Confirm
-						</Button>
-					</View>
-				)}
-				status={props.modalType}
-			>
-				<Text>{props.content}</Text>
-			</Card>
-		</Modal>
-	);
+
 	return (
-		<Layout style={ContainerStyles.flexContainer}>
-			<Text category="h4" style={ContainerStyles.lowerMargin}>
-				Change Name
-			</Text>
-			<Input
-				placeholder="Name"
-				label="Name"
-				value={name}
-				onChangeText={(nameUpdate) => setName(nameUpdate)}
-			/>
-			<Text
-				category="h4"
-				style={
-					(ContainerStyles.upperMargin, ContainerStyles.lowerMargin)
-				}
-			>
-				Change Password
-			</Text>
-			<Input
-				placeholder="Password"
-				label="Password"
-				value={password}
-				onChangeText={(passUpdate) => setPassword(passUpdate)}
-				accessoryRight={visibleIcon}
-				secureTextEntry={secureText}
-			/>
-			<Input
-				placeholder="Confirm Password"
-				label="Confirm Password"
-				value={confirm}
-				onChangeText={(passUpdate) => setConfirm(passUpdate)}
-				accessoryRight={visibleIcon}
-				secureTextEntry={secureText}
-			/>
-			<Button>Submit</Button>
-			<Layout style={ContainerStyles.containerStart}>
-				<Button
-					appearance="ghost"
-					onPress={() => setLogoutVisible(true)}
+		<SafeAreaView style={ContainerStyles.flexContainer}>
+			<ScrollView style={ContainerStyles.horizMargin}>
+				<Card
+					footer={() => (
+						<Button onPress={submitChecklist}>Submit</Button>
+					)}
 				>
-					Logout
-				</Button>
-			</Layout>
-			<GeneralModal
-				header="stringy"
-				functionOnConfirm={UserService.logout}
-				content="yohoh"
-				modalType="basic"
-			/>
-		</Layout>
+					<Text category="h4" style={TextStyle.subheader}>
+						Change Name
+					</Text>
+					<Input
+						placeholder="Name"
+						label="Name"
+						value={newName}
+						onChangeText={(nameUpdate) => setName(nameUpdate)}
+					/>
+					<View style={{ marginTop: 10 }}>
+						<Text category="h6" style={ContainerStyles.lowerMargin}>
+							Tags
+						</Text>
+						<Text appearance="hint">{profile.tags.join(", ")}</Text>
+					</View>
+
+					<Divider style={TextStyle.divider} />
+
+					<TagPicker
+						functionOnConfirm={onTagsChange}
+						content={allTags}
+						checked={profile.tags}
+						style={{ maxHeight: 200 }}
+					/>
+					<Text category="h4" style={TextStyle.subheader}>
+						Update Profile Picture
+					</Text>
+					<ProfilePicturePicker
+						functionOnConfirm={(image) => imageCallback(image)}
+						pfp={profile.profilePicture}
+					/>
+				</Card>
+				<Card
+					footer={() => (
+						<Button onPress={submitChangePassword}>Submit</Button>
+					)}
+				>
+					<Text category="h4" style={TextStyle.subheader}>
+						Change Password
+					</Text>
+					<Input
+						placeholder="Current Password"
+						label="Current Password"
+						value={curPassword}
+						onChangeText={(passUpdate) =>
+							setCurPassword(passUpdate)
+						}
+						accessoryRight={visibleIcon}
+						secureTextEntry={secureText}
+					/>
+					<Input
+						placeholder="Password"
+						label="Password"
+						value={password}
+						onChangeText={(passUpdate) => setPassword(passUpdate)}
+						accessoryRight={visibleIcon}
+						secureTextEntry={secureText}
+					/>
+					<Input
+						placeholder="Confirm Password"
+						label="Confirm Password"
+						value={confirm}
+						onChangeText={(passUpdate) => setConfirm(passUpdate)}
+						accessoryRight={visibleIcon}
+						secureTextEntry={secureText}
+					/>
+				</Card>
+
+				<View style={ContainerStyles.containerStart}>
+					<Button
+						appearance="ghost"
+						onPress={() => {
+							setModalType(0);
+							setModalVisible(true);
+						}}
+						status="warning"
+					>
+						Logout
+					</Button>
+				</View>
+				<View style={ContainerStyles.containerStart}>
+					<Button
+						appearance="ghost"
+						onPress={() => {
+							setModalType(1);
+							setModalVisible(true);
+						}}
+						status="danger"
+					>
+						Delete Account
+					</Button>
+				</View>
+				<GeneralModal
+					visible={modalVisible}
+					closeFunction={() => setModalVisible(false)}
+					header={
+						modalType == 0
+							? "Are you sure you want to log out?"
+							: "Are you sure you want to delete your account?"
+					}
+					functionOnConfirm={
+						modalType == 0
+							? () => {
+									AuthService.logout().then(logOutSuccess());
+							  }
+							: () => {
+									AuthService.deleteAccount().then(
+										logOutSuccess()
+									);
+							  }
+					}
+					content={
+						modalType == 0
+							? "Are you sure you want to log out? Your user data will be removed from this device."
+							: "Are you sure you want to delete your account? Your user data will be removed from the database and you will no longer be able to log in. This action is irreversible."
+					}
+					modalType={modalType == 0 ? "warning" : "danger"}
+				/>
+			</ScrollView>
+		</SafeAreaView>
 	);
 };
-interface ModalSettings {
-	header: string;
-	functionOnConfirm: FunctionNull;
-	content: string;
-	modalType: string;
-}
 
-type FunctionNull = () => void;
-export default ProfileScreen;
+export default ProfileSettingsScreen;

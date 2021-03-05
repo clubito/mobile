@@ -35,4 +35,14 @@ export default class ClubService {
 
 		return response.data.tags;
 	}
+
+	static async getClub(clubID: string) {
+		const response: AxiosResponse<Club> = await API.get<Club>(
+			"/clubs/profile",
+			{
+				params: { id: clubID },
+			}
+		);
+		return response.data;
+	}
 }

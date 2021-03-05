@@ -1,11 +1,21 @@
 import React from "react";
 import { Button } from "@ui-kitten/components";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+	createStackNavigator,
+	HeaderBackButton,
+} from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
-import ProfileSettings from "./ProfileSettingsScreen";
+import ProfileSettingsScreen from "./ProfileSettingsScreen";
+import ClubScreen from "../clubs/ClubScreen";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Club } from "../../types";
 
-const Stack = createStackNavigator();
+type ProfileParamList = {
+	Profile: { refresh?: boolean };
+	Settings: undefined;
+	Club: { clubId: string; clubName: string };
+};
+const Stack = createStackNavigator<ProfileParamList>();
 
 const SearchNavigator = () => (
 	<Stack.Navigator
@@ -38,8 +48,20 @@ const SearchNavigator = () => (
 		/>
 		<Stack.Screen
 			name="Settings"
-			component={ProfileSettings}
-			options={{ title: "Profile Settings" }}
+			component={ProfileSettingsScreen}
+			options={({ navigation }) => ({
+				title: "Profile Settings",
+				headerLeft: () => (
+					<HeaderBackButton
+						onPress={() => navigation.goBack({ refresh: true })}
+					/>
+				),
+			})}
+		/>
+		<Stack.Screen
+			name="Club"
+			component={ClubScreen}
+			options={({ route }) => ({ title: route.params.clubName })}
 		/>
 	</Stack.Navigator>
 );
