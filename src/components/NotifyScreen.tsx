@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Text, Layout, Button } from "@ui-kitten/components";
+import { Text, Layout, Button, Icon, IconProps } from "@ui-kitten/components";
 import { ContainerStyles } from "../styles/CommonStyles";
+import { View } from "react-native";
 
 interface Props {
 	message: string;
@@ -9,12 +10,41 @@ interface Props {
 
 const NotifyScreen = (props: Props) => {
 	const navigation = useNavigation();
+	const infiniteAnimationIconRef = React.useRef<IconProps>();
+	React.useEffect(() => {
+		infiniteAnimationIconRef.current.startAnimation();
+	}, []);
 
+	const RenderInfiniteAnimationIcon = (props: IconProps) => (
+		<Icon
+			{...props}
+			ref={infiniteAnimationIconRef}
+			animation="zoom"
+			name="checkmark-circle-2"
+			fill="green"
+		/>
+	);
 	return (
-		<Layout style={ContainerStyles.center}>
-			<Text>{props.message}</Text>
+		<View
+			style={{
+				flex: 1,
+				alignSelf: "center",
+				justifyContent: "center",
+				margin: 10,
+			}}
+		>
+			<RenderInfiniteAnimationIcon />
+			<Text
+				category="h3"
+				style={{
+					textAlign: "center",
+					marginBottom: 30,
+				}}
+			>
+				{props.message}
+			</Text>
 			<Button onPress={() => navigation.goBack()}>OKAY</Button>
-		</Layout>
+		</View>
 	);
 };
 
