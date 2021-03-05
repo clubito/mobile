@@ -6,11 +6,11 @@ import {
 	TouchableHighlight,
 } from "react-native";
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Divider, Button, Modal } from "@ui-kitten/components";
+import { Text, Card, Divider, List } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import { MaterialIcons } from "@expo/vector-icons";
-import TagPicker from "../../components/TagPicker";
+import ClubListItem from "../../components/ClubListItem";
 
 const ProfileScreen = () => {
 	const [profile, setProfile] = useState<User | null>(null);
@@ -22,7 +22,7 @@ const ProfileScreen = () => {
 				setChecked(data.tags);
 			});
 		}
-	});
+	}, []);
 	if (profile === null) {
 		return (
 			<View style={TextStyle.center}>
@@ -30,34 +30,18 @@ const ProfileScreen = () => {
 			</View>
 		);
 	}
-	const onTagsChange = (checkedTags: string[]) => {
-		setChecked(checkedTags);
-	};
-	const submitChecklist = () => {
-		console.log(checked);
-	};
-	const tagListTotal = [
-		"tag0",
-		"tag1",
-		"tag2",
-		"tag3",
-		"tag4",
-		"tag5",
-		"tag6",
-		"tag7",
-		"tag8",
-		"tag9",
-		"tag10",
-		"tag11",
-		"tag12",
-		"tag13",
-		"tag14",
-		"tag15",
-		"tag16",
-		"tag17",
-		"tag18",
-		"tag19",
-	];
+	const tagList =
+		profile.tags.length === 0 ? (
+			<Text appearance="hint">
+				No tags yet. Add tags in your profile settings.
+			</Text>
+		) : (
+			<ScrollView horizontal={true}>
+				{profile.tags.map((item) => {
+					<Card>{item}</Card>;
+				})}
+			</ScrollView>
+		);
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
@@ -88,23 +72,14 @@ const ProfileScreen = () => {
 					<Text category="h6" style={ContainerStyles.lowerMargin}>
 						Tags
 					</Text>
-					<Text appearance="hint">{profile.tags.join(", ")}</Text>
+					{tagList}
 				</View>
-
 				<Divider style={TextStyle.divider} />
-
-				<TagPicker
-					functionOnConfirm={onTagsChange}
-					content={tagListTotal}
-					checked={profile.tags}
-					style={{ maxHeight: 200 }}
+				<List
+					data={profile.clubs}
+					renderItem={({ item }) => <ClubListItem club={item} />}
+					style={{ marginVertical: 10 }}
 				/>
-				<Button
-					onPress={submitChecklist}
-					style={{ flex: 1, margin: 10 }}
-				>
-					Confirm
-				</Button>
 			</View>
 		</SafeAreaView>
 	);

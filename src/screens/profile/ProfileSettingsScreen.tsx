@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
 	SafeAreaView,
 	TouchableWithoutFeedback,
 	ScrollView,
 	View,
 } from "react-native";
-import { Text, Input, Button, Card } from "@ui-kitten/components";
+import { Text, Input, Button, Card, Divider } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { MaterialIcons } from "@expo/vector-icons";
+import { User } from "../../types";
+import UserService from "../../services/UserService";
 import GeneralModal from "../../components/GeneralModal";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 import { AuthContext } from "../../context/AuthContext";
 import AuthService from "../../services/AuthService";
+import TagPicker from "../../components/TagPicker";
+import ClubService from "../../services/ClubService";
 
 const ProfileSettingsScreen = () => {
 	const [name, setName] = React.useState("");
@@ -22,6 +26,26 @@ const ProfileSettingsScreen = () => {
 	const [modalVisible, setModalVisible] = React.useState(false);
 	const [modalType, setModalType] = React.useState(0);
 	const { logOutSuccess } = React.useContext(AuthContext);
+	const [profile, setProfile] = useState<User | null>(null);
+	const [checked, setChecked] = useState([] as string[]);
+	const [allTags, setAllTags] = useState([] as string[]);
+	useEffect(() => {
+		if (profile === null) {
+			UserService.getCurrentUser().then((data) => {
+				setProfile(data);
+				setChecked(data.tags);
+			});
+			ClubService.getAllTags().then((data) => {
+				setAllTags(data);
+			});
+		}
+	}, []);
+	const onTagsChange = (checkedTags: string[]) => {
+		setChecked(checkedTags);
+	};
+	const submitChecklist = () => {
+		console.log(checked);
+	};
 
 	const toggleVisibleText = () => {
 		setSecureText(!secureText);
@@ -35,6 +59,13 @@ const ProfileSettingsScreen = () => {
 			/>
 		</TouchableWithoutFeedback>
 	);
+	if (profile === null) {
+		return (
+			<View style={TextStyle.center}>
+				<Text>An error has occurred, no user data could be found</Text>
+			</View>
+		);
+	}
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>
@@ -48,6 +79,27 @@ const ProfileSettingsScreen = () => {
 						value={name}
 						onChangeText={(nameUpdate) => setName(nameUpdate)}
 					/>
+					<View style={{ marginTop: 10 }}>
+						<Text category="h6" style={ContainerStyles.lowerMargin}>
+							Tags
+						</Text>
+						<Text appearance="hint">{profile.tags.join(", ")}</Text>
+					</View>
+
+					<Divider style={TextStyle.divider} />
+
+					<TagPicker
+						functionOnConfirm={onTagsChange}
+						content={allTags}
+						checked={profile.tags}
+						style={{ maxHeight: 200 }}
+					/>
+					<Button
+						onPress={submitChecklist}
+						style={{ flex: 1, margin: 10 }}
+					>
+						Confirm
+					</Button>
 					<Text category="h4" style={TextStyle.subheader}>
 						Update Profile Picture
 					</Text>
