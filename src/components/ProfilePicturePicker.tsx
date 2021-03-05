@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, Platform, TouchableHighlight } from "react-native";
+import { View, Platform, TouchableWithoutFeedback } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Avatar, Icon } from "@ui-kitten/components";
 
@@ -11,7 +11,7 @@ interface ProfilePictureSettings {
 type StrFunction = (arg0: string) => void;
 
 const ProfilePicturePicker = (props: ProfilePictureSettings) => {
-	const [image, setImage] = useState<string>("");
+	const [image, setImage] = useState<string>("https://picsum.photos/200");
 
 	useEffect(() => {
 		(async () => {
@@ -46,23 +46,17 @@ const ProfilePicturePicker = (props: ProfilePictureSettings) => {
 		}
 	};
 
-	const picture = image ? (
-		<Avatar source={{ uri: image }} style={{ width: 200, height: 200 }} />
-	) : (
-		<Icon
-			name="person"
-			fill="#8F9BB3"
-			style={{ width: 200, height: 200 }}
-		/>
-	);
-
 	return (
 		<View
 			style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
 		>
-			<TouchableHighlight onPress={pickImage}>
-				{picture}
-			</TouchableHighlight>
+			<TouchableWithoutFeedback onPress={pickImage}>
+				<Avatar
+					style={{ height: 200, width: 200 }}
+					shape="round"
+					source={{ uri: image }}
+				/>
+			</TouchableWithoutFeedback>
 		</View>
 	);
 };
