@@ -58,21 +58,36 @@ const ProfileSettingsScreen = () => {
 
 	const [tagList, setTagList] = useState([] as IndexPath[]);
 
+	const maptoIndexPath = (selectedTags: string[], allTagsL: string[]) => {
+		const list: IndexPath[] = [];
+		selectedTags.forEach((value) => {
+			if (allTagsL.indexOf(value) >= 0) {
+				list.push(new IndexPath(allTagsL.indexOf(value)));
+			}
+		});
+		return list;
+	};
+
 	const [pfpChanged, setPFPChanged] = useState(false);
 	const [profilePic, setPFP] = useState("");
 	const pullAllData = () => {
-		UserService.getCurrentUser().then((data) => {
-			setProfile(data);
-			setChecked(data.tags);
-		});
 		ClubService.getAllTags().then((data) => {
 			setAllTags(data);
+			UserService.getCurrentUser().then((userProfile) => {
+				setProfile(userProfile);
+				setChecked(userProfile.tags);
+				savedModel.current = new ChangeProfileModel(
+					userProfile.name,
+					userProfile.profilePicture,
+					maptoIndexPath(userProfile.tags, data)
+				);
+                setLoading(false);
+			});
 		});
 	};
 	useEffect(() => {
 		if (profile === null) {
 			pullAllData();
-			setLoading(false);
 		}
 	}, []);
 
@@ -117,16 +132,6 @@ const ProfileSettingsScreen = () => {
 		return list;
 	};
 
-	const maptoIndexPath = (selectedTags: string[]) => {
-		const list: IndexPath[] = [];
-		selectedTags.forEach((value) => {
-			if (allTags.indexOf(value) >= 0) {
-				list.push(new IndexPath(allTags.indexOf(value)));
-			}
-		});
-		return list;
-	};
-
 	const imageCallback = (image: string) => {
 		setPFP(image);
 		setPFPChanged(true);
@@ -147,11 +152,7 @@ const ProfileSettingsScreen = () => {
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>
 				<Formik
-					initialValues={{
-						name: profile.name,
-						profilePicture: profile.profilePicture,
-						tags: maptoIndexPath(profile.tags),
-					}}
+					initialValues={savedModel.current}
 					validationSchema={ChangeProfileSchema}
 					onSubmit={submitChecklist}
 					validateOnChange={submitted}
