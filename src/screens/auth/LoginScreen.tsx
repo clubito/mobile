@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { AuthContext } from "../../context/AuthContext";
-import UserService from "../../services/UserService";
+import AuthService from "../../services/AuthService";
 import { LoginModel, LoginSchema } from "../../data/LoginData";
 import FormInput from "../../components/FormInput";
 import FormSecureInput from "../../components/FormSecureInput";
@@ -25,7 +25,7 @@ const LoginScreen = () => {
 		savedModel.current = model;
 		setIsLoading(true);
 
-		UserService.login(model.email, model.password)
+		AuthService.login(model.email, model.password)
 			.then((profileSetup) => signInSuccess(profileSetup))
 			.catch((error) => setResponseError(error.message))
 			.finally(() => setIsLoading(false));

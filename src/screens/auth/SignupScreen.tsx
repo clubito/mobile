@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import { StyleSheet } from "react-native";
 import { Button, Layout, Text } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import UserService from "../../services/UserService";
+import AuthService from "../../services/AuthService";
 import { SignupModel, SignupSchema } from "../../data/SignupData";
 import NotifyScreen from "../../components/NotifyScreen";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -22,7 +22,7 @@ const SignupScreen = () => {
         savedModel.current = model;
 		setIsLoading(true);
         
-		UserService.signup(model.email, model.password)
+		AuthService.signup(model.email, model.password)
 			.then(() => setIsSuccessful(true))
 			.catch((error) => setResponseError(error.message))
 			.finally(() => setIsLoading(false));

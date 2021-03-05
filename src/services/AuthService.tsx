@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API, { setUserToken } from "./API";
 
-export default class UserService {
+export default class AuthService {
 	/**
 	 * Validate the current user's token if it exists.
 	 */
