@@ -101,6 +101,9 @@ const ProfileSettingsScreen = () => {
 		console.log(curPassword);
 		console.log(password);
 		console.log(confirm);
+		AuthService.changePassword(curPassword, password)
+			.then(() => console.log("success"))
+			.catch((error) => console.log(error.message));
 	};
 
 	const toggleVisibleText = () => {
