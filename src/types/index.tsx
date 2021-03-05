@@ -2,13 +2,21 @@
  * Contains all types for data handling
  */
 
-import { Component } from "react";
-
 interface Club {
-	objectId: string;
+	id: string;
 	name: string;
 	logo: string;
 	description: string;
+	role: string;
 }
 
-export { Club };
+interface User {
+	objectId: string;
+	name: string;
+	email: string;
+	clubs: Club[];
+	joinRequests: string[];
+	tags: string[];
+}
+
+export { Club, User };
