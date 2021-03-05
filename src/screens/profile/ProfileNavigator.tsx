@@ -1,6 +1,9 @@
 import React from "react";
 import { Button } from "@ui-kitten/components";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+	createStackNavigator,
+	HeaderBackButton,
+} from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import ProfileSettingsScreen from "./ProfileSettingsScreen";
 import ClubScreen from "../clubs/ClubScreen";
@@ -8,7 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Club } from "../../types";
 
 type ProfileParamList = {
-	Profile: undefined;
+	Profile: { refresh?: boolean };
 	Settings: undefined;
 	Club: { clubId: string; clubName: string };
 };
@@ -46,7 +49,14 @@ const SearchNavigator = () => (
 		<Stack.Screen
 			name="Settings"
 			component={ProfileSettingsScreen}
-			options={{ title: "Profile Settings" }}
+			options={({ navigation }) => ({
+				title: "Profile Settings",
+				headerLeft: () => (
+					<HeaderBackButton
+						onPress={() => navigation.goBack({ refresh: true })}
+					/>
+				),
+			})}
 		/>
 		<Stack.Screen
 			name="Club"

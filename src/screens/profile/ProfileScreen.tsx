@@ -10,18 +10,44 @@ import { Text, Card, Divider, List, Avatar } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const ProfileScreen = () => {
+type ProfileParamList = {
+	Profile: { refresh?: boolean };
+	Settings: undefined;
+	Club: { clubId: string; clubName: string };
+};
+type ProfileScreenRouteProp = RouteProp<ProfileParamList, "Profile">;
+
+type ProfileScreenNavigationProp = StackNavigationProp<
+	ProfileParamList,
+	"Profile"
+>;
+
+type Props = {
+	route: ProfileScreenRouteProp;
+	navigation: ProfileScreenNavigationProp;
+};
+
+const ProfileScreen = (props: Props) => {
 	const nav = useNavigation();
 	const [profile, setProfile] = useState<User | null>(null);
+
+	const getUserData = () => {
+		UserService.getCurrentUser().then((data) => {
+			setProfile(data);
+		});
+	};
+
 	useEffect(() => {
-		if (profile === null) {
-			UserService.getCurrentUser().then((data) => {
-				setProfile(data);
-			});
-		}
-	}, []);
+		const unsubscribe = nav.addListener("focus", () => {
+			console.log("refres");
+			getUserData();
+		});
+		return unsubscribe;
+	}, [nav]);
+
 	if (profile === null) {
 		return (
 			<View style={TextStyle.center}>
@@ -29,6 +55,7 @@ const ProfileScreen = () => {
 			</View>
 		);
 	}
+
 	const tagList =
 		profile.tags.length === 0 ? (
 			<Text appearance="hint">
