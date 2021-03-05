@@ -8,16 +8,16 @@ import {
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Card, Divider, Button, Modal } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
-import { Profile } from "../../types";
+import { User } from "../../types";
 import { MaterialIcons } from "@expo/vector-icons";
 import TagPicker from "../../components/TagPicker";
 
 const ProfileScreen = () => {
-	const [profile, setProfile] = useState<Profile | null>(null);
+	const [profile, setProfile] = useState<User | null>(null);
 	const [checked, setChecked] = useState([] as string[]);
 	useEffect(() => {
 		if (profile === null) {
-			UserService.getUserProfile().then((data) => {
+			UserService.getCurrentUser().then((data) => {
 				setProfile(data);
 				setChecked(data.tags);
 			});

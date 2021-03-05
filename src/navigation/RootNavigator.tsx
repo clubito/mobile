@@ -35,6 +35,13 @@ const RootNavigator = () => {
 					isProfileSetup: profileSetup,
 				});
 			},
+			logOutSuccess: () => {
+				setState({
+					isLoading: false,
+					isLoggedIn: false,
+					isProfileSetup: false,
+				});
+			},
 		};
 	}, []);
 

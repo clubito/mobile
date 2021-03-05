@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Image, View, Platform, TouchableHighlight } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { Avatar, Icon } from "@ui-kitten/components";
 
 const ProfilePicturePicker = () => {
 	const [image, setImage] = useState<string | null>(null);
@@ -36,9 +36,13 @@ const ProfilePicturePicker = () => {
 	};
 
 	const picture = image ? (
-		<Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+		<Avatar source={{ uri: image }} style={{ width: 200, height: 200 }} />
 	) : (
-		<MaterialIcons name="account-box" size={200} />
+		<Icon
+			name="person"
+			fill="#8F9BB3"
+			style={{ width: 200, height: 200 }}
+		/>
 	);
 
 	return (
