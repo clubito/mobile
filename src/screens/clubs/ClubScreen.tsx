@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-	SafeAreaView,
-	ScrollView,
-	View,
-	TouchableHighlight,
-} from "react-native";
+import { View } from "react-native";
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Card, Divider, List } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
@@ -48,7 +43,9 @@ const ClubScreen = (props: Props) => {
 	}
 	return (
 		<View style={ContainerStyles.horizMargin}>
-			<Text>{clubInfo?.description}</Text>
+			<Card>
+				<Text>{clubInfo?.description}</Text>
+			</Card>
 		</View>
 	);
 };

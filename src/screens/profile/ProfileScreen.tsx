@@ -6,10 +6,9 @@ import {
 	TouchableHighlight,
 } from "react-native";
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Divider, List } from "@ui-kitten/components";
+import { Text, Card, Divider, List, Avatar } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
-import { User, Club } from "../../types";
-import { MaterialIcons } from "@expo/vector-icons";
+import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import { useNavigation } from "@react-navigation/native";
 
@@ -61,9 +60,8 @@ const ProfileScreen = () => {
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
 				<View style={{ flexDirection: "row" }}>
-					<MaterialIcons
-						name="account-box"
-						size={50}
+					<Avatar
+						source={{ uri: profile.profilePicture }}
 						style={{ alignSelf: "center", marginRight: 10 }}
 					/>
 					<View

@@ -38,6 +38,7 @@ const ProfileSettingsScreen = () => {
 			pullAllData();
 		}
 	}, [profile]);
+
 	const pullAllData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
@@ -100,10 +101,8 @@ const ProfileSettingsScreen = () => {
 	};
 
 	const imageCallback = (image: string) => {
-		if (image != profilePic) {
-			setPFP(image);
-			setPFPChanged(true);
-		}
+		setPFP(image);
+		setPFPChanged(true);
 	};
 
 	const visibleIcon = () => (
