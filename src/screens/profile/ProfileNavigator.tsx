@@ -3,9 +3,16 @@ import { Button } from "@ui-kitten/components";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import ProfileSettingsScreen from "./ProfileSettingsScreen";
+import ClubScreen from "../clubs/ClubScreen";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Club } from "../../types";
 
-const Stack = createStackNavigator();
+type ProfileParamList = {
+	Profile: undefined;
+	Settings: undefined;
+	Club: { clubId: string; clubName: string };
+};
+const Stack = createStackNavigator<ProfileParamList>();
 
 const SearchNavigator = () => (
 	<Stack.Navigator
@@ -40,6 +47,11 @@ const SearchNavigator = () => (
 			name="Settings"
 			component={ProfileSettingsScreen}
 			options={{ title: "Profile Settings" }}
+		/>
+		<Stack.Screen
+			name="Club"
+			component={ClubScreen}
+			options={({ route }) => ({ title: route.params.clubName })}
 		/>
 	</Stack.Navigator>
 );

@@ -29,6 +29,8 @@ const ProfileSettingsScreen = () => {
 	const [profile, setProfile] = useState<User | null>(null);
 	const [checked, setChecked] = useState([] as string[]);
 	const [allTags, setAllTags] = useState([] as string[]);
+	const [profilePic, setPFP] = useState("");
+
 	useEffect(() => {
 		if (profile === null) {
 			UserService.getCurrentUser().then((data) => {
@@ -44,13 +46,17 @@ const ProfileSettingsScreen = () => {
 		setChecked(checkedTags);
 	};
 	const submitChecklist = () => {
+		console.log(name);
+		console.log(profilePic);
 		console.log(checked);
 	};
 
 	const toggleVisibleText = () => {
 		setSecureText(!secureText);
 	};
-
+	const imageCallback = (image: string) => {
+		setPFP(image);
+	};
 	const visibleIcon = () => (
 		<TouchableWithoutFeedback onPress={toggleVisibleText}>
 			<MaterialIcons
@@ -69,7 +75,11 @@ const ProfileSettingsScreen = () => {
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>
-				<Card footer={() => <Button>Submit</Button>}>
+				<Card
+					footer={() => (
+						<Button onPress={submitChecklist}>Submit</Button>
+					)}
+				>
 					<Text category="h4" style={TextStyle.subheader}>
 						Change Name
 					</Text>
@@ -94,16 +104,12 @@ const ProfileSettingsScreen = () => {
 						checked={profile.tags}
 						style={{ maxHeight: 200 }}
 					/>
-					<Button
-						onPress={submitChecklist}
-						style={{ flex: 1, margin: 10 }}
-					>
-						Confirm
-					</Button>
 					<Text category="h4" style={TextStyle.subheader}>
 						Update Profile Picture
 					</Text>
-					<ProfilePicturePicker />
+					<ProfilePicturePicker
+						functionOnConfirm={(image) => imageCallback(image)}
+					/>
 				</Card>
 				<Card>
 					<Text category="h4" style={TextStyle.subheader}>

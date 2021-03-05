@@ -3,7 +3,12 @@ import { Image, View, Platform, TouchableHighlight } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Avatar, Icon } from "@ui-kitten/components";
 
-const ProfilePicturePicker = () => {
+interface ProfilePictureSettings {
+	functionOnConfirm: Function;
+	pfp: string | null;
+}
+
+const ProfilePicturePicker = (props: ProfilePictureSettings) => {
 	const [image, setImage] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -19,7 +24,11 @@ const ProfilePicturePicker = () => {
 				}
 			}
 		})();
+		if (props.pfp !== null) setImage(props.pfp);
 	}, []);
+	useEffect(() => {
+		props.functionOnConfirm(image);
+	}, [image]);
 
 	const pickImage = async () => {
 		let result = await ImagePicker.launchImageLibraryAsync({

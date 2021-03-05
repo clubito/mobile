@@ -8,18 +8,18 @@ import {
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Card, Divider, List } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
-import { User } from "../../types";
+import { User, Club } from "../../types";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubListItem from "../../components/ClubListItem";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
+	const nav = useNavigation();
 	const [profile, setProfile] = useState<User | null>(null);
-	const [checked, setChecked] = useState([] as string[]);
 	useEffect(() => {
 		if (profile === null) {
 			UserService.getCurrentUser().then((data) => {
 				setProfile(data);
-				setChecked(data.tags);
 			});
 		}
 	}, []);
@@ -77,7 +77,18 @@ const ProfileScreen = () => {
 				<Divider style={TextStyle.divider} />
 				<List
 					data={profile.clubs}
-					renderItem={({ item }) => <ClubListItem club={item} />}
+					renderItem={({ item }) => (
+						<TouchableHighlight
+							onPress={() =>
+								nav.navigate("Club", {
+									clubId: item.id,
+									clubName: item.name,
+								})
+							}
+						>
+							<ClubListItem club={item} />
+						</TouchableHighlight>
+					)}
 					style={{ marginVertical: 10 }}
 				/>
 			</View>

@@ -35,4 +35,14 @@ export default class ClubService {
 
 		return response.data.tags;
 	}
+	static async getClub(clubID: string) {
+		const c: Club = {
+			id: clubID,
+			name: "toh",
+			logo: "ghh",
+			description: "this is a club",
+			role: "you are a person",
+		};
+		return c;
+	}
 }
