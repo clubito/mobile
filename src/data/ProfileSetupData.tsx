@@ -1,10 +1,11 @@
 import * as Yup from "yup";
+import { IndexPath } from "@ui-kitten/components";
 
 class ProfileSetupModel {
 	constructor(
 		readonly name: string,
 		readonly profilePicture: string,
-		readonly tags: string[]
+		readonly tags: IndexPath[]
 	) {}
 
 	static empty(): ProfileSetupModel {

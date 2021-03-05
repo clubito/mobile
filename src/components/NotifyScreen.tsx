@@ -5,7 +5,6 @@ import { ContainerStyles } from "../styles/CommonStyles";
 
 interface Props {
 	message: string;
-	navigateCallback?: Function;
 }
 
 const NotifyScreen = (props: Props) => {
@@ -14,13 +13,7 @@ const NotifyScreen = (props: Props) => {
 	return (
 		<Layout style={ContainerStyles.center}>
 			<Text>{props.message}</Text>
-			<Button
-				onPress={() =>
-					props.navigateCallback?.() ?? navigation.goBack()
-				}
-			>
-				OKAY
-			</Button>
+			<Button onPress={() => navigation.goBack()}>OKAY</Button>
 		</Layout>
 	);
 };

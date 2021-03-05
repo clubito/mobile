@@ -1,42 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { Avatar, Button, Layout, Text } from "@ui-kitten/components";
+import { Avatar, Button, IndexPath, Layout, Text } from "@ui-kitten/components";
 import { Formik } from "formik";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { AuthContext } from "../../context/AuthContext";
 import UserService from "../../services/UserService";
-import { ProfileSetupModel, ProfileSetupSchema } from "../../data/ProfileSetupData";
+import {
+	ProfileSetupModel,
+	ProfileSetupSchema,
+} from "../../data/ProfileSetupData";
 import FormInput from "../../components/FormInput";
 import FormMultiSelect from "../../components/FormMultiSelect";
 import LoadingScreen from "../../components/LoadingScreen";
 import NotifyScreen from "../../components/NotifyScreen";
+import ClubService from "../../services/ClubService";
 
 const ProfileSetupScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
-	const [isSuccessful, setIsSuccessful] = React.useState(false);
 
-	const { signInSuccess } = React.useContext(AuthContext);
+	const { profileSetupSuccess } = React.useContext(AuthContext);
 
 	const savedModel = React.useRef(ProfileSetupModel.empty());
+	const [tags, setTags] = React.useState([] as string[]);
 	const [submitted, setSubmitted] = React.useState(false);
 	const [responseError, setResponseError] = React.useState();
+
+	useEffect(() => {
+		ClubService.getAllTags().then((tagList) => setTags(tagList));
+	}, []);
 
 	const createUser = (model: ProfileSetupModel) => {
 		savedModel.current = model;
 		setIsLoading(true);
+
+		UserService.setupProfile({
+			name: model.name,
+			profilePicture: model.profilePicture,
+			tags: mapTagSelections(model.tags),
+		})
+			.then(() => profileSetupSuccess())
+			.catch((error) => setResponseError(error.message))
+			.finally(() => setIsLoading(false));
+	};
+
+	const mapTagSelections = (selectedTags: IndexPath[]) => {
+		const list: string[] = [];
+		selectedTags.forEach((index) => {
+			list.push(tags[index.row]);
+		});
+		return list;
 	};
 
 	if (isLoading) {
 		return <LoadingScreen />;
-	}
-
-	if (isSuccessful) {
-		return (
-			<NotifyScreen
-				message="User account successfully created"
-				navigateCallback={signInSuccess}
-			/>
-		);
 	}
 
 	return (
@@ -70,7 +86,7 @@ const ProfileSetupScreen = () => {
 							id="tags"
 							label="Select Tags"
 							style={styles.input}
-							data={["1", "2", "mizna"]}
+							data={tags}
 						/>
 
 						<Button

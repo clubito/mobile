@@ -1,8 +1,22 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import { User } from "../types";
 
 export default class UserService {
+	/**
+	 * Setup the current user's profile.
+	 * Only called once per account after signup.
+	 */
+	static async setupProfile(props: {
+		name?: string;
+		profilePicture?: string;
+		tags?: string[];
+	}) {
+		await this.updateCurrentUser(props);
+		await AsyncStorage.setItem("is_user_profile_setup", "true");
+	}
+
 	/**
 	 * Get current user profile from backend.
 	 */
@@ -11,5 +25,23 @@ export default class UserService {
 			"/user/profile"
 		);
 		return response.data;
+	}
+
+	/**
+	 * Update current user profile in backend.
+	 */
+	static async updateCurrentUser(props: {
+		name?: string;
+		profilePicture?: string;
+		tags?: string[];
+	}) {
+		const response: AxiosResponse = await API.put("/user/profile", props);
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
 	}
 }
