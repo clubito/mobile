@@ -4,8 +4,18 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	View,
+	ActivityIndicator,
 } from "react-native";
-import { Text, Input, Button, Card, Divider } from "@ui-kitten/components";
+import {
+	Text,
+	Input,
+	Button,
+	Card,
+	Divider,
+	Layout,
+	Avatar,
+	IndexPath,
+} from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { User } from "../../types";
@@ -16,88 +26,105 @@ import { AuthContext } from "../../context/AuthContext";
 import AuthService from "../../services/AuthService";
 import TagPicker from "../../components/TagPicker";
 import ClubService from "../../services/ClubService";
+import { Formik } from "formik";
+import FormInput from "../../components/FormInput";
+import FormMultiSelect from "../../components/FormMultiSelect";
+import {
+	ChangeProfileModel,
+	ChangeProfileSchema,
+} from "../../data/ChangeProfileData";
+import {
+	ChangePasswordModel,
+	ChangePasswordSchema,
+} from "../../data/ChangePasswordData";
+import FormSecureInput from "../../components/FormSecureInput";
 
 const ProfileSettingsScreen = () => {
-	const [newName, setName] = React.useState("");
-	const [curPassword, setCurPassword] = React.useState("");
-	const [password, setPassword] = React.useState("");
-	const [confirm, setConfirm] = React.useState("");
-	const [secureText, setSecureText] = React.useState(true);
 	const [modalVisible, setModalVisible] = React.useState(false);
 	const [modalType, setModalType] = React.useState(0);
 	const { logOutSuccess } = React.useContext(AuthContext);
 	const [profile, setProfile] = useState<User | null>(null);
 	const [checked, setChecked] = useState([] as string[]);
 	const [allTags, setAllTags] = useState([] as string[]);
-	const [profilePic, setPFP] = useState("");
-	const [tagsChanged, setTagsChanged] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [submitted, setSubmitted] = React.useState(false);
+	const [submitted1, setSubmitted1] = React.useState(false);
+	const [responseError, setResponseError] = React.useState();
+	const [responseError1, setResponseError1] = React.useState();
+	const [success, setSuccess] = React.useState("");
+	const [success1, setSuccess1] = React.useState("");
+	const savedModel = React.useRef(ChangeProfileModel.empty());
+	const savedPassModel = React.useRef(ChangePasswordModel.empty());
+
+	const [tagList, setTagList] = useState([] as IndexPath[]);
+
 	const [pfpChanged, setPFPChanged] = useState(false);
-
-	useEffect(() => {
-		if (profile === null) {
-			pullAllData();
-		}
-	}, [profile]);
-
+	const [profilePic, setPFP] = useState("");
 	const pullAllData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
 			setChecked(data.tags);
-			setName(data.name);
-			setTagsChanged(false);
-			setPFPChanged(false);
 		});
 		ClubService.getAllTags().then((data) => {
 			setAllTags(data);
 		});
 	};
+	useEffect(() => {
+		if (profile === null) {
+			pullAllData();
+			setLoading(false);
+		}
+	}, []);
 
 	if (profile === null) {
 		return (
-			<View style={TextStyle.center}>
-				<Text>An error has occurred, no user data could be found</Text>
-			</View>
+			<Layout style={{ flex: 1, justifyContent: "center" }}>
+				<ActivityIndicator size="large" />
+			</Layout>
 		);
 	}
 
-	const onTagsChange = (checkedTags: string[]) => {
-		if (checkedTags != checked) {
-			setChecked(checkedTags);
-			setTagsChanged(true);
-		}
-	};
-
-	const submitChecklist = () => {
+	const submitChecklist = (model: ChangeProfileModel) => {
+		savedModel.current = model;
+		console.log(model);
 		let props = {} as {
 			name?: string;
 			profilePicture?: string;
 			tags?: string[];
 		};
-		if (newName !== "" && profile && newName !== profile.name)
-			props.name = newName;
-		if (pfpChanged) props.profilePicture = profilePic;
-		if (tagsChanged) props.tags = checked;
+		if (model.name !== "") props.name = model.name;
+		if (profilePic !== profile.profilePicture)
+			props.profilePicture = profilePic;
+		props.tags = mapTagSelections(model.tags);
 		if (props.name || props.profilePicture || props.tags) {
-			console.log(props);
 			UserService.updateCurrentUser(props)
 				.then(() => {
-					console.log("Success");
 					pullAllData();
+					setSuccess("Successfully updated profile");
+					setResponseError(undefined);
 				})
-				.catch((error) => console.log(error.message));
+				.catch((error) => setResponseError(error.message));
 		} else {
 			console.log("Nothing was changed");
 		}
 	};
 
-	const submitChangePassword = () => {
-		console.log(curPassword);
-		console.log(password);
-		console.log(confirm);
+	const mapTagSelections = (selectedTags: IndexPath[]) => {
+		const list: string[] = [];
+		selectedTags.forEach((index) => {
+			list.push(allTags[index.row]);
+		});
+		return list;
 	};
 
-	const toggleVisibleText = () => {
-		setSecureText(!secureText);
+	const maptoIndexPath = (selectedTags: string[]) => {
+		const list: IndexPath[] = [];
+		selectedTags.forEach((value) => {
+			if (allTags.indexOf(value) >= 0) {
+				list.push(new IndexPath(allTags.indexOf(value)));
+			}
+		});
+		return list;
 	};
 
 	const imageCallback = (image: string) => {
@@ -105,91 +132,103 @@ const ProfileSettingsScreen = () => {
 		setPFPChanged(true);
 	};
 
-	const visibleIcon = () => (
-		<TouchableWithoutFeedback onPress={toggleVisibleText}>
-			<MaterialIcons
-				name={secureText ? "visibility" : "visibility-off"}
-				size={20}
-			/>
-		</TouchableWithoutFeedback>
-	);
+	const submitChangePassword = (model: ChangePasswordModel) => {
+		savedPassModel.current = model;
+		console.log(savedPassModel);
+		AuthService.changePassword(model.curPassword, model.password)
+			.then(() => {
+				setSuccess1("Successfully changed password");
+				setResponseError1(undefined);
+			})
+			.catch((error) => setResponseError1(error.message));
+	};
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<ScrollView style={ContainerStyles.horizMargin}>
-				<Card
-					footer={() => (
-						<Button onPress={submitChecklist}>Submit</Button>
-					)}
+				<Formik
+					initialValues={{
+						name: profile.name,
+						profilePicture: profile.profilePicture,
+						tags: maptoIndexPath(profile.tags),
+					}}
+					validationSchema={ChangeProfileSchema}
+					onSubmit={submitChecklist}
+					validateOnChange={submitted}
+					enableReinitialize={true}
 				>
-					<Text category="h4" style={TextStyle.subheader}>
-						Change Name
-					</Text>
-					<Input
-						placeholder="Name"
-						label="Name"
-						value={newName}
-						onChangeText={(nameUpdate) => setName(nameUpdate)}
-					/>
-					<View style={{ marginTop: 10 }}>
-						<Text category="h6" style={ContainerStyles.lowerMargin}>
-							Tags
-						</Text>
-						<Text appearance="hint">{profile.tags.join(", ")}</Text>
-					</View>
+					{({ handleSubmit }) => (
+						<Card style={ContainerStyles.extraMargin}>
+							<ProfilePicturePicker
+								functionOnConfirm={(image) =>
+									imageCallback(image)
+								}
+								pfp={profile.profilePicture}
+							/>
 
-					<Divider style={TextStyle.divider} />
+							<FormInput id="name" label="Name" />
 
-					<TagPicker
-						functionOnConfirm={onTagsChange}
-						content={allTags}
-						checked={profile.tags}
-						style={{ maxHeight: 200 }}
-					/>
-					<Text category="h4" style={TextStyle.subheader}>
-						Update Profile Picture
-					</Text>
-					<ProfilePicturePicker
-						functionOnConfirm={(image) => imageCallback(image)}
-						pfp={profile.profilePicture}
-					/>
-				</Card>
-				<Card
-					footer={() => (
-						<Button onPress={submitChangePassword}>Submit</Button>
+							<FormMultiSelect
+								id="tags"
+								label="Select Tags"
+								data={allTags}
+							/>
+
+							<Button
+								onPress={() => {
+									setSubmitted(true);
+									handleSubmit();
+								}}
+								style={ContainerStyles.upperMargin}
+							>
+								Apply
+							</Button>
+
+							<Text
+								status={success !== "" ? "success" : "danger"}
+							>
+								{success !== "" ? success! : responseError!}
+							</Text>
+						</Card>
 					)}
+				</Formik>
+				<Formik
+					initialValues={savedPassModel.current}
+					validationSchema={ChangePasswordSchema}
+					onSubmit={submitChangePassword}
+					validateOnChange={submitted1}
 				>
-					<Text category="h4" style={TextStyle.subheader}>
-						Change Password
-					</Text>
-					<Input
-						placeholder="Current Password"
-						label="Current Password"
-						value={curPassword}
-						onChangeText={(passUpdate) =>
-							setCurPassword(passUpdate)
-						}
-						accessoryRight={visibleIcon}
-						secureTextEntry={secureText}
-					/>
-					<Input
-						placeholder="Password"
-						label="Password"
-						value={password}
-						onChangeText={(passUpdate) => setPassword(passUpdate)}
-						accessoryRight={visibleIcon}
-						secureTextEntry={secureText}
-					/>
-					<Input
-						placeholder="Confirm Password"
-						label="Confirm Password"
-						value={confirm}
-						onChangeText={(passUpdate) => setConfirm(passUpdate)}
-						accessoryRight={visibleIcon}
-						secureTextEntry={secureText}
-					/>
-				</Card>
+					{({ handleSubmit }) => (
+						<Card style={ContainerStyles.extraMargin}>
+							<FormSecureInput
+								id="curPassword"
+								label="Current Password"
+							/>
+							<FormSecureInput id="password" label="Password" />
 
+							<FormSecureInput
+								id="confirmPassword"
+								label="Confirm Password"
+							/>
+
+							<Button
+								onPress={() => {
+									setSubmitted1(true);
+									handleSubmit();
+								}}
+								style={ContainerStyles.upperMargin}
+							>
+								Change Password
+							</Button>
+
+							<Text
+								status={success1 !== "" ? "success" : "danger"}
+							>
+								{success1 !== "" ? success1! : responseError1!}
+							</Text>
+						</Card>
+					)}
+				</Formik>
 				<View style={ContainerStyles.containerStart}>
 					<Button
 						appearance="ghost"
@@ -228,7 +267,7 @@ const ProfileSettingsScreen = () => {
 									AuthService.logout().then(logOutSuccess());
 							  }
 							: () => {
-									AuthService.deleteAccount().then(
+									UserService.deleteUser().then(
 										logOutSuccess()
 									);
 							  }

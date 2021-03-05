@@ -4,35 +4,26 @@ import {
 	ScrollView,
 	View,
 	TouchableHighlight,
+	ActivityIndicator,
 } from "react-native";
 import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Divider, List, Avatar } from "@ui-kitten/components";
+import {
+	Text,
+	Card,
+	Divider,
+	List,
+	Avatar,
+	Layout,
+} from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 
-type ProfileParamList = {
-	Profile: { refresh?: boolean };
-	Settings: undefined;
-	Club: { clubId: string; clubName: string };
-};
-type ProfileScreenRouteProp = RouteProp<ProfileParamList, "Profile">;
-
-type ProfileScreenNavigationProp = StackNavigationProp<
-	ProfileParamList,
-	"Profile"
->;
-
-type Props = {
-	route: ProfileScreenRouteProp;
-	navigation: ProfileScreenNavigationProp;
-};
-
-const ProfileScreen = (props: Props) => {
+const ProfileScreen = () => {
 	const nav = useNavigation();
 	const [profile, setProfile] = useState<User | null>(null);
+	const [loading, setLoading] = useState(true);
 
 	const getUserData = () => {
 		UserService.getCurrentUser().then((data) => {
@@ -42,17 +33,17 @@ const ProfileScreen = (props: Props) => {
 
 	useEffect(() => {
 		const unsubscribe = nav.addListener("focus", () => {
-			console.log("refres");
 			getUserData();
+			setLoading(false);
 		});
 		return unsubscribe;
 	}, [nav]);
 
-	if (profile === null) {
+	if (profile === null || loading) {
 		return (
-			<View style={TextStyle.center}>
-				<Text>An error has occurred, no user data could be found</Text>
-			</View>
+			<Layout style={{ flex: 1, justifyContent: "center" }}>
+				<ActivityIndicator size="large" />
+			</Layout>
 		);
 	}
 
@@ -62,12 +53,8 @@ const ProfileScreen = (props: Props) => {
 				No tags yet. Add tags in your profile settings.
 			</Text>
 		) : (
-			<ScrollView
-				style={{ flex: 1, flexDirection: "row" }}
-				horizontal={true}
-			>
+			<ScrollView style={{ flexDirection: "row" }} horizontal={true}>
 				{profile.tags.map((item) => {
-					console.log(item);
 					return (
 						<Card key={item}>
 							<Text
@@ -123,6 +110,7 @@ const ProfileScreen = (props: Props) => {
 								nav.navigate("Club", {
 									clubId: item.id,
 									clubName: item.name,
+									role: item.role,
 								})
 							}
 						>

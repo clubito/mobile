@@ -66,13 +66,6 @@ export default class AuthService {
 	}
 
 	/**
-	 * Clear local data store (user_token etc).
-	 */
-	static async deleteAccount() {
-		await AsyncStorage.clear();
-	}
-
-	/**
 	 * Signup new user
 	 */
 	static async signup(email: string, password: string) {
@@ -97,6 +90,22 @@ export default class AuthService {
 			email: email,
 		});
 
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+	}
+
+	/**
+	 *  Change password with current and new password
+	 */
+	static async changePassword(curPassword: string, newPassword: string) {
+		const response: AxiosResponse = await API.post("/reset", {
+			currentPassword: curPassword,
+			newPassword: newPassword,
+		});
 		if (response.status !== 200) {
 			throw {
 				code: response.status,

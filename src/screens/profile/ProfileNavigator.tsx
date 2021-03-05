@@ -1,19 +1,18 @@
 import React from "react";
 import { Button } from "@ui-kitten/components";
-import {
-	createStackNavigator,
-	HeaderBackButton,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import ProfileSettingsScreen from "./ProfileSettingsScreen";
 import ClubScreen from "../clubs/ClubScreen";
+import ClubSettings from "../clubs/ClubSettings";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Club } from "../../types";
 
 type ProfileParamList = {
-	Profile: { refresh?: boolean };
+	Profile: undefined;
 	Settings: undefined;
-	Club: { clubId: string; clubName: string };
+	Club: { clubId: string; clubName: string; role: string };
+	ClubSettings: { clubId: string };
 };
 const Stack = createStackNavigator<ProfileParamList>();
 
@@ -49,19 +48,33 @@ const SearchNavigator = () => (
 		<Stack.Screen
 			name="Settings"
 			component={ProfileSettingsScreen}
-			options={({ navigation }) => ({
-				title: "Profile Settings",
-				headerLeft: () => (
-					<HeaderBackButton
-						onPress={() => navigation.goBack({ refresh: true })}
-					/>
-				),
-			})}
+			options={{ title: "Profile Settings" }}
 		/>
 		<Stack.Screen
 			name="Club"
 			component={ClubScreen}
-			options={({ route }) => ({ title: route.params.clubName })}
+			options={({ navigation, route }) => ({
+				title: route.params.clubName,
+				headerRight: () => {
+					return route.params.role === "OFFICER" ||
+						route.params.role === "OWNER" ? (
+						<Button
+							onPress={() =>
+								navigation.navigate("ClubSettings", {
+									clubId: route.params.clubId,
+								})
+							}
+							accessoryLeft={SettingsIcon}
+							appearance="ghost"
+						/>
+					) : null;
+				},
+			})}
+		/>
+		<Stack.Screen
+			name="ClubSettings"
+			component={ClubSettings}
+			options={{ title: "Club Settings" }}
 		/>
 	</Stack.Navigator>
 );
