@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import { StyleSheet } from "react-native";
 import { Button, Input, Layout, Text } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import UserService from "../../services/UserService";
+import AuthService from "../../services/AuthService";
 import {
 	ForgotPasswordModel,
 	ForgotPasswordSchema,
@@ -24,7 +24,7 @@ const ForgotPasswordScreen = () => {
 		savedModel.current = model;
 		setIsLoading(true);
 
-		UserService.forgotPassword(model.email)
+		AuthService.forgotPassword(model.email)
 			.then(() => setIsSuccessful(true))
 			.catch((error) => setResponseError(error.message))
 			.finally(() => setIsLoading(false));

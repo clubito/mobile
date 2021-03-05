@@ -5,7 +5,7 @@ import SplashScreen from "../screens/SplashScreen";
 import MainNavigator from "./MainNavigator";
 
 import { AuthContext } from "../context/AuthContext";
-import UserService from "../services/UserService";
+import AuthService from "../services/AuthService";
 import CreateUserScreen from "../screens/auth/ProfileSetupScreen";
 
 const RootNavigator = () => {
@@ -17,7 +17,7 @@ const RootNavigator = () => {
 
 	useEffect(() => {
 		if (state.isLoading)
-			UserService.isAnyoneLoggedIn().then((data: boolean[]) =>
+			AuthService.isAnyoneLoggedIn().then((data: boolean[]) =>
 				setState({
 					isLoading: false,
 					isLoggedIn: data[0],

@@ -3,18 +3,20 @@
  */
 
 interface Club {
-	objectId: string;
+	id: string;
 	name: string;
 	logo: string;
 	description: string;
+	role: string;
 }
 
-interface Profile {
+interface User {
+	objectId: string;
 	name: string;
 	email: string;
-	profile_picture: string | null;
-	tags: string[];
 	clubs: Club[];
+	joinRequests: string[];
+	tags: string[];
 }
 
-export { Club, Profile };
+export { Club, User };
