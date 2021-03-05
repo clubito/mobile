@@ -28,7 +28,7 @@ export default class AuthService {
 			"is_user_profile_setup"
 		);
 
-		return [true, isUserProfileSetup !== null];
+		return [true, isUserProfileSetup === "true"];
 	}
 
 	/**
@@ -48,13 +48,14 @@ export default class AuthService {
 			};
 		}
 
-		AsyncStorage.setItem("user_token", response.data.token);
+		await AsyncStorage.setItem("user_token", response.data.token);
 		setUserToken(response.data.token);
 
-		AsyncStorage.setItem(
+		await AsyncStorage.setItem(
 			"is_user_profile_setup",
-			response.data.isProfileSetup
+			response.data.isProfileSetup ? "true" : "false"
 		);
+
 		return response.data.isProfileSetup;
 	}
 
