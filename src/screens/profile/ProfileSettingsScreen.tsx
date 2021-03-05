@@ -181,7 +181,7 @@ const ProfileSettingsScreen = () => {
 								}}
 								style={ContainerStyles.upperMargin}
 							>
-								Done
+								Apply
 							</Button>
 
 							<Text
