@@ -6,14 +6,26 @@ import ClubScreen from "../clubs/ClubScreen";
 import ClubSettings from "../clubs/ClubSettings";
 import { MaterialIcons } from "@expo/vector-icons";
 
-type ProfileParamList = {
+type SearchParamList = {
 	Club: { clubId: string; clubName: string; role: string };
 	ClubSettings: { clubId: string };
 };
-const Stack = createStackNavigator<ProfileParamList>();
+const Stack = createStackNavigator<SearchParamList>();
 
 const SearchNavigator = () => (
-	<Stack.Navigator>
+	<Stack.Navigator
+		screenOptions={{
+			headerStyle: {
+				backgroundColor: "#5c5c5c",
+			},
+			headerTintColor: "#fff",
+			headerTitleStyle: {
+				fontWeight: "bold",
+			},
+			headerTitleAlign: "center",
+			headerBackTitleVisible: false,
+		}}
+	>
 		<Stack.Screen name="Search" component={SearchScreen} />
 		<Stack.Screen
 			name="Club"

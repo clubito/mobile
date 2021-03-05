@@ -47,6 +47,10 @@ const ForgotPasswordScreen = () => {
 		>
 			{({ handleSubmit }) => (
 				<Layout style={ContainerStyles.center}>
+					<Text category="h2" style={styles.title}>
+						Forgot Password
+					</Text>
+
 					<FormInput id="email" label="Email" style={styles.input} />
 
 					<Button
@@ -56,7 +60,7 @@ const ForgotPasswordScreen = () => {
 							handleSubmit();
 						}}
 					>
-						Forgot Password
+						Submit
 					</Button>
 
 					<Text style={TextStyle.error}>{responseError!}</Text>
@@ -70,6 +74,9 @@ const styles = StyleSheet.create({
 	input: {
 		width: 300,
 		marginBottom: 15,
+	},
+	title: {
+		marginBottom: 30,
 	},
 });
 

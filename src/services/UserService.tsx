@@ -52,7 +52,7 @@ export default class UserService {
 		tags?: string[];
 	}) {
 		// If any picture is selected, upload to S3
-		if (props.profilePicture) {
+		if (props.profilePicture && !props.profilePicture.startsWith("https")) {
 			props.profilePicture = await ImageService.upload(
 				props.profilePicture
 			);

@@ -14,14 +14,14 @@ const SignupScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [isSuccessful, setIsSuccessful] = React.useState(false);
 
-    const savedModel = React.useRef(SignupModel.empty());
+	const savedModel = React.useRef(SignupModel.empty());
 	const [submitted, setSubmitted] = React.useState(false);
 	const [responseError, setResponseError] = React.useState();
 
 	const signup = (model: SignupModel) => {
-        savedModel.current = model;
+		savedModel.current = model;
 		setIsLoading(true);
-        
+
 		AuthService.signup(model.email, model.password)
 			.then(() => setIsSuccessful(true))
 			.catch((error) => setResponseError(error.message))
@@ -45,6 +45,10 @@ const SignupScreen = () => {
 		>
 			{({ handleSubmit }) => (
 				<Layout style={ContainerStyles.center}>
+					<Text category="h2" style={styles.title}>
+						Sign Up
+					</Text>
+
 					<FormInput id="email" label="Email" style={styles.input} />
 
 					<FormSecureInput
@@ -66,7 +70,7 @@ const SignupScreen = () => {
 							handleSubmit();
 						}}
 					>
-						Signup
+						Submit
 					</Button>
 
 					<Text style={TextStyle.error}>{responseError!}</Text>
@@ -80,6 +84,9 @@ const styles = StyleSheet.create({
 	input: {
 		width: 300,
 		marginBottom: 15,
+	},
+	title: {
+		marginBottom: 30,
 	},
 });
 

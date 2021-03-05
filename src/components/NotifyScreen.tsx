@@ -31,6 +31,7 @@ const NotifyScreen = (props: Props) => {
 				alignSelf: "center",
 				justifyContent: "center",
 				margin: 10,
+				backgroundColor: "#FFFFF",
 			}}
 		>
 			<RenderInfiniteAnimationIcon />
