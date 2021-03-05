@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import { TextStyle, ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Divider, List } from "@ui-kitten/components";
+import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
+import { ContainerStyles } from "../../styles/CommonStyles";
+import { Text, Card, Layout } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -25,15 +25,24 @@ type Props = {
 };
 
 const ClubScreen = (props: Props) => {
-	console.log(props.route.params);
 	const [clubInfo, setClubInfo] = useState<Club | null>(null);
+	const [loading, setLoading] = useState(true);
+
 	useEffect(() => {
 		if (clubInfo === null) {
 			ClubService.getClub(props.route.params.clubId).then((data) => {
 				setClubInfo(data);
+				setLoading(false);
 			});
 		}
 	}, []);
+	if (loading) {
+		return (
+			<Layout style={{ flex: 1, justifyContent: "center" }}>
+				<ActivityIndicator size="large" />
+			</Layout>
+		);
+	}
 	if (clubInfo === null) {
 		return (
 			<View>
@@ -42,11 +51,30 @@ const ClubScreen = (props: Props) => {
 		);
 	}
 	return (
-		<View style={ContainerStyles.horizMargin}>
-			<Card>
-				<Text>{clubInfo?.description}</Text>
-			</Card>
-		</View>
+		<SafeAreaView style={ContainerStyles.flexContainer}>
+			<View style={ContainerStyles.horizMargin}>
+				<View
+					style={{
+						width: "100%",
+						marginVertical: 10,
+					}}
+				>
+					<Image
+						source={{ uri: clubInfo.logo }}
+						style={{
+							width: 300,
+							height: 100,
+							resizeMode: "center",
+							alignSelf: "center",
+						}}
+					/>
+				</View>
+
+				<Card>
+					<Text>{clubInfo?.description}</Text>
+				</Card>
+			</View>
+		</SafeAreaView>
 	);
 };
 export default ClubScreen;

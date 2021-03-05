@@ -35,8 +35,12 @@ export default class UserService {
 		const response: AxiosResponse<User> = await API.delete<User>(
 			"/user/profile"
 		);
-		console.log(response);
-		return response.data;
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.statusText,
+			};
+		}
 	}
 
 	/**

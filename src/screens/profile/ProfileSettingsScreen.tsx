@@ -4,8 +4,16 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	View,
+	ActivityIndicator,
 } from "react-native";
-import { Text, Input, Button, Card, Divider } from "@ui-kitten/components";
+import {
+	Text,
+	Input,
+	Button,
+	Card,
+	Divider,
+	Layout,
+} from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { MaterialIcons } from "@expo/vector-icons";
 import { User } from "../../types";
@@ -32,12 +40,7 @@ const ProfileSettingsScreen = () => {
 	const [profilePic, setPFP] = useState("");
 	const [tagsChanged, setTagsChanged] = useState(false);
 	const [pfpChanged, setPFPChanged] = useState(false);
-
-	useEffect(() => {
-		if (profile === null) {
-			pullAllData();
-		}
-	}, [profile]);
+	const [loading, setLoading] = useState(true);
 
 	const pullAllData = () => {
 		UserService.getCurrentUser().then((data) => {
@@ -51,12 +54,18 @@ const ProfileSettingsScreen = () => {
 			setAllTags(data);
 		});
 	};
+	useEffect(() => {
+		if (profile === null) {
+			pullAllData();
+			setLoading(false);
+		}
+	}, [profile]);
 
-	if (profile === null) {
+	if (profile === null || loading) {
 		return (
-			<View style={TextStyle.center}>
-				<Text>An error has occurred, no user data could be found</Text>
-			</View>
+			<Layout style={{ flex: 1, justifyContent: "center" }}>
+				<ActivityIndicator size="large" />
+			</Layout>
 		);
 	}
 
@@ -78,10 +87,8 @@ const ProfileSettingsScreen = () => {
 		if (pfpChanged) props.profilePicture = profilePic;
 		if (tagsChanged) props.tags = checked;
 		if (props.name || props.profilePicture || props.tags) {
-			console.log(props);
 			UserService.updateCurrentUser(props)
 				.then(() => {
-					console.log("Success");
 					pullAllData();
 				})
 				.catch((error) => console.log(error.message));
