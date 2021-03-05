@@ -42,7 +42,6 @@ const ProfileScreen = (props: Props) => {
 
 	useEffect(() => {
 		const unsubscribe = nav.addListener("focus", () => {
-			console.log("refres");
 			getUserData();
 		});
 		return unsubscribe;

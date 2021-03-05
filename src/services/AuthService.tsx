@@ -66,13 +66,6 @@ export default class AuthService {
 	}
 
 	/**
-	 * Clear local data store (user_token etc).
-	 */
-	static async deleteAccount() {
-		await AsyncStorage.clear();
-	}
-
-	/**
 	 * Signup new user
 	 */
 	static async signup(email: string, password: string) {

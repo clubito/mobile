@@ -189,7 +189,6 @@ const ProfileSettingsScreen = () => {
 						secureTextEntry={secureText}
 					/>
 				</Card>
-
 				<View style={ContainerStyles.containerStart}>
 					<Button
 						appearance="ghost"
@@ -228,7 +227,7 @@ const ProfileSettingsScreen = () => {
 									AuthService.logout().then(logOutSuccess());
 							  }
 							: () => {
-									AuthService.deleteAccount().then(
+									UserService.deleteUser().then(
 										logOutSuccess()
 									);
 							  }

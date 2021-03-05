@@ -29,6 +29,17 @@ export default class UserService {
 	}
 
 	/**
+	 * Delete current user from backend
+	 */
+	static async deleteUser() {
+		const response: AxiosResponse<User> = await API.delete<User>(
+			"/user/profile"
+		);
+		console.log(response);
+		return response.data;
+	}
+
+	/**
 	 * Update current user profile in backend.
 	 */
 	static async updateCurrentUser(props: {
