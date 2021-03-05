@@ -6,7 +6,7 @@ import MainNavigator from "./MainNavigator";
 
 import { AuthContext } from "../context/AuthContext";
 import AuthService from "../services/AuthService";
-import CreateUserScreen from "../screens/auth/ProfileSetupScreen";
+import ProfileSetupScreen from "../screens/auth/ProfileSetupScreen";
 
 const RootNavigator = () => {
 	const [state, setState] = useState({
@@ -35,6 +35,13 @@ const RootNavigator = () => {
 					isProfileSetup: profileSetup,
 				});
 			},
+			profileSetupSuccess: () => {
+				setState({
+					isLoading: false,
+					isLoggedIn: true,
+					isProfileSetup: true,
+				});
+			},
 		};
 	}, []);
 
@@ -48,7 +55,7 @@ const RootNavigator = () => {
 				state.isProfileSetup ? (
 					<MainNavigator />
 				) : (
-					<CreateUserScreen />
+					<ProfileSetupScreen />
 				)
 			) : (
 				<AuthNavigator />
