@@ -113,6 +113,7 @@ const ProfileScreen = () => {
 								nav.navigate("Club", {
 									clubId: item.id,
 									clubName: item.name,
+									role: item.role,
 								})
 							}
 						>

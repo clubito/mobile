@@ -45,4 +45,19 @@ export default class ClubService {
 		);
 		return response.data;
 	}
+
+	static async requestToJoin(clubID: string) {
+		console.log(clubID);
+		const response: AxiosResponse = await API.post("/clubs/join", {
+			id: clubID,
+		});
+		console.log(response);
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
 }
