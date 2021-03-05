@@ -27,8 +27,10 @@ const LoginScreen = () => {
 
 		AuthService.login(model.email, model.password)
 			.then((profileSetup) => signInSuccess(profileSetup))
-			.catch((error) => setResponseError(error.message))
-			.finally(() => setIsLoading(false));
+			.catch((error) => {
+				setResponseError(error.message);
+				setIsLoading(false);
+			});
 	};
 
 	if (isLoading) {

@@ -11,7 +11,10 @@ export default class ClubService {
 		sort: string,
 		tagFilter: string[]
 	) {
-		const response: AxiosResponse<Club[]> = await API.get<Club[]>(
+		const response: AxiosResponse<{
+			message: string;
+			result: Club[];
+		}> = await API.get<{ message: string; result: Club[] }>(
 			"/clubs/search",
 			{
 				params: {
@@ -22,7 +25,7 @@ export default class ClubService {
 			}
 		);
 
-		return response.data;
+		return response.data.result;
 	}
 
 	/**
