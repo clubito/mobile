@@ -11,19 +11,15 @@ export default class ClubService {
 		sort: string,
 		tagFilter: string[]
 	) {
-		const response: AxiosResponse<{
-			message: string;
+		const response: AxiosResponse<{ result: Club[] }> = await API.get<{
 			result: Club[];
-		}> = await API.get<{ message: string; result: Club[] }>(
-			"/clubs/search",
-			{
-				params: {
-					name: searchQuery,
-					sortBy: sort,
-					filter: tagFilter,
-				},
-			}
-		);
+		}>("/clubs/search", {
+			params: {
+				name: searchQuery,
+				sortBy: sort,
+				filter: tagFilter,
+			},
+		});
 
 		return response.data.result;
 	}

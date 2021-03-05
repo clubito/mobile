@@ -12,8 +12,8 @@ import {
 import FormInput from "../../components/FormInput";
 import FormMultiSelect from "../../components/FormMultiSelect";
 import LoadingScreen from "../../components/LoadingScreen";
-import NotifyScreen from "../../components/NotifyScreen";
 import ClubService from "../../services/ClubService";
+import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 
 const ProfileSetupScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -63,17 +63,14 @@ const ProfileSetupScreen = () => {
 				onSubmit={createUser}
 				validateOnChange={submitted}
 			>
-				{({ handleSubmit }) => (
+				{({ handleSubmit, setFieldValue }) => (
 					<Layout style={ContainerStyles.center}>
 						<Layout style={[styles.pictureRow, styles.input]}>
-							<Avatar
-								size="giant"
-								style={styles.avatar}
-								source={require("../../assets/icon.png")}
+							<ProfilePicturePicker
+								functionOnConfirm={(image) => {
+									setFieldValue("profilePicture", image);
+								}}
 							/>
-							<Button size="tiny" appearance="ghost">
-								Select Profile Picture
-							</Button>
 						</Layout>
 
 						<FormInput

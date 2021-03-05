@@ -5,6 +5,7 @@ import {
 	FlatList,
 	StyleSheet,
 	Text,
+	TouchableHighlight,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -17,8 +18,10 @@ import {
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchScreen = () => {
+	const navigation = useNavigation();
 	const [isLoading, setIsLoading] = useState(false);
 	const [clubs, setClubs] = useState([] as Club[]);
 	const query = useRef("");
@@ -31,6 +34,7 @@ const SearchScreen = () => {
 
 	useEffect(() => {
 		ClubService.getAllTags().then((tagList) => setFilters(tagList));
+		handleSearch();
 	}, []);
 
 	const handleSearch = () => {
@@ -122,7 +126,20 @@ const SearchScreen = () => {
 				keyExtractor={(item) => item.id}
 				keyboardDismissMode="on-drag"
 				contentContainerStyle={styles.clubList}
-				renderItem={({ item }) => <ClubListItem club={item} />}
+				renderItem={({ item }) => (
+					<TouchableHighlight
+						onPress={() => {
+							console.log(item);
+							navigation.navigate("Club", {
+								clubId: item.id,
+								clubName: item.name,
+								role: item.role,
+							});
+						}}
+					>
+						<ClubListItem club={item} />
+					</TouchableHighlight>
+				)}
 			/>
 		</Layout>
 	);
