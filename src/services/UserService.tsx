@@ -11,7 +11,7 @@ export default class UserService {
 		const token = await AsyncStorage.getItem("user_token");
 
 		if (token === null) {
-			return false;
+			return [false, false];
 		}
 
 		setUserToken(token);
@@ -22,10 +22,14 @@ export default class UserService {
 		// Invalid token
 		if (response.status !== 200) {
 			this.logout();
-			return false;
+			return [false, false];
 		}
 
-		return true;
+		const isUserProfileSetup = await AsyncStorage.getItem(
+			"is_user_profile_setup"
+		);
+
+		return [true, isUserProfileSetup !== null];
 	}
 
 	/**
@@ -47,6 +51,12 @@ export default class UserService {
 
 		AsyncStorage.setItem("user_token", response.data.token);
 		setUserToken(response.data.token);
+
+		AsyncStorage.setItem(
+			"is_user_profile_setup",
+			response.data.isProfileSetup
+		);
+		return response.data.isProfileSetup;
 	}
 
 	/**
