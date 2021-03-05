@@ -11,9 +11,10 @@ interface Club {
 }
 
 interface User {
-	objectId: string;
+	id: string;
 	name: string;
 	email: string;
+	profilePicture: string;
 	clubs: Club[];
 	joinRequests: string[];
 	tags: string[];
