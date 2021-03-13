@@ -37,7 +37,7 @@ const SearchScreen = () => {
 		handleSearch();
 	}, []);
 
-    useEffect(() => {
+	useEffect(() => {
 		handleSearch();
 	}, [sortSelection]);
 
@@ -134,13 +134,17 @@ const SearchScreen = () => {
 				contentContainerStyle={styles.clubList}
 				renderItem={({ item }) => (
 					<TouchableHighlight
-						onPress={() => {
-							navigation.navigate("Club", {
-								clubId: item.id,
-								clubName: item.name,
-								role: item.role,
-							});
-						}}
+						onPress={() =>
+							navigation.navigate("ClubNavigator", {
+								title: item.name,
+								screen: "Club",
+								params: {
+									clubId: item.id,
+									clubName: item.name,
+									role: item.role,
+								},
+							})
+						}
 					>
 						<ClubListItem club={item} />
 					</TouchableHighlight>

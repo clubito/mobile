@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Layout, Button, Icon } from "@ui-kitten/components";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { Text, Card, Layout, Button } from "@ui-kitten/components";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Announcement, Club, Event } from "../../types";
 import ClubService from "../../services/ClubService";
@@ -11,18 +11,11 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import AnnouncementList from "./AnnouncementList";
 import EventList from "./EventList";
 
-type ProfileParamList = {
-	Profile: undefined;
-	Settings: undefined;
+type ClubParamList = {
 	Club: { clubId: string; clubName: string };
-	ClubSettings: { clubId: string };
 };
-type ProfileScreenRouteProp = RouteProp<ProfileParamList, "Club">;
-
-type ProfileScreenNavigationProp = StackNavigationProp<
-	ProfileParamList,
-	"Club"
->;
+type ProfileScreenRouteProp = RouteProp<ClubParamList, "Club">;
+type ProfileScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
 
 type Props = {
 	route: ProfileScreenRouteProp;

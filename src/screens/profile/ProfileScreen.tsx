@@ -107,10 +107,14 @@ const ProfileScreen = () => {
 					renderItem={({ item }) => (
 						<TouchableHighlight
 							onPress={() =>
-								nav.navigate("Club", {
-									clubId: item.id,
-									clubName: item.name,
-									role: item.role,
+								nav.navigate("ClubNavigator", {
+									title: item.name,
+									screen: "Club",
+									params: {
+										clubId: item.id,
+										clubName: item.name,
+										role: item.role,
+									},
 								})
 							}
 						>

@@ -3,16 +3,13 @@ import { Button } from "@ui-kitten/components";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import ProfileSettingsScreen from "./ProfileSettingsScreen";
-import ClubScreen from "../clubs/ClubScreen";
-import ClubSettings from "../clubs/ClubSettings";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Club } from "../../types";
+import ClubNavigator from "../clubs/ClubNavigator";
 
 type ProfileParamList = {
 	Profile: undefined;
 	Settings: undefined;
-	Club: { clubId: string; clubName: string; role: string };
-	ClubSettings: { clubId: string };
+	ClubNavigator: { title: string };
 };
 const Stack = createStackNavigator<ProfileParamList>();
 
@@ -51,30 +48,11 @@ const SearchNavigator = () => (
 			options={{ title: "Profile Settings" }}
 		/>
 		<Stack.Screen
-			name="Club"
-			component={ClubScreen}
-			options={({ navigation, route }) => ({
-				title: route.params.clubName,
-				headerRight: () => {
-					return route.params.role === "OFFICER" ||
-						route.params.role === "OWNER" ? (
-						<Button
-							onPress={() =>
-								navigation.navigate("ClubSettings", {
-									clubId: route.params.clubId,
-								})
-							}
-							accessoryLeft={SettingsIcon}
-							appearance="ghost"
-						/>
-					) : null;
-				},
+			name="ClubNavigator"
+			component={ClubNavigator}
+			options={({ route }) => ({
+				title: route.params.title,
 			})}
-		/>
-		<Stack.Screen
-			name="ClubSettings"
-			component={ClubSettings}
-			options={{ title: "Club Settings" }}
 		/>
 	</Stack.Navigator>
 );

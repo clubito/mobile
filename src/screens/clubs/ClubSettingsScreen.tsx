@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Layout, Button } from "@ui-kitten/components";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { Text, Layout, Button } from "@ui-kitten/components";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
 import ClubService from "../../services/ClubService";
-import GeneralModal from "../../components/GeneralModal";
 
-type ProfileParamList = {
-	Profile: undefined;
-	Settings: undefined;
-	Club: { clubId: string; clubName: string };
+type ClubSettingsParamList = {
 	ClubSettings: { clubId: string };
 };
-type ProfileScreenRouteProp = RouteProp<ProfileParamList, "ClubSettings">;
-
-type ProfileScreenNavigationProp = StackNavigationProp<
-	ProfileParamList,
+type ClubSettingsRouteProp = RouteProp<ClubSettingsParamList, "ClubSettings">;
+type ClubSettingsNavigationProp = StackNavigationProp<
+	ClubSettingsParamList,
 	"ClubSettings"
 >;
 
 type Props = {
-	route: ProfileScreenRouteProp;
-	navigation: ProfileScreenNavigationProp;
+	route: ClubSettingsRouteProp;
+	navigation: ClubSettingsNavigationProp;
 };
 
 const ClubSettings = (props: Props) => {
