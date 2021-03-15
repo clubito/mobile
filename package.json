@@ -33,7 +33,9 @@
     "react-native-svg": "9.13.6",
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.12",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "expo-notifications": "~0.8.2",
+    "expo-constants": "~9.3.3"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
