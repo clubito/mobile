@@ -4,6 +4,7 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
 export default class NotificationService {
+	static nav: any;
 
 	static async registerDevice() {
 		Notifications.setNotificationHandler({
@@ -48,16 +49,16 @@ export default class NotificationService {
 				lightColor: "#FF231F7C",
 			});
 		}
-
-		Notifications.addNotificationReceivedListener(this.handleNotification);
-    	Notifications.addNotificationResponseReceivedListener(this.handleNotificationResponse);
 	}
 
-	static handleNotificationResponse(response: any) {
-		console.log(response);
+	static setNavigator(nav: any) {
+		this.nav = nav;
+		Notifications.addNotificationResponseReceivedListener((event) =>
+			this.handleNotification(event.notification)
+		);
 	}
 
-	static handleNotification(notification: any) {
-		console.log(notification);
+	static handleNotification(notification: Notifications.Notification) {
+		console.log(notification.request.content.title);
 	}
 }
