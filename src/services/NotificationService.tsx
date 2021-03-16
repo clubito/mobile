@@ -8,11 +8,11 @@ export default class NotificationService {
 	static async registerDevice() {
 		Notifications.setNotificationHandler({
 			handleNotification: async () => ({
-			  shouldShowAlert: true,
-			  shouldPlaySound: true,
-			  shouldSetBadge: false,
+				shouldShowAlert: true,
+				shouldPlaySound: true,
+				shouldSetBadge: false,
 			}),
-		  });
+		});
 
 		if (Constants.isDevice) {
 			const {
@@ -35,7 +35,7 @@ export default class NotificationService {
 			const token: string = (await Notifications.getExpoPushTokenAsync()).data;
 
 			// TODO: testing only, remove once notifications work
-			await AsyncStorage.setItem("test_notif_token","TOK: " + token);
+			await AsyncStorage.setItem("test_notif_token", token);
 		} else {
 			alert("Must use physical device for Push Notifications");
 		}

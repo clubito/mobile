@@ -10,7 +10,6 @@ import { LoginModel, LoginSchema } from "../../data/LoginData";
 import FormInput from "../../components/FormInput";
 import FormSecureInput from "../../components/FormSecureInput";
 import LoadingScreen from "../../components/LoadingScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -33,11 +32,6 @@ const LoginScreen = () => {
 				setIsLoading(false);
 			});
 	};
-
-	// TODO: testing only, remove once notifications work
-	setTimeout(()=> {
-		AsyncStorage.getItem("test_notif_token").then((t) => alert(t!));
-	}, 1000);
 
 	if (isLoading) {
 		return <LoadingScreen />;

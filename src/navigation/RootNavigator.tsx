@@ -6,6 +6,7 @@ import MainNavigator from "./MainNavigator";
 
 import { AuthContext } from "../context/AuthContext";
 import AuthService from "../services/AuthService";
+import NotificationService from "../services/NotificationService";
 import ProfileSetupScreen from "../screens/auth/ProfileSetupScreen";
 
 const RootNavigator = () => {
@@ -29,6 +30,7 @@ const RootNavigator = () => {
 	const authContext = React.useMemo(() => {
 		return {
 			signInSuccess: (profileSetup: boolean) => {
+				NotificationService.registerDevice();
 				setState({
 					isLoading: false,
 					isLoggedIn: true,
