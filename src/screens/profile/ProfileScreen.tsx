@@ -111,8 +111,8 @@ const ProfileScreen = () => {
 									title: item.name,
 									screen: "Club",
 									params: {
-										clubId: item.id,
-										clubName: item.name,
+										id: item.id,
+										title: item.name,
 										role: item.role,
 									},
 								})

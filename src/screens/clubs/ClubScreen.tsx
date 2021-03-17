@@ -12,7 +12,7 @@ import AnnouncementList from "./AnnouncementList";
 import EventList from "./EventList";
 
 type ClubParamList = {
-	Club: { clubId: string; clubName: string };
+	Club: { id: string; };
 };
 type ProfileScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ProfileScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -38,7 +38,7 @@ const ClubScreen = (props: Props) => {
 
 	useEffect(() => {
 		if (clubInfo === null) {
-			ClubService.getClub(props.route.params.clubId).then((data) => {
+			ClubService.getClub(props.route.params.id).then((data) => {
 				setClubInfo(data);
 				setLoading(false);
 			});
