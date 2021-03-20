@@ -42,4 +42,21 @@ interface User {
 	role?: string;
 }
 
-export { Club, User, Announcement, Event };
+interface ChatThread {
+	clubId: string;
+	clubName: string;
+	clubLogo: string;
+	messages: ChatMessage[];
+}
+
+interface ChatMessage {
+	id: string;
+	clubId: string;
+	authorId: string;
+	authorName: string;
+	authorPicture: string;
+	timestamp: Date;
+	body: string;
+}
+
+export { Club, User, Announcement, Event, ChatThread, ChatMessage };
