@@ -39,6 +39,7 @@ import {
 } from "../../data/ChangePasswordData";
 import FormSecureInput from "../../components/FormSecureInput";
 import { useNavigation } from "@react-navigation/core";
+import SettingsItem from "../../components/SettingsItem";
 
 const ProfileSettingsScreen = () => {
 	const nav = useNavigation();
@@ -46,6 +47,7 @@ const ProfileSettingsScreen = () => {
 	const [modalType, setModalType] = React.useState(0);
 	const { logOutSuccess } = React.useContext(AuthContext);
 	const [profile, setProfile] = useState<User | null>(null);
+	const [enableNotifications, setNotificationsEnabled] = useState(true);
 	const [checked, setChecked] = useState([] as string[]);
 	const [allTags, setAllTags] = useState([] as string[]);
 	const [loading, setLoading] = useState(true);
@@ -78,6 +80,7 @@ const ProfileSettingsScreen = () => {
 			UserService.getCurrentUser().then((userProfile) => {
 				setProfile(userProfile);
 				setChecked(userProfile.tags);
+				setNotificationsEnabled(profile?.enableNotifications!);
 				savedModel.current = new ChangeProfileModel(
 					userProfile.name,
 					userProfile.profilePicture,
@@ -195,6 +198,18 @@ const ProfileSettingsScreen = () => {
 						</Card>
 					)}
 				</Formik>
+
+				<Card style={ContainerStyles.extraMargin}>
+					<SettingsItem
+						text="Notifications"
+						enabled={enableNotifications}
+						onToggle={(state) => {
+							setNotificationsEnabled(state);
+							UserService.setNotificationsEnabled(state);
+						}}
+					/>
+				</Card>
+
 				<Formik
 					initialValues={savedPassModel.current}
 					validationSchema={ChangePasswordSchema}

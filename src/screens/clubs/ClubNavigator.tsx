@@ -7,7 +7,7 @@ import ClubSettingsScreen from "./ClubSettingsScreen";
 import { Button } from "react-native";
 
 type ClubParamList = {
-	Club: { clubId: string; clubName: string; role: string };
+	Club: { id: string; title: string; role: string };
 	ClubSettings: { clubId: string };
 };
 
@@ -19,14 +19,14 @@ const ClubNavigator = () => (
 			name="Club"
 			component={ClubScreen}
 			options={({ navigation, route }) => ({
-				title: route.params.clubName,
+				title: route.params.title,
 				headerRight: () => {
 					return route.params.role === "OFFICER" ||
 						route.params.role === "OWNER" ? (
 						<Button
 							onPress={() =>
 								navigation.navigate("ClubSettings", {
-									clubId: route.params.clubId,
+									clubId: route.params.id,
 								})
 							}
 							accessoryLeft={SettingsIcon}
