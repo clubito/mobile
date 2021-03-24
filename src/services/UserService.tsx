@@ -67,4 +67,22 @@ export default class UserService {
 			};
 		}
 	}
+
+	/**
+	 * Disable all notfications for current user
+	 */
+	static async setNotificationsEnabled(state: boolean) {
+		const response: AxiosResponse = await API.post("/user/notifications", {
+			enabled: state,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
 }
