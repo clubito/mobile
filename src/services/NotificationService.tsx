@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
@@ -36,7 +35,7 @@ export default class NotificationService {
 			const token: string = (await Notifications.getExpoPushTokenAsync()).data;
 
 			// TODO: testing only, remove once notifications work
-			await AsyncStorage.setItem("test_notif_token", token);
+			console.log(token);
 		} else {
 			alert("Must use physical device for Push Notifications");
 		}
