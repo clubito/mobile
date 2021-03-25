@@ -13,7 +13,7 @@ type ProfileParamList = {
 };
 const Stack = createStackNavigator<ProfileParamList>();
 
-const SearchNavigator = () => (
+const ProfileNavigator = () => (
 	<Stack.Navigator
 		initialRouteName="Profile"
 		screenOptions={{
@@ -60,4 +60,5 @@ const SearchNavigator = () => (
 const SettingsIcon = () => (
 	<MaterialIcons name="settings" size={20} color="white" />
 );
-export default SearchNavigator;
+
+export default ProfileNavigator;
