@@ -10,8 +10,12 @@ type SearchParamList = {
 const Stack = createStackNavigator<SearchParamList>();
 
 const SearchNavigator = () => (
-	<Stack.Navigator headerMode="none">
-		<Stack.Screen name="Search" component={SearchScreen} />
+	<Stack.Navigator>
+		<Stack.Screen
+			name="Search"
+			component={SearchScreen}
+			options={{ headerShown: false }}
+		/>
 		<Stack.Screen
 			name="ClubNavigator"
 			component={ClubNavigator}

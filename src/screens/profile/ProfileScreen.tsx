@@ -3,11 +3,10 @@ import {
 	SafeAreaView,
 	ScrollView,
 	View,
-	TouchableHighlight,
 	ActivityIndicator,
 	StyleSheet,
 } from "react-native";
-import { Text, Card, List, Avatar, Layout } from "@ui-kitten/components";
+import { Text, Card, List, Avatar, Layout, Divider } from "@ui-kitten/components";
 import { ImageOverlay } from "../../components/ImageOverlay";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
@@ -135,8 +134,10 @@ const ProfileScreen = () => {
 
 				<List
 					data={profile.clubs}
+					ItemSeparatorComponent={Divider}
 					renderItem={({ item }) => (
-						<TouchableHighlight
+						<ClubListItem
+							club={item}
 							onPress={() =>
 								nav.navigate("ClubNavigator", {
 									title: item.name,
@@ -148,9 +149,7 @@ const ProfileScreen = () => {
 									},
 								})
 							}
-						>
-							<ClubListItem club={item} />
-						</TouchableHighlight>
+						/>
 					)}
 					style={{ marginVertical: 10 }}
 				/>
