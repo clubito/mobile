@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
+	Icon,
 	IndexPath,
 	Input,
 	Layout,
@@ -82,7 +83,10 @@ const SearchScreen = () => {
 				placeholder="Search"
 				returnKeyType="search"
 				defaultValue={query.current}
-				clearButtonMode="always"
+				clearButtonMode="while-editing"
+				accessoryRight={() => (
+					<Icon width={20} height={20} name="search-outline" />
+				)}
 				onChangeText={(text) => (query.current = text)}
 				onSubmitEditing={(event) => {
 					handleSearch();
@@ -157,9 +161,11 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingHorizontal: 16,
 	},
 	selectContainer: {
 		flexDirection: "row",
+		marginBottom: 8,
 	},
 	select: {
 		flex: 1,
