@@ -9,10 +9,10 @@ import ClubService from "../../services/ClubService";
 import GeneralModal from "../../components/GeneralModal";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
-import EventList from "./EventList";
+import EventTab from "./EventTab";
 
 type ClubParamList = {
-	Club: { id: string; };
+	Club: { id: string };
 };
 type ProfileScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ProfileScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -52,8 +52,6 @@ const ClubScreen = (props: Props) => {
 			</Layout>
 		);
 	}
-
-	console.log(clubInfo.role);
 
 	const requestButton =
 		clubInfo.role === "OWNER" ||
@@ -132,7 +130,7 @@ const ClubScreen = (props: Props) => {
 					/>
 					<Tab.Screen
 						name="EventList"
-						component={EventList}
+						component={EventTab}
 						initialParams={{ eventList: clubInfo.events }}
 						options={{ title: "Events" }}
 					/>

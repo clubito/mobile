@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";
-import { Button } from "react-native";
+import { Button } from "@ui-kitten/components";
 
 type ClubParamList = {
 	Club: { id: string; title: string; role: string };

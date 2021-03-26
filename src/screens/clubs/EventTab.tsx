@@ -9,6 +9,7 @@ import ClubService from "../../services/ClubService";
 import GeneralModal from "../../components/GeneralModal";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { ClubTabsParamList } from "./ClubScreen";
+import EventList from "../../components/EventList";
 
 type ProfileScreenRouteProp = RouteProp<ClubTabsParamList, "EventList">;
 
@@ -21,24 +22,10 @@ type Props = {
 	route: ProfileScreenRouteProp;
 	navigation: ProfileScreenNavigationProp;
 };
-const EventList = (props: Props) => {
+const EventTab = (props: Props) => {
 	const [events, setEvents] = useState<Event[]>(props.route.params.eventList);
 
-	return (
-		<View style={ContainerStyles.horizMargin}>
-			<List
-				data={events}
-				renderItem={({ item }) => (
-					<View style={ContainerStyles.extraMargin}>
-						<Text>{item.name}</Text>
-						<Text appearance="hint">
-							{item.startTime} to {item.endTime}
-						</Text>
-						<Text appearance="hint">{item.shortLocation}</Text>
-					</View>
-				)}
-			></List>
-		</View>
-	);
+	return <EventList events={events} />;
 };
-export default EventList;
+
+export default EventTab;
