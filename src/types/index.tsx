@@ -8,6 +8,7 @@ interface Announcement {
 }
 
 interface Event {
+	id: string;
 	name: string;
 	description: string;
 	startTime: Date;

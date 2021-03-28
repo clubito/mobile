@@ -15,6 +15,7 @@ export default class EventService {
 
 		for (var i = 0; i < 50; i++) {
 			const ev1: Event = {
+				id: "njklnfd",
 				name: "event no. " + i,
 				description: "event" + i + " is an event",
 				startTime: new Date(1616041297644 + i * 100000000),
@@ -40,14 +41,16 @@ export default class EventService {
 		// );
 		// return response.data;
 		const ev1: Event = {
+			id: "njklnfd",
 			name: "event no. 1",
-			description: "event 1 is an event",
+			description:
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 			startTime: new Date(1616041297644 + 2 * 100000000),
 			endTime: new Date(1616041297644 + (2 + 1) * 100000000),
 			longitude: "0000001",
 			latitude: "123456",
 			shortLocation: "Street go here ya number 1",
-			picture: "Nothing yet",
+			picture: "https://picsum.photos/200",
 			lastUpdated: new Date(),
 		};
 		return ev1;

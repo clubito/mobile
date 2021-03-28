@@ -14,15 +14,26 @@ type ClubParamList = {
 const Stack = createStackNavigator<ClubParamList>();
 
 const ClubNavigator = () => (
-	<Stack.Navigator headerMode="none">
+	<Stack.Navigator
+		screenOptions={{
+			headerStyle: {
+				backgroundColor: "#5c5c5c",
+			},
+			headerTintColor: "#fff",
+			headerTitleStyle: {
+				fontWeight: "bold",
+			},
+			headerTitleAlign: "center",
+			headerBackTitleVisible: false,
+		}}
+	>
 		<Stack.Screen
 			name="Club"
 			component={ClubScreen}
 			options={({ navigation, route }) => ({
 				title: route.params.title,
 				headerRight: () => {
-					return route.params.role === "OFFICER" ||
-						route.params.role === "OWNER" ? (
+					return true ? (
 						<Button
 							onPress={() =>
 								navigation.navigate("ClubSettings", {

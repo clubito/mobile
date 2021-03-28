@@ -2,12 +2,12 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, View, Image } from "react-native";
 import EventService from "../../services/EventService";
-import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
+import { ContainerStyles } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
 import { Event } from "../../types";
-import { Layout } from "@ui-kitten/components";
+import { Text, Layout, Card, Button, Avatar } from "@ui-kitten/components";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -40,8 +40,26 @@ const EventScreen = (props: Props) => {
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<View style={ContainerStyles.horizMargin}>
-				<Text>{event.name}</Text>
+			<View style={ContainerStyles.extraMargin}>
+				<View
+					style={{
+						flex: 1,
+						alignItems: "center",
+						justifyContent: "center",
+						marginBottom: 10,
+					}}
+				>
+					<Image
+						style={{ height: 200, width: 200 }}
+						source={{ uri: event.picture }}
+					/>
+				</View>
+				<Button onPress={() => {}}>{"RSVP to " + event.name}</Button>
+				<Card style={ContainerStyles.lowerMargin}>
+					<Text>
+						<b>Description:</b> {event.description}
+					</Text>
+				</Card>
 			</View>
 		</SafeAreaView>
 	);
