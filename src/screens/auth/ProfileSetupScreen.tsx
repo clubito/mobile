@@ -83,7 +83,7 @@ const ProfileSetupScreen = () => {
 
 						<FormMultiSelect
 							id="tags"
-							label="Select Tags"
+							label="Select Interests"
 							style={styles.input}
 							data={tags}
 						/>
