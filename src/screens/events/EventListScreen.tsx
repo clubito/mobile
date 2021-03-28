@@ -1,17 +1,28 @@
-import { Button, Calendar, Text, Layout } from "@ui-kitten/components";
+import {
+	Button,
+	Calendar,
+	Text,
+	Layout,
+	Popover,
+	MenuGroup,
+	DrawerGroup,
+	DrawerItem,
+	ButtonGroup,
+} from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, SafeAreaView, View } from "react-native";
 import EventService from "../../services/EventService";
 import { Event } from "../../types";
 import EventList from "../../components/EventList";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { useNavigation } from "@react-navigation/native";
 
 const EventListScreen = () => {
+	const curDate = new Date();
 	const [eventInfo, setEventInfo] = useState<Event[] | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [date, setDate] = React.useState(new Date());
-	const [viewAll, setViewAll] = useState(true);
+	//viewAll = 0 to view all components, = 1 to view current, = 2 to view upcoming, = 3 for a specific day
+	const [viewAll, setViewAll] = useState(1);
 
 	useEffect(() => {
 		if (eventInfo === null) {
@@ -30,6 +41,24 @@ const EventListScreen = () => {
 		);
 	};
 
+	const isCurrent = (start: Date, end: Date) => {
+		if (typeof start === "string") {
+			start = new Date(start);
+		}
+		if (typeof end === "string") {
+			end = new Date(end);
+		}
+
+		return curDate > start && curDate < end;
+	};
+
+	const isUpcoming = (d: Date) => {
+		if (typeof d === "string") {
+			d = new Date(d);
+		}
+		return d > curDate;
+	};
+
 	if (eventInfo === null || loading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
@@ -39,39 +68,82 @@ const EventListScreen = () => {
 	}
 
 	var filteredEvents: Event[];
-
-	if (viewAll) filteredEvents = eventInfo;
-	else
-		filteredEvents = eventInfo.filter((item) =>
-			sameDay(item.startTime, date)
-		);
+	var listTitle: string;
+	switch (viewAll) {
+		case 0:
+			filteredEvents = eventInfo;
+			listTitle = "All Events";
+			break;
+		case 2:
+			filteredEvents = eventInfo.filter((item) =>
+				isUpcoming(item.startTime)
+			);
+			listTitle = "Upcoming Events";
+			break;
+		case 3:
+			filteredEvents = eventInfo.filter((item) =>
+				sameDay(item.startTime, date)
+			);
+			listTitle =
+				"Events on " +
+				date.toLocaleDateString([], {
+					year: "2-digit",
+					month: "2-digit",
+					day: "2-digit",
+				});
+			break;
+		default:
+			filteredEvents = eventInfo.filter((item) =>
+				isCurrent(item.startTime, item.endTime)
+			);
+			listTitle = "Ongoing Events";
+			break;
+	}
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<Calendar
-				date={date}
-				style={{ alignSelf: "center" }}
-				onSelect={(nextDate) => {
-					setDate(nextDate);
-					setViewAll(false);
-				}}
-				renderFooter={() => (
-					<Button onPress={() => setViewAll(true)} disabled={viewAll}>
-						View All Events
-					</Button>
-				)}
-			/>
+			<DrawerGroup title={() => <Text category="h3">Calendar</Text>}>
+				<DrawerItem
+					title={() => (
+						<Calendar
+							date={date}
+							style={{ alignSelf: "center" }}
+							onSelect={(nextDate) => {
+								setDate(nextDate);
+								setViewAll(3);
+							}}
+						/>
+					)}
+				/>
+			</DrawerGroup>
+			<ButtonGroup appearance="outline" style={{ borderRadius: 0 }}>
+				<Button
+					style={{ flex: 1 }}
+					onPress={() => setViewAll(0)}
+					disabled={viewAll === 0}
+				>
+					View All
+				</Button>
+				<Button
+					style={{ flex: 1 }}
+					onPress={() => setViewAll(1)}
+					disabled={viewAll === 1}
+				>
+					View Current
+				</Button>
+				<Button
+					style={{ flex: 1 }}
+					onPress={() => setViewAll(2)}
+					disabled={viewAll === 2}
+				>
+					View Upcoming
+				</Button>
+			</ButtonGroup>
+
 			<Text category="h2" style={{ alignSelf: "center" }}>
-				{viewAll
-					? "All Events"
-					: "Events on " +
-					  date.toLocaleDateString([], {
-							year: "2-digit",
-							month: "2-digit",
-							day: "2-digit",
-					  })}
+				{listTitle}
 			</Text>
-			<EventList events={filteredEvents} />
+			<EventList events={filteredEvents} renderClubInfo={true} />
 		</SafeAreaView>
 	);
 };

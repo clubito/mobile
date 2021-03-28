@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Event } from "../types";
+import { Club, Event } from "../types";
 
 export default class EventService {
 	/**
@@ -12,7 +12,14 @@ export default class EventService {
 		// }>("/clubs/tags");
 		// return response.data.tags;
 		const evList = [] as Event[];
-
+		const club1: Club = {
+			id: "605bf58636058a2d921a9463",
+			name: "string",
+			logo: "https://picsum.photos/200",
+			description: "cdsfehnjisljifs",
+			role: "MEMBER",
+			theme: "string",
+		};
 		for (var i = 0; i < 50; i++) {
 			const ev1: Event = {
 				id: "njklnfd",
@@ -23,8 +30,9 @@ export default class EventService {
 				longitude: "0000001",
 				latitude: "123456",
 				shortLocation: "Street go here ya number 1",
-				picture: "Nothing yet",
+				picture: "https://picsum.photos/200",
 				lastUpdated: new Date(),
+				club: club1,
 			};
 			evList.push(ev1);
 		}
@@ -40,6 +48,14 @@ export default class EventService {
 		// 	}
 		// );
 		// return response.data;
+		const club1: Club = {
+			id: "605bf58636058a2d921a9463",
+			name: "string",
+			logo: "https://picsum.photos/200",
+			description: "cdsfehnjisljifs",
+			role: "MEMBER",
+			theme: "string",
+		};
 		const ev1: Event = {
 			id: "njklnfd",
 			name: "event no. 1",
@@ -52,6 +68,7 @@ export default class EventService {
 			shortLocation: "Street go here ya number 1",
 			picture: "https://picsum.photos/200",
 			lastUpdated: new Date(),
+			club: club1,
 		};
 		return ev1;
 	}

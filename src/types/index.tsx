@@ -18,6 +18,7 @@ interface Event {
 	shortLocation: string;
 	picture: string;
 	lastUpdated: Date;
+	club: Club;
 }
 
 interface Club {
