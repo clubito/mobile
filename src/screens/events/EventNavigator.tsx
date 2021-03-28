@@ -6,11 +6,11 @@ import EventListScreen from "./EventListScreen";
 import EventScreen from "./EventScreen";
 import { Button } from "@ui-kitten/components";
 
-type SearchParamList = {
+export type EventParamList = {
 	EventList: undefined;
 	Event: { id: string; title: string; role: string };
 };
-const Stack = createStackNavigator<SearchParamList>();
+const Stack = createStackNavigator<EventParamList>();
 
 const EventNavigator = () => (
 	<Stack.Navigator
