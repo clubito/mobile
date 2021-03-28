@@ -104,7 +104,7 @@ const ProfileScreen = () => {
 								Clubs
 							</Text>
 							<Text category="c2" status="control">
-								2
+								{profile.clubs.length}
 							</Text>
 						</View>
 
@@ -113,7 +113,7 @@ const ProfileScreen = () => {
 								Interests
 							</Text>
 							<Text category="c2" status="control">
-								4
+								{profile.tags.length}
 							</Text>
 						</View>
 
