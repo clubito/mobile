@@ -5,9 +5,16 @@ import {
 	View,
 	ActivityIndicator,
 	StyleSheet,
+	ImageBackground,
 } from "react-native";
-import { Text, Card, List, Avatar, Layout, Divider } from "@ui-kitten/components";
-import { ImageOverlay } from "../../components/ImageOverlay";
+import {
+	Text,
+	Card,
+	List,
+	Avatar,
+	Layout,
+	Divider,
+} from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
@@ -67,10 +74,17 @@ const ProfileScreen = () => {
 	return (
 		<SafeAreaView>
 			<ScrollView>
-				<ImageOverlay
+				<ImageBackground
 					style={styles.header}
 					source={require("../../assets/background.png")}
 				>
+					<View
+						style={[
+							StyleSheet.absoluteFill,
+							{ backgroundColor: "rgba(0, 0, 0, 0.45)" },
+						]}
+					/>
+
 					<Avatar
 						style={styles.profileAvatar}
 						source={{ uri: profile.profilePicture }}
@@ -112,7 +126,7 @@ const ProfileScreen = () => {
 							</Text>
 						</View>
 					</View>
-				</ImageOverlay>
+				</ImageBackground>
 
 				<Layout>
 					<Text style={[styles.label, styles.text]} category="s1">
