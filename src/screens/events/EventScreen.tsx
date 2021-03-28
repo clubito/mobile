@@ -2,7 +2,13 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { ActivityIndicator, SafeAreaView, View, Image } from "react-native";
+import {
+	ActivityIndicator,
+	SafeAreaView,
+	View,
+	Image,
+	ImageBackground,
+} from "react-native";
 import EventService from "../../services/EventService";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
@@ -49,8 +55,8 @@ const EventScreen = (props: Props) => {
 						marginBottom: 10,
 					}}
 				>
-					<Image
-						style={{ height: 200, width: 200 }}
+					<ImageBackground
+						style={{ height: 200, width: "100%" }}
 						source={{ uri: event.picture }}
 					/>
 				</View>

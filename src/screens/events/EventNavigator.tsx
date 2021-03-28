@@ -15,14 +15,6 @@ const Stack = createStackNavigator<EventParamList>();
 const EventNavigator = () => (
 	<Stack.Navigator
 		screenOptions={{
-			headerStyle: {
-				backgroundColor: "#5c5c5c",
-			},
-			headerTintColor: "#fff",
-			headerTitleStyle: {
-				fontWeight: "bold",
-			},
-			headerTitleAlign: "center",
 			headerBackTitleVisible: false,
 		}}
 	>

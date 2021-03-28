@@ -14,19 +14,7 @@ type ClubParamList = {
 const Stack = createStackNavigator<ClubParamList>();
 
 const ClubNavigator = () => (
-	<Stack.Navigator
-		screenOptions={{
-			headerStyle: {
-				backgroundColor: "#5c5c5c",
-			},
-			headerTintColor: "#fff",
-			headerTitleStyle: {
-				fontWeight: "bold",
-			},
-			headerTitleAlign: "center",
-			headerBackTitleVisible: false,
-		}}
-	>
+	<Stack.Navigator>
 		<Stack.Screen
 			name="Club"
 			component={ClubScreen}
@@ -56,8 +44,6 @@ const ClubNavigator = () => (
 	</Stack.Navigator>
 );
 
-const SettingsIcon = () => (
-	<MaterialIcons name="settings" size={20} color="white" />
-);
+const SettingsIcon = () => <MaterialIcons name="settings" size={20} />;
 
 export default ClubNavigator;
