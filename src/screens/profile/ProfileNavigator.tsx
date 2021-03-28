@@ -17,14 +17,6 @@ const ProfileNavigator = () => (
 	<Stack.Navigator
 		initialRouteName="Profile"
 		screenOptions={{
-			headerStyle: {
-				backgroundColor: "#5c5c5c",
-			},
-			headerTintColor: "#fff",
-			headerTitleStyle: {
-				fontWeight: "bold",
-			},
-			headerTitleAlign: "center",
 			headerBackTitleVisible: false,
 		}}
 	>
@@ -57,8 +49,6 @@ const ProfileNavigator = () => (
 	</Stack.Navigator>
 );
 
-const SettingsIcon = () => (
-	<MaterialIcons name="settings" size={20} color="white" />
-);
+const SettingsIcon = () => <MaterialIcons name="settings" size={20} />;
 
 export default ProfileNavigator;

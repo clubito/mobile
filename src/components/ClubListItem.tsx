@@ -1,30 +1,59 @@
-import { Text, Avatar } from "@ui-kitten/components";
+import { Avatar, Button, ListItem, Text } from "@ui-kitten/components";
 import React from "react";
-import { View } from "react-native";
-import { TextStyle } from "../styles/CommonStyles";
+import { StyleSheet } from "react-native";
 import { Club } from "../types";
 
 interface Props {
 	club: Club;
+	onPress: () => void;
 }
 
-const ClubListItem = (props: Props) => (
-	<View style={{ flexDirection: "row" }}>
-		<Avatar
-			source={{ uri: props.club.logo }}
-			style={{ margin: 5, height: 50, width: 50 }}
+const ClubListItem = (props: Props) => {
+	const membership =
+		props.club.role !== "NONMEMBER" ? props.club.role.substring(0, 1) : "";
+	const membershipTextColor = membership === "O" ? "danger" : "info";
+
+	return (
+		<ListItem
+			onPress={props.onPress}
+			title={() => (
+				<Text style={styles.title} category="s1">
+					{props.club.name}
+				</Text>
+			)}
+			description={() => (
+				<Text appearance="hint" style={styles.desc} numberOfLines={1}>
+					{props.club.description}
+				</Text>
+			)}
+			accessoryLeft={() => (
+				<Avatar
+					source={{ uri: props.club.logo }}
+					style={{ marginRight: 5, height: 45, width: 45 }}
+				/>
+			)}
+			accessoryRight={() => (
+				<Button
+					size="small"
+					appearance="ghost"
+					status={membershipTextColor}
+				>
+					{membership}
+				</Button>
+			)}
 		/>
-		<View style={{ flexDirection: "column", flex: 1 }}>
-			<Text category="h4">{props.club.name}</Text>
-			<Text
-				appearance="hint"
-				style={{ overflow: "hidden" }}
-				numberOfLines={1}
-			>
-				{props.club.description}
-			</Text>
-		</View>
-	</View>
-);
+	);
+};
+
+const styles = StyleSheet.create({
+	title: {
+		marginLeft: 8,
+		fontSize: 16,
+	},
+	desc: {
+		marginLeft: 8,
+		fontSize: 14,
+	},
+});
 
 export default ClubListItem;
