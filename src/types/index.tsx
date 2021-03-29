@@ -40,6 +40,7 @@ interface User {
 	joinRequests: string[];
 	tags: string[];
 	role?: string;
+	enableNotifications?: boolean;
 }
 
 interface ChatThread {

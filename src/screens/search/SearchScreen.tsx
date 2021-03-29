@@ -5,10 +5,11 @@ import {
 	FlatList,
 	StyleSheet,
 	Text,
-	TouchableHighlight,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
+	Divider,
+	Icon,
 	IndexPath,
 	Input,
 	Layout,
@@ -82,7 +83,10 @@ const SearchScreen = () => {
 				placeholder="Search"
 				returnKeyType="search"
 				defaultValue={query.current}
-				clearButtonMode="always"
+				clearButtonMode="while-editing"
+				accessoryRight={() => (
+					<Icon width={20} height={20} name="search-outline" />
+				)}
 				onChangeText={(text) => (query.current = text)}
 				onSubmitEditing={(event) => {
 					handleSearch();
@@ -132,22 +136,22 @@ const SearchScreen = () => {
 				keyExtractor={(item) => item.id}
 				keyboardDismissMode="on-drag"
 				contentContainerStyle={styles.clubList}
+				ItemSeparatorComponent={Divider}
 				renderItem={({ item }) => (
-					<TouchableHighlight
+					<ClubListItem
+						club={item}
 						onPress={() =>
 							navigation.navigate("ClubNavigator", {
 								title: item.name,
 								screen: "Club",
 								params: {
-									clubId: item.id,
-									clubName: item.name,
+									id: item.id,
+									title: item.name,
 									role: item.role,
 								},
 							})
 						}
-					>
-						<ClubListItem club={item} />
-					</TouchableHighlight>
+					/>
 				)}
 			/>
 		</Layout>
@@ -157,9 +161,11 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingHorizontal: 8,
 	},
 	selectContainer: {
 		flexDirection: "row",
+		marginBottom: 8,
 	},
 	select: {
 		flex: 1,

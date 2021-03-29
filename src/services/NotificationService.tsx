@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
@@ -36,7 +35,7 @@ export default class NotificationService {
 			const token: string = (await Notifications.getExpoPushTokenAsync()).data;
 
 			// TODO: testing only, remove once notifications work
-			await AsyncStorage.setItem("test_notif_token", token);
+			console.log(token);
 		} else {
 			alert("Must use physical device for Push Notifications");
 		}
@@ -54,11 +53,36 @@ export default class NotificationService {
 	static setNavigator(nav: any) {
 		this.nav = nav;
 		Notifications.addNotificationResponseReceivedListener((event) =>
-			this.handleNotification(event.notification)
+			this.handleNotification(event.notification.request.content)
 		);
 	}
 
-	static handleNotification(notification: Notifications.Notification) {
-		console.log(notification.request.content.title);
+	static handleNotification(notification: Notifications.NotificationContent) {
+		let navigator, screen: string;
+		switch (notification.data.type) {
+			case "event":
+				navigator = "EventNavigator";
+				screen = "Event";
+				break;
+			case "club":
+				navigator = "ClubNavigator";
+				screen = "Club";
+				break;
+			default:
+				navigator = screen = "Error";
+		}
+
+		this.nav.navigate("NotificationNavigator", {
+			screen: navigator,
+			params: {
+				screen: screen,
+				title: notification.data.title,
+				params: {
+					id: notification.data.id,
+					title: notification.data.title,
+					role: notification.data.role,
+				},
+			},
+		});
 	}
 }
