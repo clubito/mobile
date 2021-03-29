@@ -8,6 +8,7 @@ import {
 	ForgotPasswordModel,
 	ForgotPasswordSchema,
 } from "../../data/ForgotPasswordData";
+import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 import LoadingScreen from "../../components/LoadingScreen";
 import NotifyScreen from "../../components/NotifyScreen";
 import FormInput from "../../components/FormInput";
@@ -46,25 +47,31 @@ const ForgotPasswordScreen = () => {
 			validateOnChange={submitted}
 		>
 			{({ handleSubmit }) => (
-				<Layout style={ContainerStyles.center}>
-					<Text category="h2" style={styles.title}>
-						Forgot Password
-					</Text>
+				<KeyboardAwareLayout>
+					<Layout style={ContainerStyles.center}>
+						<Text category="h2" style={styles.title}>
+							Forgot Password
+						</Text>
 
-					<FormInput id="email" label="Email" style={styles.input} />
+						<FormInput
+							id="email"
+							label="Email"
+							style={styles.input}
+						/>
 
-					<Button
-						style={styles.input}
-						onPress={() => {
-							setSubmitted(true);
-							handleSubmit();
-						}}
-					>
-						Submit
-					</Button>
+						<Button
+							style={styles.input}
+							onPress={() => {
+								setSubmitted(true);
+								handleSubmit();
+							}}
+						>
+							Submit
+						</Button>
 
-					<Text style={TextStyle.error}>{responseError!}</Text>
-				</Layout>
+						<Text style={TextStyle.error}>{responseError!}</Text>
+					</Layout>
+				</KeyboardAwareLayout>
 			)}
 		</Formik>
 	);

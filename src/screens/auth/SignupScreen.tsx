@@ -5,6 +5,7 @@ import { Button, Layout, Text } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import AuthService from "../../services/AuthService";
 import { SignupModel, SignupSchema } from "../../data/SignupData";
+import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 import NotifyScreen from "../../components/NotifyScreen";
 import LoadingScreen from "../../components/LoadingScreen";
 import FormInput from "../../components/FormInput";
@@ -44,37 +45,43 @@ const SignupScreen = () => {
 			validateOnChange={submitted}
 		>
 			{({ handleSubmit }) => (
-				<Layout style={ContainerStyles.center}>
-					<Text category="h2" style={styles.title}>
-						Sign Up
-					</Text>
+				<KeyboardAwareLayout>
+					<Layout style={ContainerStyles.center}>
+						<Text category="h2" style={styles.title}>
+							Sign Up
+						</Text>
 
-					<FormInput id="email" label="Email" style={styles.input} />
+						<FormInput
+							id="email"
+							label="Email"
+							style={styles.input}
+						/>
 
-					<FormSecureInput
-						id="password"
-						label="Password"
-						style={styles.input}
-					/>
+						<FormSecureInput
+							id="password"
+							label="Password"
+							style={styles.input}
+						/>
 
-					<FormSecureInput
-						id="confirmPassword"
-						label="Confirm Password"
-						style={styles.input}
-					/>
+						<FormSecureInput
+							id="confirmPassword"
+							label="Confirm Password"
+							style={styles.input}
+						/>
 
-					<Button
-						style={styles.input}
-						onPress={() => {
-							setSubmitted(true);
-							handleSubmit();
-						}}
-					>
-						Submit
-					</Button>
+						<Button
+							style={styles.input}
+							onPress={() => {
+								setSubmitted(true);
+								handleSubmit();
+							}}
+						>
+							Submit
+						</Button>
 
-					<Text style={TextStyle.error}>{responseError!}</Text>
-				</Layout>
+						<Text style={TextStyle.error}>{responseError!}</Text>
+					</Layout>
+				</KeyboardAwareLayout>
 			)}
 		</Formik>
 	);
