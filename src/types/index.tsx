@@ -50,8 +50,6 @@ interface ChatThread {
 }
 
 interface ChatMessage {
-	id: string;
-	clubId: string;
 	authorId: string;
 	authorName: string;
 	authorPicture: string;
