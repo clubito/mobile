@@ -8,18 +8,18 @@ import { Club } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
 
-type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
-type ClubSettingsNavigationProp = StackNavigationProp<
+type AddAnnouncementRouteProp = RouteProp<ClubParamList, "AddAnnouncement">;
+type AddAnnouncementNavigationProp = StackNavigationProp<
 	ClubParamList,
-	"ClubSettings"
+	"AddAnnouncement"
 >;
 
 type Props = {
-	route: ClubSettingsRouteProp;
-	navigation: ClubSettingsNavigationProp;
+	route: AddAnnouncementRouteProp;
+	navigation: AddAnnouncementNavigationProp;
 };
 
-const ClubSettings = (props: Props) => {
+const AddAnnouncementScreen = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState<Club | null>(null);
 	const [loading, setLoading] = useState(true);
 
@@ -43,9 +43,9 @@ const ClubSettings = (props: Props) => {
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
-				<Text>Club settings for {clubInfo.name}</Text>
+				<Text>Add Announcement for {clubInfo.name}</Text>
 			</View>
 		</SafeAreaView>
 	);
 };
-export default ClubSettings;
+export default AddAnnouncementScreen;

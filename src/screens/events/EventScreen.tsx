@@ -36,6 +36,25 @@ const EventScreen = (props: Props) => {
 		}
 	}, []);
 
+	const getReadableDate = (d: Date) => {
+		if (typeof d === "string") {
+			d = new Date(d);
+		}
+		return (
+			String(
+				d.toLocaleDateString([], {
+					year: "2-digit",
+					month: "2-digit",
+					day: "2-digit",
+				})
+			) +
+			" " +
+			String(
+				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+			)
+		);
+	};
+
 	if (event === null || loading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
@@ -60,7 +79,15 @@ const EventScreen = (props: Props) => {
 						source={{ uri: event.picture }}
 					/>
 				</View>
-				<Button onPress={() => {}}>{"RSVP to " + event.name}</Button>
+				<Card style={ContainerStyles.lowerMargin}>
+					<Text category="s1" style={{ textAlign: "center" }}>
+						{getReadableDate(event.startTime)} to{" "}
+						{getReadableDate(event.endTime)}
+					</Text>
+				</Card>
+				<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
+					{"RSVP to " + event.name}
+				</Button>
 				<Card style={ContainerStyles.lowerMargin}>
 					<Text>
 						<b>Description:</b> {event.description}

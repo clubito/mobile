@@ -117,12 +117,9 @@ const EventList = (props: Props) => {
 						]}
 						onPress={() =>
 							navigation.navigate("Event", {
+								id: item.id,
 								title: item.name,
-								params: {
-									id: item.id,
-									title: item.name,
-									role: item.role,
-								},
+								role: item.role,
 							})
 						}
 						footer={() =>

@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Layout, Button } from "@ui-kitten/components";
-import { RouteProp } from "@react-navigation/native";
+import {
+	Text,
+	Card,
+	Layout,
+	Button,
+	Popover,
+	Menu,
+	MenuItem,
+} from "@ui-kitten/components";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Announcement, Club, Event } from "../../types";
 import ClubService from "../../services/ClubService";
@@ -10,10 +18,8 @@ import GeneralModal from "../../components/GeneralModal";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
+import { ClubParamList } from "./ClubNavigator";
 
-type ClubParamList = {
-	Club: { id: string };
-};
 type ProfileScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ProfileScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
 
@@ -30,9 +36,11 @@ export type ClubTabsParamList = {
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
 
 const ClubScreen = (props: Props) => {
+	const navigation = useNavigation();
 	const [clubInfo, setClubInfo] = useState<Club | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [modalVisible, setModalVisible] = React.useState(false);
+	const [addVisible, setAddVisible] = React.useState(false);
 	const [message, setMessage] = React.useState("");
 	const [error, setError] = React.useState(false);
 
@@ -66,6 +74,47 @@ const ClubScreen = (props: Props) => {
 			</Button>
 		);
 
+	const renderToggleButton = () => (
+		<Button
+			style={{ position: "absolute", bottom: 10, right: 10 }}
+			onPress={() => setAddVisible(true)}
+		>
+			+
+		</Button>
+	);
+
+	const addAnEvButton =
+		clubInfo.role === "OWNER" ||
+		clubInfo.role === "OFFICER" ||
+		clubInfo.role === "MEMBER" ? (
+			<Popover
+				anchor={renderToggleButton}
+				visible={addVisible}
+				placement={"top end"}
+				onBackdropPress={() => setAddVisible(false)}
+			>
+				<Menu>
+					<MenuItem
+						title="Add Announcement"
+						onPress={() => {
+							setAddVisible(false);
+							navigation.navigate("AddAnnouncement", {
+								clubId: clubInfo.id,
+							});
+						}}
+					/>
+					<MenuItem
+						title="Add Event"
+						onPress={() => {
+							setAddVisible(false);
+							navigation.navigate("AddEvent", {
+								clubId: clubInfo.id,
+							});
+						}}
+					/>
+				</Menu>
+			</Popover>
+		) : null;
 	const sendRequest = () => {
 		setModalVisible(false);
 		ClubService.requestToJoin(clubInfo.id)
@@ -136,6 +185,7 @@ const ClubScreen = (props: Props) => {
 					/>
 				</Tab.Navigator>
 			</View>
+			{addAnEvButton}
 		</SafeAreaView>
 	);
 };

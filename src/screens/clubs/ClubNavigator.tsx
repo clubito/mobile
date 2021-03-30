@@ -4,11 +4,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";
+import AddEventScreen from "./AddEventScreen";
 import { Button } from "@ui-kitten/components";
+import AddAnnouncementScreen from "./AddAnnouncement";
 
-type ClubParamList = {
+export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
 	ClubSettings: { clubId: string };
+	AddEvent: { clubId: string; eventId?: string };
+	AddAnnouncement: { clubId: string; eventId?: string };
 };
 
 const Stack = createStackNavigator<ClubParamList>();
@@ -21,7 +25,8 @@ const ClubNavigator = () => (
 			options={({ navigation, route }) => ({
 				title: route.params.title,
 				headerRight: () => {
-					return true ? (
+					return route.params.role === "OFFICER" ||
+						route.params.role === "OWNER" ? (
 						<Button
 							onPress={() =>
 								navigation.navigate("ClubSettings", {
@@ -39,6 +44,16 @@ const ClubNavigator = () => (
 			name="ClubSettings"
 			component={ClubSettingsScreen}
 			options={{ title: "Club Settings" }}
+		/>
+		<Stack.Screen
+			name="AddEvent"
+			component={AddEventScreen}
+			options={{ title: "Add Event" }}
+		/>
+		<Stack.Screen
+			name="AddAnnouncement"
+			component={AddAnnouncementScreen}
+			options={{ title: "Add Announcement" }}
 		/>
 		{/* <Stack.Screen name="EventNavigator" component={EventNavigator} /> */}
 	</Stack.Navigator>
