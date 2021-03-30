@@ -13,7 +13,7 @@ function App() {
 		<NavigationContainer>
 			{StatusBar.setBarStyle("dark-content", true)}
 			<IconRegistry icons={EvaIconsPack} />
-			<ApplicationProvider {...eva} theme={eva.light}>
+			<ApplicationProvider {...eva} theme={eva.dark}>
 				<RootNavigator />
 			</ApplicationProvider>
 			<Toast ref={(ref) => global['toast'] = ref} />
