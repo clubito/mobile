@@ -1,37 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import {
-	Text,
-	Card,
-	Layout,
-	Button,
-	Icon,
-	List,
-	ListItem,
-} from "@ui-kitten/components";
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { Text, List } from "@ui-kitten/components";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Announcement, Club } from "../../types";
-import ClubService from "../../services/ClubService";
+import { Announcement } from "../../types";
 import { ClubTabsParamList } from "./ClubScreen";
 
-type ProfileScreenRouteProp = RouteProp<ClubTabsParamList, "AnnouncementList">;
+type AnnouncementListRouteProp = RouteProp<ClubTabsParamList, "AnnouncementList">;
 
-type ProfileScreenNavigationProp = StackNavigationProp<
+type AnnouncementListNavigationProp = StackNavigationProp<
 	ClubTabsParamList,
 	"AnnouncementList"
 >;
 
 type Props = {
-	route: ProfileScreenRouteProp;
-	navigation: ProfileScreenNavigationProp;
+	route: AnnouncementListRouteProp;
+	navigation: AnnouncementListNavigationProp;
 };
 
 const AnnouncementList = (props: Props) => {
-	const [announcements, setAnnouncements] = useState<Announcement[]>(
-		props.route.params.announcementList
-	);
+	const announcements: Announcement[] = props.route.params.announcementList;
 
 	return (
 		<View style={ContainerStyles.horizMargin}>

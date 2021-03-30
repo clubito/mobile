@@ -22,13 +22,13 @@ import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
 	const nav = useNavigation();
-	const [profile, setProfile] = useState<User | null>(null);
-	const [loading, setLoading] = useState(true);
+	const [profile, setProfile] = useState({} as User);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const getUserData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
-			setLoading(false);
+			setIsLoading(false);
 		});
 	};
 
@@ -39,7 +39,7 @@ const ProfileScreen = () => {
 		return unsubscribe;
 	}, [nav]);
 
-	if (profile === null || loading) {
+	if (isLoading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />

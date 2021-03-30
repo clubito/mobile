@@ -1,30 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
 	SafeAreaView,
-	TouchableWithoutFeedback,
 	ScrollView,
 	View,
 	ActivityIndicator,
 } from "react-native";
-import {
-	Text,
-	Input,
-	Button,
-	Card,
-	Divider,
-	Layout,
-	Avatar,
-	IndexPath,
-} from "@ui-kitten/components";
-import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Text, Button, Card, Layout, IndexPath } from "@ui-kitten/components";
+import { ContainerStyles } from "../../styles/CommonStyles";
 import { User } from "../../types";
 import UserService from "../../services/UserService";
 import GeneralModal from "../../components/GeneralModal";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 import { AuthContext } from "../../context/AuthContext";
 import AuthService from "../../services/AuthService";
-import TagPicker from "../../components/TagPicker";
 import ClubService from "../../services/ClubService";
 import { Formik } from "formik";
 import FormInput from "../../components/FormInput";
@@ -43,24 +31,21 @@ import SettingsItem from "../../components/SettingsItem";
 
 const ProfileSettingsScreen = () => {
 	const nav = useNavigation();
-	const [modalVisible, setModalVisible] = React.useState(false);
-	const [modalType, setModalType] = React.useState(0);
-	const { logOutSuccess } = React.useContext(AuthContext);
-	const [profile, setProfile] = useState<User | null>(null);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [modalType, setModalType] = useState(0);
+	const { logOutSuccess } = useContext(AuthContext);
+	const [profile, setProfile] = useState<User>({} as User);
 	const [enableNotifications, setNotificationsEnabled] = useState(true);
-	const [checked, setChecked] = useState([] as string[]);
 	const [allTags, setAllTags] = useState([] as string[]);
-	const [loading, setLoading] = useState(true);
-	const [submitted, setSubmitted] = React.useState(false);
-	const [submitted1, setSubmitted1] = React.useState(false);
-	const [responseError, setResponseError] = React.useState();
-	const [responseError1, setResponseError1] = React.useState();
-	const [success, setSuccess] = React.useState("");
-	const [success1, setSuccess1] = React.useState("");
-	const savedModel = React.useRef(ChangeProfileModel.empty());
-	const savedPassModel = React.useRef(ChangePasswordModel.empty());
-
-	const [tagList, setTagList] = useState([] as IndexPath[]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [submitted, setSubmitted] = useState(false);
+	const [submitted1, setSubmitted1] = useState(false);
+	const [responseError, setResponseError] = useState();
+	const [responseError1, setResponseError1] = useState();
+	const [success, setSuccess] = useState("");
+	const [success1, setSuccess1] = useState("");
+	const savedModel = useRef(ChangeProfileModel.empty());
+	const savedPassModel = useRef(ChangePasswordModel.empty());
 
 	const maptoIndexPath = (selectedTags: string[], allTagsL: string[]) => {
 		const list: IndexPath[] = [];
@@ -72,31 +57,28 @@ const ProfileSettingsScreen = () => {
 		return list;
 	};
 
-	const [pfpChanged, setPFPChanged] = useState(false);
 	const [profilePic, setPFP] = useState("");
 	const pullAllData = () => {
 		ClubService.getAllTags().then((data) => {
 			setAllTags(data);
 			UserService.getCurrentUser().then((userProfile) => {
 				setProfile(userProfile);
-				setChecked(userProfile.tags);
 				setNotificationsEnabled(profile?.enableNotifications!);
 				savedModel.current = new ChangeProfileModel(
 					userProfile.name,
 					userProfile.profilePicture,
 					maptoIndexPath(userProfile.tags, data)
 				);
-				setLoading(false);
+				setIsLoading(false);
 			});
 		});
 	};
+
 	useEffect(() => {
-		if (profile === null) {
-			pullAllData();
-		}
+		pullAllData();
 	}, []);
 
-	if (profile === null) {
+	if (isLoading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -139,7 +121,6 @@ const ProfileSettingsScreen = () => {
 
 	const imageCallback = (image: string) => {
 		setPFP(image);
-		setPFPChanged(true);
 	};
 
 	const submitChangePassword = (model: ChangePasswordModel) => {

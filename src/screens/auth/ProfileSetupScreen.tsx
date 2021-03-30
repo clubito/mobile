@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { Avatar, Button, IndexPath, Layout, Text } from "@ui-kitten/components";
+import { Button, IndexPath, Layout, Text } from "@ui-kitten/components";
 import { Formik } from "formik";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { AuthContext } from "../../context/AuthContext";

@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { StyleSheet } from "react-native";
-import { Button, Input, Layout, Text } from "@ui-kitten/components";
+import { Button, Layout, Text } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import AuthService from "../../services/AuthService";
 import {
