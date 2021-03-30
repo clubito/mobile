@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Layout, Button } from "@ui-kitten/components";
+import { Text, Layout } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -20,19 +20,17 @@ type Props = {
 };
 
 const ClubSettings = (props: Props) => {
-	const [clubInfo, setClubInfo] = useState<Club | null>(null);
-	const [loading, setLoading] = useState(true);
+	const [clubInfo, setClubInfo] = useState({} as Club);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		if (clubInfo === null) {
-			ClubService.getClub(props.route.params.clubId).then((data) => {
-				setClubInfo(data);
-				setLoading(false);
-			});
-		}
+		ClubService.getClub(props.route.params.clubId).then((data) => {
+			setClubInfo(data);
+			setIsLoading(false);
+		});
 	}, []);
 
-	if (clubInfo === null || loading) {
+	if (isLoading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -48,4 +46,5 @@ const ClubSettings = (props: Props) => {
 		</SafeAreaView>
 	);
 };
+
 export default ClubSettings;

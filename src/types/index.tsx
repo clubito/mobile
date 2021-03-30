@@ -31,6 +31,10 @@ interface Club {
 	members?: User[];
 	announcements?: Announcement[];
 	events?: Event[];
+	joinRequestStatus: {
+		status: string;
+		approvalDate: Date;
+	};
 }
 
 interface User {

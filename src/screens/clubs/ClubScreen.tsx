@@ -20,12 +20,12 @@ import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
 
-type ProfileScreenRouteProp = RouteProp<ClubParamList, "Club">;
-type ProfileScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
+type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
+type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
 
 type Props = {
-	route: ProfileScreenRouteProp;
-	navigation: ProfileScreenNavigationProp;
+	route: ClubScreenRouteProp;
+	navigation: ClubScreenNavigationProp;
 };
 
 export type ClubTabsParamList = {
@@ -37,23 +37,23 @@ const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
 
 const ClubScreen = (props: Props) => {
 	const navigation = useNavigation();
-	const [clubInfo, setClubInfo] = useState<Club | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [modalVisible, setModalVisible] = React.useState(false);
 	const [addVisible, setAddVisible] = React.useState(false);
-	const [message, setMessage] = React.useState("");
-	const [error, setError] = React.useState(false);
+	const [clubInfo, setClubInfo] = useState({} as Club);
+	const [isLoading, setIsLoading] = useState(true);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [message, setMessage] = useState("");
+	const [error, setError] = useState(false);
+	const [isMember, setIsMember] = useState(false);
 
 	useEffect(() => {
-		if (clubInfo === null) {
-			ClubService.getClub(props.route.params.id).then((data) => {
-				setClubInfo(data);
-				setLoading(false);
-			});
-		}
+		ClubService.getClub(props.route.params.id).then((data) => {
+			setClubInfo(data);
+			setIsMember(data.role !== "NONMEMBER");
+			setIsLoading(false);
+		});
 	}, []);
 
-	if (clubInfo === null || loading) {
+	if (isLoading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -61,18 +61,18 @@ const ClubScreen = (props: Props) => {
 		);
 	}
 
-	const requestButton =
-		clubInfo.role === "OWNER" ||
-		clubInfo.role === "OFFICER" ||
-		clubInfo.role === "MEMBER" ? null : (
-			<Button
-				onPress={() => {
-					setModalVisible(true);
-				}}
-			>
-				Request to Join Club
-			</Button>
-		);
+	const requestButton = isMember ? null : (
+		<Button
+			disabled={clubInfo.joinRequestStatus.status === "PENDING"}
+			onPress={() => {
+				setModalVisible(true);
+			}}
+		>
+			{clubInfo.joinRequestStatus.status === "PENDING"
+				? "Join Request Pending"
+				: "Request to Join Club"}
+		</Button>
+	);
 
 	const renderToggleButton = () => (
 		<Button
@@ -168,25 +168,29 @@ const ClubScreen = (props: Props) => {
 					}
 					modalType={"basic"}
 				/>
-				<Tab.Navigator>
-					<Tab.Screen
-						name="AnnouncementList"
-						component={AnnouncementList}
-						initialParams={{
-							announcementList: clubInfo.announcements,
-						}}
-						options={{ title: "Announcements" }}
-					/>
-					<Tab.Screen
-						name="EventList"
-						component={EventTab}
-						initialParams={{ eventList: clubInfo.events }}
-						options={{ title: "Events" }}
-					/>
-				</Tab.Navigator>
+
+				{isMember && (
+					<Tab.Navigator>
+						<Tab.Screen
+							name="AnnouncementList"
+							component={AnnouncementList}
+							initialParams={{
+								announcementList: clubInfo.announcements,
+							}}
+							options={{ title: "Announcements" }}
+						/>
+						<Tab.Screen
+							name="EventList"
+							component={EventTab}
+							initialParams={{ eventList: clubInfo.events }}
+							options={{ title: "Events" }}
+						/>
+					</Tab.Navigator>
+				)}
 			</View>
 			{addAnEvButton}
 		</SafeAreaView>
 	);
 };
+
 export default ClubScreen;
