@@ -70,6 +70,10 @@ export default class NotificationService {
 				navigator = "ClubNavigator";
 				screen = "Club";
 				break;
+			case "chat":
+				navigator = "ChatNavigator";
+				screen = "ChatScreen";
+				break;
 			default:
 				this.nav.navigate("Home");
 				return;
