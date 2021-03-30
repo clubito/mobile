@@ -12,7 +12,7 @@ import AnnouncementList from "./AnnouncementList";
 import EventList from "./EventList";
 
 type ClubParamList = {
-	Club: { id: string; };
+	Club: { id: string };
 };
 type ProfileScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ProfileScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -35,11 +35,13 @@ const ClubScreen = (props: Props) => {
 	const [modalVisible, setModalVisible] = React.useState(false);
 	const [message, setMessage] = React.useState("");
 	const [error, setError] = React.useState(false);
+	const [isMember, setIsMember] = useState(false);
 
 	useEffect(() => {
 		if (clubInfo === null) {
 			ClubService.getClub(props.route.params.id).then((data) => {
 				setClubInfo(data);
+				setIsMember(data.role !== "NONMEMBER");
 				setLoading(false);
 			});
 		}
@@ -53,20 +55,18 @@ const ClubScreen = (props: Props) => {
 		);
 	}
 
-	console.log(clubInfo.role);
-
-	const requestButton =
-		clubInfo.role === "OWNER" ||
-		clubInfo.role === "OFFICER" ||
-		clubInfo.role === "MEMBER" ? null : (
-			<Button
-				onPress={() => {
-					setModalVisible(true);
-				}}
-			>
-				Request to Join Club
-			</Button>
-		);
+	const requestButton = isMember ? null : (
+		<Button
+			disabled={clubInfo.joinRequestStatus.status === "PENDING"}
+			onPress={() => {
+				setModalVisible(true);
+			}}
+		>
+			{clubInfo.joinRequestStatus.status === "PENDING"
+				? "Join Request Pending"
+				: "Request to Join Club"}
+		</Button>
+	);
 
 	const sendRequest = () => {
 		setModalVisible(false);
@@ -121,22 +121,25 @@ const ClubScreen = (props: Props) => {
 					}
 					modalType={"basic"}
 				/>
-				<Tab.Navigator>
-					<Tab.Screen
-						name="AnnouncementList"
-						component={AnnouncementList}
-						initialParams={{
-							announcementList: clubInfo.announcements,
-						}}
-						options={{ title: "Announcements" }}
-					/>
-					<Tab.Screen
-						name="EventList"
-						component={EventList}
-						initialParams={{ eventList: clubInfo.events }}
-						options={{ title: "Events" }}
-					/>
-				</Tab.Navigator>
+
+				{isMember && (
+					<Tab.Navigator>
+						<Tab.Screen
+							name="AnnouncementList"
+							component={AnnouncementList}
+							initialParams={{
+								announcementList: clubInfo.announcements,
+							}}
+							options={{ title: "Announcements" }}
+						/>
+						<Tab.Screen
+							name="EventList"
+							component={EventList}
+							initialParams={{ eventList: clubInfo.events }}
+							options={{ title: "Events" }}
+						/>
+					</Tab.Navigator>
+				)}
 			</View>
 		</SafeAreaView>
 	);
