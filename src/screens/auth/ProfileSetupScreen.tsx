@@ -9,6 +9,7 @@ import {
 	ProfileSetupModel,
 	ProfileSetupSchema,
 } from "../../data/ProfileSetupData";
+import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 import FormInput from "../../components/FormInput";
 import FormMultiSelect from "../../components/FormMultiSelect";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -66,40 +67,44 @@ const ProfileSetupScreen = () => {
 				validateOnChange={submitted}
 			>
 				{({ handleSubmit, setFieldValue }) => (
-					<Layout style={ContainerStyles.center}>
-						<Layout style={[styles.pictureRow, styles.input]}>
-							<ProfilePicturePicker
-								functionOnConfirm={(image) => {
-									setFieldValue("profilePicture", image);
-								}}
+					<KeyboardAwareLayout>
+						<Layout style={ContainerStyles.center}>
+							<Layout style={[styles.pictureRow, styles.input]}>
+								<ProfilePicturePicker
+									functionOnConfirm={(image) => {
+										setFieldValue("profilePicture", image);
+									}}
+								/>
+							</Layout>
+
+							<FormInput
+								id="name"
+								label="Name"
+								style={styles.input}
 							/>
+
+							<FormMultiSelect
+								id="tags"
+								label="Select Interests"
+								style={styles.input}
+								data={tags}
+							/>
+
+							<Button
+								style={styles.input}
+								onPress={() => {
+									setSubmitted(true);
+									handleSubmit();
+								}}
+							>
+								Done
+							</Button>
+
+							<Text style={TextStyle.error}>
+								{responseError!}
+							</Text>
 						</Layout>
-
-						<FormInput
-							id="name"
-							label="Name"
-							style={styles.input}
-						/>
-
-						<FormMultiSelect
-							id="tags"
-							label="Select Tags"
-							style={styles.input}
-							data={tags}
-						/>
-
-						<Button
-							style={styles.input}
-							onPress={() => {
-								setSubmitted(true);
-								handleSubmit();
-							}}
-						>
-							Done
-						</Button>
-
-						<Text style={TextStyle.error}>{responseError!}</Text>
-					</Layout>
+					</KeyboardAwareLayout>
 				)}
 			</Formik>
 		</Layout>

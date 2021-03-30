@@ -176,7 +176,7 @@ const ProfileSettingsScreen = () => {
 
 							<FormMultiSelect
 								id="tags"
-								label="Select Tags"
+								label="Select Interests"
 								data={allTags}
 							/>
 

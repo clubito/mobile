@@ -1,6 +1,7 @@
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import API from "./API";
 
 export default class NotificationService {
 	static nav: any;
@@ -32,10 +33,11 @@ export default class NotificationService {
 				return;
 			}
 
+			// Fetch and send expo device token to backend
 			const token: string = (await Notifications.getExpoPushTokenAsync()).data;
-
-			// TODO: testing only, remove once notifications work
-			console.log(token);
+			await API.post("/user/notifications/register", {
+				pushToken: token,
+			});
 		} else {
 			alert("Must use physical device for Push Notifications");
 		}
@@ -69,7 +71,8 @@ export default class NotificationService {
 				screen = "Club";
 				break;
 			default:
-				navigator = screen = "Error";
+				this.nav.navigate("Home");
+				return;
 		}
 
 		this.nav.navigate("NotificationNavigator", {

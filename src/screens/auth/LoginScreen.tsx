@@ -3,10 +3,11 @@ import { ImageBackground, StyleSheet } from "react-native";
 import { Button, Layout, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
-import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
+import { TextStyle } from "../../styles/CommonStyles";
 import { AuthContext } from "../../context/AuthContext";
 import AuthService from "../../services/AuthService";
 import { LoginModel, LoginSchema } from "../../data/LoginData";
+import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 import FormInput from "../../components/FormInput";
 import FormSecureInput from "../../components/FormSecureInput";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -39,64 +40,68 @@ const LoginScreen = () => {
 
 	return (
 		<Layout style={{ height: "100%" }}>
-			<ImageBackground
-				style={styles.appBar}
-				source={require("../../assets/background.png")}
-			/>
+			<KeyboardAwareLayout>
+				<ImageBackground
+					style={styles.appBar}
+					source={require("../../assets/background.png")}
+				/>
 
-			<Formik
-				style={styles.formContainer}
-				initialValues={savedModel.current}
-				validationSchema={LoginSchema}
-				onSubmit={login}
-				validateOnChange={submitted}
-			>
-				{({ handleSubmit }) => (
-					<Layout style={styles.form}>
-						<FormInput
-							id="email"
-							label="Email"
-							style={styles.input}
-						/>
+				<Formik
+					style={styles.formContainer}
+					initialValues={savedModel.current}
+					validationSchema={LoginSchema}
+					onSubmit={login}
+					validateOnChange={submitted}
+				>
+					{({ handleSubmit }) => (
+						<Layout style={styles.form}>
+							<FormInput
+								id="email"
+								label="Email"
+								style={styles.input}
+							/>
 
-						<FormSecureInput
-							id="password"
-							label="Password"
-							style={styles.input}
-						/>
+							<FormSecureInput
+								id="password"
+								label="Password"
+								style={styles.input}
+							/>
 
-						<Button
-							style={styles.forgotPasswordButton}
-							size="medium"
-							appearance="ghost"
-							onPress={() =>
-								navigation.navigate("Forgot Password")
-							}
-						>
-							Forgot Password?
-						</Button>
+							<Button
+								style={styles.forgotPasswordButton}
+								size="medium"
+								appearance="ghost"
+								onPress={() =>
+									navigation.navigate("Forgot Password")
+								}
+							>
+								Forgot Password?
+							</Button>
 
-						<Button
-							style={styles.loginButton}
-							onPress={() => {
-								setSubmitted(true);
-								handleSubmit();
-							}}
-						>
-							Login
-						</Button>
+							<Button
+								style={styles.loginButton}
+								onPress={() => {
+									setSubmitted(true);
+									handleSubmit();
+								}}
+							>
+								Login
+							</Button>
 
-						<Text style={TextStyle.error}>{responseError!}</Text>
+							<Text style={TextStyle.error}>
+								{responseError!}
+							</Text>
 
-						<Button
-							appearance="ghost"
-							onPress={() => navigation.navigate("Signup")}
-						>
-							Signup for Clubito
-						</Button>
-					</Layout>
-				)}
-			</Formik>
+							<Button
+								appearance="ghost"
+								onPress={() => navigation.navigate("Signup")}
+							>
+								Signup for Clubito
+							</Button>
+						</Layout>
+					)}
+				</Formik>
+			</KeyboardAwareLayout>
 		</Layout>
 	);
 };
