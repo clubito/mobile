@@ -7,6 +7,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
+import MemberList from "../../components/MemberList";
+import ApplicationList from "../../components/ApplicationList";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type ClubSettingsNavigationProp = StackNavigationProp<
@@ -42,6 +44,18 @@ const ClubSettings = (props: Props) => {
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
 				<Text>Club settings for {clubInfo.name}</Text>
+				{clubInfo.members ? (
+					<MemberList
+						members={clubInfo.members}
+						role={clubInfo.role}
+					/>
+				) : null}
+				{clubInfo.members ? (
+					<ApplicationList
+						applicants={clubInfo.members}
+						role={clubInfo.role}
+					/>
+				) : null}
 			</View>
 		</SafeAreaView>
 	);

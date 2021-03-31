@@ -6,7 +6,7 @@ import ProfileSettingsScreen from "./ProfileSettingsScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubNavigator from "../clubs/ClubNavigator";
 
-type ProfileParamList = {
+export type ProfileParamList = {
 	Profile: undefined;
 	Settings: undefined;
 	ClubNavigator: { title: string };

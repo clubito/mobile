@@ -85,4 +85,24 @@ export default class UserService {
 
 		return response.data;
 	}
+
+	/**
+	 * Get another user by profile
+	 */
+	static async getOtherUser(userId: string) {
+		const response: AxiosResponse<User> = await API.get<User>(
+			"/user/other/profile",
+			{
+				params: { id: userId },
+			}
+		);
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+			};
+		}
+
+		return response.data;
+	}
 }

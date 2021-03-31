@@ -9,16 +9,20 @@ import {
 	Popover,
 	Menu,
 	MenuItem,
+	IconProps,
+	Icon,
 } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Announcement, Club, Event } from "../../types";
+import { Announcement, Club, Event, User } from "../../types";
 import ClubService from "../../services/ClubService";
 import GeneralModal from "../../components/GeneralModal";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
+import MemberList from "../../components/MemberList";
+import MemberTab from "./MemberTab";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -31,6 +35,7 @@ type Props = {
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
 	EventList: { eventList: Event[] };
+	Members: { members: User[]; role: string };
 };
 
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
@@ -76,14 +81,23 @@ const ClubScreen = (props: Props) => {
 
 	const renderToggleButton = () => (
 		<Button
-			style={{ position: "absolute", bottom: 10, right: 10 }}
+			style={{
+				position: "absolute",
+				bottom: 10,
+				right: 10,
+				width: 50,
+				height: 50,
+				borderRadius: 25,
+			}}
 			onPress={() => setAddVisible(true)}
-		>
-			+
-		</Button>
+			accessoryLeft={(props: IconProps) => (
+				<Icon name="plus-outline" {...props} />
+			)}
+		/>
 	);
 
 	const addAnEvButton =
+		//Added member for testing, must remember to remove later
 		clubInfo.role === "OWNER" ||
 		clubInfo.role === "OFFICER" ||
 		clubInfo.role === "MEMBER" ? (
@@ -115,6 +129,7 @@ const ClubScreen = (props: Props) => {
 				</Menu>
 			</Popover>
 		) : null;
+
 	const sendRequest = () => {
 		setModalVisible(false);
 		ClubService.requestToJoin(clubInfo.id)
@@ -184,6 +199,15 @@ const ClubScreen = (props: Props) => {
 							component={EventTab}
 							initialParams={{ eventList: clubInfo.events }}
 							options={{ title: "Events" }}
+						/>
+						<Tab.Screen
+							name="Members"
+							component={MemberTab}
+							initialParams={{
+								members: clubInfo.members,
+								role: clubInfo.role,
+							}}
+							options={{ title: "Members" }}
 						/>
 					</Tab.Navigator>
 				)}

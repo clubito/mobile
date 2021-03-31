@@ -18,9 +18,19 @@ import {
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { ProfileParamList } from "./ProfileNavigator";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const ProfileScreen = () => {
+type ProfileRouteProp = RouteProp<ProfileParamList, "Profile">;
+type ProfileNavigationProp = StackNavigationProp<ProfileParamList, "Profile">;
+
+type Props = {
+	route: ProfileRouteProp;
+	navigation: ProfileNavigationProp;
+};
+
+const ProfileScreen = (props: Props) => {
 	const nav = useNavigation();
 	const [profile, setProfile] = useState({} as User);
 	const [isLoading, setIsLoading] = useState(true);
@@ -28,13 +38,24 @@ const ProfileScreen = () => {
 	const getUserData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
+			console.log(data);
+			setIsLoading(false);
+		});
+	};
+
+	const getOtherUser = (userId: string) => {
+		UserService.getOtherUser(userId).then((data) => {
+			setProfile(data);
+			console.log(data);
 			setIsLoading(false);
 		});
 	};
 
 	useEffect(() => {
 		const unsubscribe = nav.addListener("focus", () => {
-			getUserData();
+			if (props.route.params && props.route.params.userId) {
+				getOtherUser(props.route.params.userId);
+			} else getUserData();
 		});
 		return unsubscribe;
 	}, [nav]);
