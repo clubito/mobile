@@ -8,7 +8,7 @@ interface Props {
 	onPress: () => void;
 }
 
-const ChatListItem = (props: Props) => {
+const ChatThreadListItem = (props: Props) => {
 	function formatAMPM() {
 		var hours = props.chatThread.messages[0].timestamp.getHours();
 		var minutes = props.chatThread.messages[0].timestamp.getMinutes();
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default ChatListItem;
+export default ChatThreadListItem;
