@@ -1,8 +1,21 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	ActivityIndicator,
+	KeyboardAvoidingView,
+	StyleSheet,
+	TouchableOpacity,
+} from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Avatar, Divider, Layout, List } from "@ui-kitten/components";
+import {
+	Avatar,
+	Button,
+	Divider,
+	Input,
+	Layout,
+	List,
+} from "@ui-kitten/components";
+import { MaterialIcons } from "@expo/vector-icons";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
 import ChatMessageListItem from "../../components/ChatMessageListItem";
@@ -66,18 +79,37 @@ const ChatScreen = (props: Props) => {
 	}
 
 	return (
-		<Layout>
-			<List
-				data={chatThread.messages}
-				keyExtractor={(item) =>
-					item.authorId + item.body + item.timestamp
-				}
-				keyboardDismissMode="on-drag"
-				ItemSeparatorComponent={Divider}
-				renderItem={({ item }) => (
-					<ChatMessageListItem message={item} />
-				)}
-			/>
+		<Layout style={styles.mainContainer}>
+			<Layout style={styles.messagesContainer}>
+				<List
+					data={chatThread.messages}
+					keyExtractor={(item) =>
+						item.authorId + item.body + item.timestamp
+					}
+					keyboardDismissMode="on-drag"
+					ItemSeparatorComponent={Divider}
+					renderItem={({ item }) => (
+						<ChatMessageListItem message={item} />
+					)}
+				/>
+			</Layout>
+			<KeyboardAvoidingView
+				keyboardVerticalOffset={110}
+				style={styles.inputContainer}
+				behavior="padding"
+			>
+				<Divider />
+				<Layout style={styles.inputInner}>
+					<Input style={styles.messageInput} />
+					<Button
+						appearance="ghost"
+						style={[styles.iconButton, styles.sendButton]}
+						accessoryLeft={() => (
+							<MaterialIcons name="send" size={24} />
+						)}
+					/>
+				</Layout>
+			</KeyboardAvoidingView>
 		</Layout>
 	);
 };
@@ -89,6 +121,34 @@ const styles = StyleSheet.create({
 	loadingContainer: {
 		flex: 1,
 		justifyContent: "center",
+	},
+	mainContainer: {
+		flex: 1,
+		flexDirection: "column",
+	},
+	messagesContainer: {
+		flex: 10,
+	},
+	inputContainer: {
+		flex: 1,
+	},
+	inputInner: {
+		paddingHorizontal: 8,
+		paddingVertical: 8,
+		flexDirection: "row",
+	},
+	messageInput: {
+		flex: 1,
+		marginHorizontal: 8,
+	},
+	sendButton: {
+		marginRight: 4,
+	},
+	iconButton: {
+		paddingHorizontal: -5,
+		paddingVertical: -5,
+		width: 32,
+		height: 32,
 	},
 });
 
