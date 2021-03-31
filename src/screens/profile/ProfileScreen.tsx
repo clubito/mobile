@@ -21,9 +21,10 @@ import ClubListItem from "../../components/ClubListItem";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { ProfileParamList } from "./ProfileNavigator";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { ClubParamList } from "../clubs/ClubNavigator";
 
-type ProfileRouteProp = RouteProp<ProfileParamList, "Profile">;
-type ProfileNavigationProp = StackNavigationProp<ProfileParamList, "Profile">;
+type ProfileRouteProp = RouteProp<ClubParamList, "Profile">;
+type ProfileNavigationProp = StackNavigationProp<ClubParamList, "Profile">;
 
 type Props = {
 	route: ProfileRouteProp;
