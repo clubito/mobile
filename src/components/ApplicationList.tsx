@@ -3,10 +3,10 @@ import { StyleSheet, View } from "react-native";
 import {
 	Text,
 	List,
-	Card,
 	Button,
 	Icon,
-	ButtonGroup,
+	ListItem,
+	Avatar,
 } from "@ui-kitten/components";
 import { User } from "../types";
 import { useNavigation } from "@react-navigation/native";
@@ -23,27 +23,34 @@ const ApplicationList = (props: Props) => {
 	return (
 		<List
 			data={props.applicants}
+			keyExtractor={(item) => item.id}
 			renderItem={({ item }) => {
 				return (
-					<Card
+					<ListItem
 						onPress={() =>
 							navigation.push("Profile", {
 								userId: item.id,
 							})
 						}
-					>
-						<View
-							style={{
-								flexDirection: "row",
-								justifyContent: "space-between",
-							}}
-						>
-							<Text category="h6" style={{ alignSelf: "center" }}>
+						title={() => (
+							<Text style={styles.title} category="s1">
 								{item.name}
 							</Text>
+						)}
+						accessoryLeft={() => (
+							<Avatar
+								source={{ uri: item.profilePicture }}
+								style={{
+									marginRight: 5,
+									height: 45,
+									width: 45,
+								}}
+							/>
+						)}
+						accessoryRight={() => (
 							<View style={{ flexDirection: "row" }}>
 								<Button
-									style={[styles.button,{marginRight: 5}]}
+									style={[styles.button, { marginRight: 5 }]}
 									status="success"
 									accessoryLeft={() => (
 										<Icon
@@ -65,8 +72,8 @@ const ApplicationList = (props: Props) => {
 									)}
 								/>
 							</View>
-						</View>
-					</Card>
+						)}
+					/>
 				);
 			}}
 		/>
@@ -80,6 +87,10 @@ const styles = StyleSheet.create({
 	icon: {
 		width: 30,
 		height: 30,
+	},
+	title: {
+		marginLeft: 8,
+		fontSize: 16,
 	},
 });
 

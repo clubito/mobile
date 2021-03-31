@@ -1,4 +1,4 @@
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -26,6 +26,7 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
+	const navigation = useNavigation();
 
 	useEffect(() => {
 		if (event === null) {
@@ -85,6 +86,7 @@ const EventScreen = (props: Props) => {
 						{getReadableDate(event.endTime)}
 					</Text>
 				</Card>
+				{/* TODO: Add RSVP function */}
 				<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
 					{"RSVP to " + event.name}
 				</Button>
@@ -93,6 +95,22 @@ const EventScreen = (props: Props) => {
 						<b>Description:</b> {event.description}
 					</Text>
 				</Card>
+				{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
+				<Button
+					onPress={() => {
+						navigation.navigate("ClubNavigator", {
+							title: event.club.name,
+							screen: "Club",
+							params: {
+								id: event.club.id,
+								title: event.club.name,
+								role: event.club.role,
+							},
+						});
+					}}
+				>
+					Club Page
+				</Button>
 			</View>
 		</SafeAreaView>
 	);

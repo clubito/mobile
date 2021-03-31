@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ContainerStyles, TextStyle } from "../styles/CommonStyles";
 import {
 	Text,
@@ -9,6 +9,7 @@ import {
 	Divider,
 	Avatar,
 	Card,
+	Icon,
 } from "@ui-kitten/components";
 import { Club, Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
@@ -31,7 +32,6 @@ const EventList = (props: Props) => {
 		return (
 			String(
 				d.toLocaleDateString([], {
-					year: "2-digit",
 					month: "2-digit",
 					day: "2-digit",
 				})
@@ -81,54 +81,53 @@ const EventList = (props: Props) => {
 								role: item.role,
 							})
 						}
-						footer={() =>
-							props.renderClubInfo ? (
-								<ListItem
-									style={{
-										flexDirection: "row",
-										marginLeft: 16,
-									}}
-									onPress={() => {
-										navigation.navigate("ClubNavigator", {
-											title: item.club.name,
-											screen: "Club",
-											params: {
-												id: item.club.id,
-												title: item.club.name,
-												role: item.club.role,
-											},
-										});
-									}}
-								>
-									<Avatar
-										source={{ uri: item.club.logo }}
-										style={{
-											marginRight: 5,
-											height: 30,
-											width: 30,
-										}}
-									/>
-									<Text
-										category="s1"
-										style={{
-											alignSelf: "center",
-											marginHorizontal: 10,
-										}}
-									>
-										{item.club.name}
-									</Text>
-								</ListItem>
-							) : (
-								((null as unknown) as ReactElement)
-							)
-						}
 					>
 						<Text category="h6">{item.name}</Text>
-						<Text appearance="hint">
-							{getReadableDate(item.startTime)} to{" "}
-							{getReadableDate(item.endTime)}
-						</Text>
-						<Text appearance="hint">{item.shortLocation}</Text>
+						<View
+							style={{
+								flexDirection: "row",
+							}}
+						>
+							<Icon
+								name="people-outline"
+								style={styles.icon}
+								fill="grey"
+							/>
+							<Text
+								appearance="hint"
+								category="s1"
+								style={{ alignSelf: "center" }}
+							>
+								{item.club.name}
+							</Text>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+							}}
+						>
+							<Icon
+								name="clock-outline"
+								style={styles.icon}
+								fill="grey"
+							/>
+							<Text appearance="hint">
+								{getReadableDate(item.startTime)} to{" "}
+								{getReadableDate(item.endTime)}
+							</Text>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+							}}
+						>
+							<Icon
+								name="pin-outline"
+								style={styles.icon}
+								fill="grey"
+							/>
+							<Text appearance="hint">{item.shortLocation}</Text>
+						</View>
 					</Card>
 				);
 			}}
@@ -149,6 +148,12 @@ const styles = StyleSheet.create({
 	},
 	upcoming: { borderWidth: 1, borderRadius: 5 },
 	current: { borderColor: "red" },
+	icon: {
+		flex: 1,
+		marginRight: 5,
+		height: 15,
+		width: 15,
+	},
 });
 
 export default EventList;

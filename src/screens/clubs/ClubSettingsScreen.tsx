@@ -45,12 +45,6 @@ const ClubSettings = (props: Props) => {
 			<View style={ContainerStyles.horizMargin}>
 				<Text>Club settings for {clubInfo.name}</Text>
 				{clubInfo.members ? (
-					<MemberList
-						members={clubInfo.members}
-						role={clubInfo.role}
-					/>
-				) : null}
-				{clubInfo.members ? (
 					<ApplicationList
 						applicants={clubInfo.members}
 						role={clubInfo.role}
