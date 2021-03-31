@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Avatar, Divider, Layout, List } from "@ui-kitten/components";
@@ -34,11 +34,25 @@ const ChatScreen = (props: Props) => {
 	useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
-				<Avatar
-					style={styles.headerLogo}
-					size="small"
-					source={{ uri: chatThread.clubLogo }}
-				/>
+				<TouchableOpacity
+					onPress={() =>
+						navigation.push("ClubNavigator", {
+							title: chatThread.clubName,
+							screen: "Club",
+							params: {
+								id: chatThread.clubId,
+								title: chatThread.clubName,
+								role: chatThread.role,
+							},
+						})
+					}
+				>
+					<Avatar
+						style={styles.headerLogo}
+						size="small"
+						source={{ uri: chatThread.clubLogo }}
+					/>
+				</TouchableOpacity>
 			),
 		});
 	}, [chatThread]);

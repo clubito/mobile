@@ -44,11 +44,11 @@ export default class ChatService {
 
 		for (let i = 0; i < 3; i++) {
 			chatList.push({
-				clubId: i.toString(),
-				clubName: "443h bois",
+				clubId: "6062a496e99e023eb29ee1f2",
+				clubName: "PUDM",
 				clubLogo: "https://picsum.photos/200",
 				messages: getChats(),
-				role: "MEMBER",
+				role: "NONMEMBER",
 			});
 		}
 
