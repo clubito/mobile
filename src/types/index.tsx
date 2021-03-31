@@ -18,7 +18,7 @@ interface Event {
 	shortLocation: string;
 	picture: string;
 	lastUpdated: Date;
-	club: Club;
+	club: string;
 }
 
 interface Club {
@@ -35,6 +35,13 @@ interface Club {
 		status: string;
 		approvalDate: Date;
 	};
+}
+
+interface JoinRequest {
+	id: string;
+	requestedAt: Date;
+	user: User;
+	status: string;
 }
 
 interface User {
@@ -64,4 +71,12 @@ interface ChatMessage {
 	body: string;
 }
 
-export { Club, User, Announcement, Event, ChatThread, ChatMessage };
+export {
+	Club,
+	User,
+	Announcement,
+	Event,
+	ChatThread,
+	ChatMessage,
+	JoinRequest,
+};

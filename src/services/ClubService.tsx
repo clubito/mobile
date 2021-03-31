@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club, User } from "../types";
+import { Club, JoinRequest, User } from "../types";
 
 export default class ClubService {
 	/**
@@ -50,7 +50,6 @@ export default class ClubService {
 		const response: AxiosResponse = await API.post("/clubs/join", {
 			id: clubID,
 		});
-		console.log(response);
 		if (response.status !== 200) {
 			throw {
 				code: response.status,
@@ -61,12 +60,11 @@ export default class ClubService {
 	}
 
 	static async getApplicants(clubID: string) {
-		const response: AxiosResponse<User[]> = await API.get<User[]>(
-			"/clubs/requests",
-			{
-				params: { id: clubID },
-			}
-		);
+		const response: AxiosResponse<JoinRequest[]> = await API.get<
+			JoinRequest[]
+		>("/clubs/requests", {
+			params: { id: clubID },
+		});
 		return response.data;
 	}
 
@@ -102,10 +100,11 @@ export default class ClubService {
 	}
 
 	//TODO: Change to correct endpoint when it is done
-	static async removeMember(clubId: string, userId: string) {
-		const response: AxiosResponse = await API.post("/clubs/request/deny", {
+	static async removeMember(clubId: string, userId: string, reason: string) {
+		const response: AxiosResponse = await API.post("/clubs/kick", {
 			id: clubId,
 			userId: userId,
+			reason: reason,
 		});
 		if (response.status !== 200) {
 			throw {

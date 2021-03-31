@@ -51,6 +51,7 @@ const ClubScreen = (props: Props) => {
 
 	useEffect(() => {
 		ClubService.getClub(props.route.params.id).then((data) => {
+			console.log(data);
 			setClubInfo(data);
 			setIsMember(data.role !== "NONMEMBER");
 			setIsLoading(false);

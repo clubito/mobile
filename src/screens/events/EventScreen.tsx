@@ -12,8 +12,9 @@ import {
 import EventService from "../../services/EventService";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
-import { Event } from "../../types";
+import { Club, Event } from "../../types";
 import { Text, Layout, Card, Button, Avatar } from "@ui-kitten/components";
+import ClubService from "../../services/ClubService";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -26,13 +27,17 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [club, setClub] = useState({} as Club);
 	const navigation = useNavigation();
 
 	useEffect(() => {
 		if (event === null) {
 			EventService.getEvent(props.route.params.id).then((data) => {
 				setEventInfo(data);
-				setLoading(false);
+				ClubService.getClub(data.club).then((data) => {
+					setClub(data);
+					setLoading(false);
+				});
 			});
 		}
 	}, []);
@@ -98,13 +103,14 @@ const EventScreen = (props: Props) => {
 				{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
 				<Button
 					onPress={() => {
+						console.log(event);
 						navigation.navigate("ClubNavigator", {
-							title: event.club.name,
+							title: club.name,
 							screen: "Club",
 							params: {
-								id: event.club.id,
-								title: event.club.name,
-								role: event.club.role,
+								id: club.id,
+								title: club.name,
+								role: club.role,
 							},
 						});
 					}}

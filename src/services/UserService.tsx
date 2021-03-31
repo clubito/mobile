@@ -25,6 +25,12 @@ export default class UserService {
 		const response: AxiosResponse<User> = await API.get<User>(
 			"/user/profile"
 		);
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.statusText,
+			};
+		}
 		return response.data;
 	}
 

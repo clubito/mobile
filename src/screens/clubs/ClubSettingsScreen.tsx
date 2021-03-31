@@ -4,7 +4,7 @@ import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Layout } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Club, User } from "../../types";
+import { Club, JoinRequest, User } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
 import MemberList from "../../components/MemberList";
@@ -23,7 +23,7 @@ type Props = {
 
 const ClubSettings = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState({} as Club);
-	const [applicants, setApplicants] = useState({} as User[]);
+	const [applicants, setApplicants] = useState({} as JoinRequest[]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoading1, setIsLoading1] = useState(true);
 
@@ -50,7 +50,7 @@ const ClubSettings = (props: Props) => {
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
 				<Text>Club settings for {clubInfo.name}</Text>
-				{applicants ? (
+				{applicants.length > 0 ? (
 					<ApplicationList
 						applicants={applicants}
 						role={clubInfo.role}
