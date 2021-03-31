@@ -69,4 +69,50 @@ export default class ClubService {
 		);
 		return response.data;
 	}
+
+	static async approveApplication(clubId: string, userId: string) {
+		const response: AxiosResponse = await API.post(
+			"/clubs/request/approve",
+			{
+				id: clubId,
+				userId: userId,
+			}
+		);
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
+
+	static async rejectApplication(clubId: string, userId: string) {
+		const response: AxiosResponse = await API.post("/clubs/request/deny", {
+			id: clubId,
+			userId: userId,
+		});
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
+
+	//TODO: Change to correct endpoint when it is done
+	static async removeMember(clubId: string, userId: string) {
+		const response: AxiosResponse = await API.post("/clubs/request/deny", {
+			id: clubId,
+			userId: userId,
+		});
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
 }

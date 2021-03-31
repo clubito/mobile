@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Event } from "../../types";
 import { ClubTabsParamList } from "./ClubScreen";
-import EventList from "../../components/EventList";
 import MemberList from "../../components/MemberList";
 
 type ProfileScreenRouteProp = RouteProp<ClubTabsParamList, "Members">;
@@ -23,6 +21,7 @@ const MemberTab = (props: Props) => {
 		<MemberList
 			members={props.route.params.members}
 			role={props.route.params.role}
+			clubId={props.route.params.clubId}
 		/>
 	);
 };

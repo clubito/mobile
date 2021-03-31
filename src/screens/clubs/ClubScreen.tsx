@@ -21,7 +21,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
-import MemberList from "../../components/MemberList";
 import MemberTab from "./MemberTab";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
@@ -35,7 +34,7 @@ type Props = {
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
 	EventList: { eventList: Event[] };
-	Members: { members: User[]; role: string };
+	Members: { members: User[]; role: string; clubId: string };
 };
 
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
@@ -207,6 +206,7 @@ const ClubScreen = (props: Props) => {
 						initialParams={{
 							members: clubInfo.members,
 							role: clubInfo.role,
+							clubId: clubInfo.id,
 						}}
 						options={{ title: "Members" }}
 					/>
