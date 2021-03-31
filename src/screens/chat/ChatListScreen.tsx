@@ -43,14 +43,10 @@ const ChatListScreen = () => {
 					<ChatThreadListItem
 						chatThread={item}
 						onPress={() =>
-							navigation.navigate("ChatNavigator", {
+							navigation.navigate("Chat", {
 								title: item.clubName,
-								screen: "ChatScreen",
-								params: {
-									id: item.clubId,
-									title: item.clubName,
-									role: item.role,
-								},
+								id: item.clubId,
+								role: item.role,
 							})
 						}
 					/>
