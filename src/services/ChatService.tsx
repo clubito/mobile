@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { ChatThread } from "../types";
+import { ChatMessage, ChatThread } from "../types";
 
 export default class ChatService {
 	static subscribers: Map<string, Function>;
@@ -10,11 +10,49 @@ export default class ChatService {
 	 * Each thread object only contains the last received message.
 	 */
 	static async getAllChatThreads() {
-		const response: AxiosResponse<ChatThread[]> = await API.get<
-			ChatThread[]
-		>("/chat/thread/all");
+		// const response: AxiosResponse<ChatThread[]> = await API.get<
+		// 	ChatThread[]
+		// >("/chat/thread/all");
 
-		return response.data;
+		// return response.data;
+
+		// Dummy data until backend is working
+		const chatList: ChatThread[] = [];
+		const getChats = (): ChatMessage[] => {
+			var messageList: ChatMessage[] = [];
+			for (let i = 0; i < 6; i++) {
+				messageList.push(
+					i % 2 == 0
+						? {
+								authorId: "6063e482a01eb4001e953dd7",
+								authorName: "samDman",
+								authorPicture: "https://picsum.photos/200",
+								timestamp: new Date(),
+								body: "message " + i.toString(),
+						  }
+						: {
+								authorId: "6062a496e99e023eb29ee1eb",
+								authorName: "John Somethings",
+								authorPicture: "https://picsum.photos/200",
+								timestamp: new Date(),
+								body: "message " + i.toString(),
+						  }
+				);
+			}
+			return messageList;
+		};
+
+		for (let i = 0; i < 3; i++) {
+			chatList.push({
+				clubId: i.toString(),
+				clubName: "443h bois",
+				clubLogo: "https://picsum.photos/200",
+				messages: getChats(),
+				role: "MEMBER",
+			});
+		}
+
+		return chatList;
 	}
 
 	/**
