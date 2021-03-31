@@ -28,7 +28,8 @@ const ClubNavigator = () => (
 				title: route.params.title,
 				headerRight: () => {
 					//TODO: Return this to proper checks
-					return true ? (
+					return route.params.role === "OWNER" ||
+						route.params.role === "OFFICER" ? (
 						<Button
 							onPress={() =>
 								navigation.navigate("ClubSettings", {

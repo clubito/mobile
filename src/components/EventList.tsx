@@ -70,7 +70,7 @@ const EventList = (props: Props) => {
 				return (
 					<Card
 						style={[
-							styles.default,
+							styles.card,
 							past < 2 ? styles.upcoming : null,
 							past === 0 ? styles.current : null,
 						]}
@@ -82,51 +82,66 @@ const EventList = (props: Props) => {
 							})
 						}
 					>
-						<Text category="h6">{item.name}</Text>
-						<View
-							style={{
-								flexDirection: "row",
-							}}
-						>
-							<Icon
-								name="people-outline"
-								style={styles.icon}
-								fill="grey"
-							/>
-							<Text
-								appearance="hint"
-								category="s1"
-								style={{ alignSelf: "center" }}
-							>
-								{item.club.name}
-							</Text>
-						</View>
-						<View
-							style={{
-								flexDirection: "row",
-							}}
-						>
-							<Icon
-								name="clock-outline"
-								style={styles.icon}
-								fill="grey"
-							/>
-							<Text appearance="hint">
-								{getReadableDate(item.startTime)} to{" "}
-								{getReadableDate(item.endTime)}
-							</Text>
-						</View>
-						<View
-							style={{
-								flexDirection: "row",
-							}}
-						>
-							<Icon
-								name="pin-outline"
-								style={styles.icon}
-								fill="grey"
-							/>
-							<Text appearance="hint">{item.shortLocation}</Text>
+						<View style={styles.default}>
+							<View style={styles.avatarBox}>
+								<Avatar
+									source={{ uri: item.picture }}
+									style={styles.avatar}
+								/>
+							</View>
+
+							<View>
+								<Text category="h6">{item.name}</Text>
+								{props.renderClubInfo ? (
+									<View
+										style={{
+											flexDirection: "row",
+										}}
+									>
+										<Icon
+											name="people-outline"
+											style={styles.icon}
+											fill="grey"
+										/>
+										<Text
+											appearance="hint"
+											category="s1"
+											style={{ alignSelf: "center" }}
+										>
+											{item.club.name}
+										</Text>
+									</View>
+								) : null}
+								<View
+									style={{
+										flexDirection: "row",
+									}}
+								>
+									<Icon
+										name="clock-outline"
+										style={styles.icon}
+										fill="grey"
+									/>
+									<Text appearance="hint">
+										{getReadableDate(item.startTime)} to{" "}
+										{getReadableDate(item.endTime)}
+									</Text>
+								</View>
+								<View
+									style={{
+										flexDirection: "row",
+									}}
+								>
+									<Icon
+										name="pin-outline"
+										style={styles.icon}
+										fill="grey"
+									/>
+									<Text appearance="hint">
+										{item.shortLocation}
+									</Text>
+								</View>
+							</View>
 						</View>
 					</Card>
 				);
@@ -141,10 +156,9 @@ const EventList = (props: Props) => {
 	If an event is currently ongoing, change border to red
  */
 const styles = StyleSheet.create({
+	card: { margin: 10 },
 	default: {
-		margin: 10,
-		flexDirection: "column",
-		alignItems: "flex-start",
+		flexDirection: "row",
 	},
 	upcoming: { borderWidth: 1, borderRadius: 5 },
 	current: { borderColor: "red" },
@@ -153,6 +167,16 @@ const styles = StyleSheet.create({
 		marginRight: 5,
 		height: 15,
 		width: 15,
+	},
+	avatarBox: {
+		flex: 1,
+		alignSelf: "center",
+		marginLeft: -10,
+		marginRight: 20,
+	},
+	avatar: {
+		height: 50,
+		width: 50,
 	},
 });
 

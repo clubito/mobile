@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club } from "../types";
+import { Club, User } from "../types";
 
 export default class ClubService {
 	/**
@@ -57,6 +57,16 @@ export default class ClubService {
 				message: response.data.error,
 			};
 		}
+		return response.data;
+	}
+
+	static async getApplicants(clubID: string) {
+		const response: AxiosResponse<User[]> = await API.get<User[]>(
+			"/clubs/requests",
+			{
+				params: { id: clubID },
+			}
+		);
 		return response.data;
 	}
 }

@@ -4,7 +4,7 @@ import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Layout } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Club } from "../../types";
+import { Club, User } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
 import MemberList from "../../components/MemberList";
@@ -23,16 +23,22 @@ type Props = {
 
 const ClubSettings = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState({} as Club);
+	const [applicants, setApplicants] = useState({} as User[]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading1, setIsLoading1] = useState(true);
 
 	useEffect(() => {
 		ClubService.getClub(props.route.params.clubId).then((data) => {
 			setClubInfo(data);
 			setIsLoading(false);
 		});
+		ClubService.getApplicants(props.route.params.clubId).then((data) => {
+			setApplicants(data);
+			setIsLoading1(false);
+		});
 	}, []);
 
-	if (isLoading) {
+	if (isLoading || isLoading1) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -44,12 +50,14 @@ const ClubSettings = (props: Props) => {
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View style={ContainerStyles.horizMargin}>
 				<Text>Club settings for {clubInfo.name}</Text>
-				{clubInfo.members ? (
+				{applicants ? (
 					<ApplicationList
-						applicants={clubInfo.members}
+						applicants={applicants}
 						role={clubInfo.role}
 					/>
-				) : null}
+				) : (
+					<Text>No Applicants available</Text>
+				)}
 			</View>
 		</SafeAreaView>
 	);
