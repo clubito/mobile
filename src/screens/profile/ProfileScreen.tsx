@@ -32,14 +32,13 @@ type Props = {
 };
 
 const ProfileScreen = (props: Props) => {
-	const nav = useNavigation();
+	const nav = useNavigation<StackNavigationProp<any>>();
 	const [profile, setProfile] = useState({} as User);
 	const [isLoading, setIsLoading] = useState(true);
 
 	const getUserData = () => {
 		UserService.getCurrentUser().then((data) => {
 			setProfile(data);
-			console.log(data);
 			setIsLoading(false);
 		});
 	};
@@ -47,7 +46,6 @@ const ProfileScreen = (props: Props) => {
 	const getOtherUser = (userId: string) => {
 		UserService.getOtherUser(userId).then((data) => {
 			setProfile(data);
-			console.log(data);
 			setIsLoading(false);
 		});
 	};
@@ -175,7 +173,7 @@ const ProfileScreen = (props: Props) => {
 						<ClubListItem
 							club={item}
 							onPress={() =>
-								nav.navigate("ClubNavigator", {
+								nav.push("ClubNavigator", {
 									title: item.name,
 									screen: "Club",
 									params: {

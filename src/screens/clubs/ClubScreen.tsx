@@ -143,75 +143,75 @@ const ClubScreen = (props: Props) => {
 	};
 
 	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<View style={ContainerStyles.horizMargin}>
-				<View
+		<SafeAreaView
+			style={[ContainerStyles.flexContainer, ContainerStyles.horizMargin]}
+		>
+			<View
+				style={{
+					width: "100%",
+					marginVertical: 10,
+				}}
+			>
+				<Image
+					source={{ uri: clubInfo.logo }}
 					style={{
-						width: "100%",
-						marginVertical: 10,
+						width: 300,
+						height: 100,
+						resizeMode: "center",
+						alignSelf: "center",
 					}}
-				>
-					<Image
-						source={{ uri: clubInfo.logo }}
-						style={{
-							width: 300,
-							height: 100,
-							resizeMode: "center",
-							alignSelf: "center",
-						}}
-					/>
-				</View>
-				{requestButton}
-				<Card>
-					<Text>{clubInfo?.description}</Text>
-				</Card>
-				{message != "" ? (
-					<Card status={error ? "danger" : "success"}>
-						<Text>{message}</Text>
-					</Card>
-				) : null}
-
-				<GeneralModal
-					visible={modalVisible}
-					closeFunction={() => setModalVisible(false)}
-					header={"Would you like to join " + clubInfo.name + "?"}
-					functionOnConfirm={sendRequest}
-					content={
-						"If you wish to join " +
-						clubInfo.name +
-						", confirm to send a request to the club owners and executives. They will confirm or deny your request."
-					}
-					modalType={"basic"}
 				/>
-
-				{isMember && (
-					<Tab.Navigator>
-						<Tab.Screen
-							name="AnnouncementList"
-							component={AnnouncementList}
-							initialParams={{
-								announcementList: clubInfo.announcements,
-							}}
-							options={{ title: "Announcements" }}
-						/>
-						<Tab.Screen
-							name="EventList"
-							component={EventTab}
-							initialParams={{ eventList: clubInfo.events }}
-							options={{ title: "Events" }}
-						/>
-						<Tab.Screen
-							name="Members"
-							component={MemberTab}
-							initialParams={{
-								members: clubInfo.members,
-								role: clubInfo.role,
-							}}
-							options={{ title: "Members" }}
-						/>
-					</Tab.Navigator>
-				)}
 			</View>
+			{requestButton}
+			<Card>
+				<Text>{clubInfo?.description}</Text>
+			</Card>
+			{message != "" ? (
+				<Card status={error ? "danger" : "success"}>
+					<Text>{message}</Text>
+				</Card>
+			) : null}
+
+			<GeneralModal
+				visible={modalVisible}
+				closeFunction={() => setModalVisible(false)}
+				header={"Would you like to join " + clubInfo.name + "?"}
+				functionOnConfirm={sendRequest}
+				content={
+					"If you wish to join " +
+					clubInfo.name +
+					", confirm to send a request to the club owners and executives. They will confirm or deny your request."
+				}
+				modalType={"basic"}
+			/>
+
+			{isMember && (
+				<Tab.Navigator>
+					<Tab.Screen
+						name="AnnouncementList"
+						component={AnnouncementList}
+						initialParams={{
+							announcementList: clubInfo.announcements,
+						}}
+						options={{ title: "Announcements" }}
+					/>
+					<Tab.Screen
+						name="EventList"
+						component={EventTab}
+						initialParams={{ eventList: clubInfo.events }}
+						options={{ title: "Events" }}
+					/>
+					<Tab.Screen
+						name="Members"
+						component={MemberTab}
+						initialParams={{
+							members: clubInfo.members,
+							role: clubInfo.role,
+						}}
+						options={{ title: "Members" }}
+					/>
+				</Tab.Navigator>
+			)}
 			{addAnEvButton}
 		</SafeAreaView>
 	);

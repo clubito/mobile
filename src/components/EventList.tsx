@@ -60,47 +60,6 @@ const EventList = (props: Props) => {
 		return curDate > start && curDate < end;
 	};
 
-	const Footer = (item: Club) => {
-		props.renderClubInfo ? (
-			<ListItem
-				style={{
-					flexDirection: "row",
-					alignContent: "center",
-					margin: 5,
-				}}
-				onPress={() => {
-					navigation.navigate("ClubNavigator", {
-						title: item.name,
-						screen: "Club",
-						params: {
-							id: item.id,
-							title: item.name,
-							role: item.role,
-						},
-					});
-				}}
-			>
-				<Avatar
-					source={{ uri: item.logo }}
-					style={{
-						marginRight: 5,
-						height: 30,
-						width: 30,
-					}}
-				/>
-				<Text
-					category="s1"
-					style={{
-						alignSelf: "center",
-						marginHorizontal: 10,
-					}}
-				>
-					{item.name}
-				</Text>
-			</ListItem>
-		) : null;
-	};
-
 	return (
 		<List
 			data={props.events}

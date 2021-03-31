@@ -68,17 +68,15 @@ const EventListScreen = () => {
 	}
 
 	var filteredEvents: Event[];
-	var listTitle: string;
+	var listTitle = "";
 	switch (viewAll) {
 		case 0:
 			filteredEvents = eventInfo;
-			listTitle = "All Events";
 			break;
 		case 2:
 			filteredEvents = eventInfo.filter((item) =>
 				isUpcoming(item.startTime)
 			);
-			listTitle = "Upcoming Events";
 			break;
 		case 3:
 			filteredEvents = eventInfo.filter((item) =>
@@ -96,7 +94,6 @@ const EventListScreen = () => {
 			filteredEvents = eventInfo.filter((item) =>
 				isCurrent(item.startTime, item.endTime)
 			);
-			listTitle = "Ongoing Events";
 			break;
 	}
 
@@ -116,33 +113,38 @@ const EventListScreen = () => {
 					)}
 				/>
 			</DrawerGroup>
-			<ButtonGroup appearance="outline" style={{ borderRadius: 0 }}>
+			<ButtonGroup
+				appearance="outline"
+				style={{ borderRadius: 0 }}
+				size="small"
+			>
 				<Button
 					style={{ flex: 1 }}
 					onPress={() => setViewAll(0)}
 					disabled={viewAll === 0}
 				>
-					View All
+					All
 				</Button>
 				<Button
 					style={{ flex: 1 }}
 					onPress={() => setViewAll(1)}
 					disabled={viewAll === 1}
 				>
-					View Current
+					Ongoing
 				</Button>
 				<Button
 					style={{ flex: 1 }}
 					onPress={() => setViewAll(2)}
 					disabled={viewAll === 2}
 				>
-					View Upcoming
+					Upcoming
 				</Button>
 			</ButtonGroup>
-
-			<Text category="h2" style={{ alignSelf: "center" }}>
-				{listTitle}
-			</Text>
+			{listTitle ? (
+				<Text category="h2" style={{ alignSelf: "center" }}>
+					{listTitle}
+				</Text>
+			) : null}
 			<EventList events={filteredEvents} renderClubInfo={true} />
 		</SafeAreaView>
 	);

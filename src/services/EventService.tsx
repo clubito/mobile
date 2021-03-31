@@ -13,12 +13,16 @@ export default class EventService {
 		// return response.data.tags;
 		const evList = [] as Event[];
 		const club1: Club = {
-			id: "605bf58636058a2d921a9463",
-			name: "string",
+			id: "6062a496e99e023eb29ee1ee",
+			name: "something something",
 			logo: "https://picsum.photos/200",
 			description: "cdsfehnjisljifs",
 			role: "MEMBER",
 			theme: "string",
+			joinRequestStatus: {
+				status: "PENDING",
+				approvalDate: new Date(),
+			},
 		};
 		for (var i = 0; i < 50; i++) {
 			const ev1: Event = {
@@ -49,12 +53,16 @@ export default class EventService {
 		// );
 		// return response.data;
 		const club1: Club = {
-			id: "605bf58636058a2d921a9463",
-			name: "string",
+			id: "6062a496e99e023eb29ee1ee",
+			name: "something something",
 			logo: "https://picsum.photos/200",
 			description: "cdsfehnjisljifs",
 			role: "MEMBER",
 			theme: "string",
+			joinRequestStatus: {
+				status: "PENDING",
+				approvalDate: new Date(),
+			},
 		};
 		const ev1: Event = {
 			id: "njklnfd",

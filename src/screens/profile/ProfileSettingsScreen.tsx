@@ -88,7 +88,6 @@ const ProfileSettingsScreen = () => {
 
 	const submitChecklist = (model: ChangeProfileModel) => {
 		savedModel.current = model;
-		console.log(model);
 		let props = {} as {
 			name?: string;
 			profilePicture?: string;
@@ -125,7 +124,6 @@ const ProfileSettingsScreen = () => {
 
 	const submitChangePassword = (model: ChangePasswordModel) => {
 		savedPassModel.current = model;
-		console.log(savedPassModel);
 		AuthService.changePassword(model.curPassword, model.password)
 			.then(() => {
 				setSuccess1("Successfully changed password");
