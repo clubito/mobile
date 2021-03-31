@@ -60,14 +60,18 @@ export default class ChatService {
 	 * with the messages sent to the thread.
 	 */
 	static async getChatThread(clubId: string) {
-		const response: AxiosResponse<ChatThread> = await API.get<ChatThread>(
-			"/chat/thread",
-			{
-				params: { id: clubId },
-			}
-		);
+		// 	const response: AxiosResponse<ChatThread> = await API.get<ChatThread>(
+		// 		"/chat/thread",
+		// 		{
+		// 			params: { id: clubId },
+		// 		}
+		// 	);
 
-		return response.data;
+		// 	return response.data;
+
+		// Dummy data until backend is working
+		const chatThread = await this.getAllChatThreads();
+		return chatThread[0];
 	}
 
 	/**
