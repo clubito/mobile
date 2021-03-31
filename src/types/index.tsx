@@ -52,6 +52,7 @@ interface ChatThread {
 	clubName: string;
 	clubLogo: string;
 	messages: ChatMessage[];
+	role: string;
 }
 
 interface ChatMessage {
