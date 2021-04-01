@@ -4,19 +4,19 @@
 
 interface Announcement {
 	message: string;
-	timestamp: Date;
+	timestamp: string;
 }
 
 interface Event {
 	name: string;
 	description: string;
-	startTime: Date;
-	endTime: Date;
+	startTime: string;
+	endTime: string;
 	longitude: string;
 	latitude: string;
 	shortLocation: string;
 	picture: string;
-	lastUpdated: Date;
+	lastUpdated: string;
 }
 
 interface Club {
@@ -31,7 +31,7 @@ interface Club {
 	events?: Event[];
 	joinRequestStatus: {
 		status: string;
-		approvalDate: Date;
+		approvalDate: string;
 	};
 }
 
@@ -59,7 +59,7 @@ interface ChatMessage {
 	authorId: string;
 	authorName: string;
 	authorPicture: string;
-	timestamp: Date;
+	timestamp: string;
 	body: string;
 }
 
