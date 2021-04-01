@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { ChatMessage, ChatThread } from "../types";
+import { ChatThread } from "../types";
 
 export default class ChatService {
 	static subscribers: Map<string, Function>;
@@ -10,49 +10,11 @@ export default class ChatService {
 	 * Each thread object only contains the last received message.
 	 */
 	static async getAllChatThreads() {
-		// const response: AxiosResponse<ChatThread[]> = await API.get<
-		// 	ChatThread[]
-		// >("/chat/thread/all");
+		const response: AxiosResponse<ChatThread[]> = await API.get<
+			ChatThread[]
+		>("/clubs/threads");
 
-		// return response.data;
-
-		// Dummy data until backend is working
-		const chatList: ChatThread[] = [];
-		const getChats = (): ChatMessage[] => {
-			var messageList: ChatMessage[] = [];
-			for (let i = 0; i < 6; i++) {
-				messageList.push(
-					i % 2 == 0
-						? {
-								authorId: "6063e482a01eb4001e953dd7",
-								authorName: "samDman",
-								authorPicture: "https://picsum.photos/200",
-								timestamp: new Date(),
-								body: "message " + i.toString(),
-						  }
-						: {
-								authorId: "6062a496e99e023eb29ee1eb",
-								authorName: "John Somethings",
-								authorPicture: "https://picsum.photos/200",
-								timestamp: new Date(),
-								body: "message " + i.toString(),
-						  }
-				);
-			}
-			return messageList;
-		};
-
-		for (let i = 0; i < 3; i++) {
-			chatList.push({
-				clubId: "6062a496e99e023eb29ee1f2",
-				clubName: "PUDM",
-				clubLogo: "https://picsum.photos/200",
-				messages: getChats(),
-				role: "NONMEMBER",
-			});
-		}
-
-		return chatList;
+		return response.data;
 	}
 
 	/**
@@ -60,18 +22,14 @@ export default class ChatService {
 	 * with the messages sent to the thread.
 	 */
 	static async getChatThread(clubId: string) {
-		// 	const response: AxiosResponse<ChatThread> = await API.get<ChatThread>(
-		// 		"/chat/thread",
-		// 		{
-		// 			params: { id: clubId },
-		// 		}
-		// 	);
+		const response: AxiosResponse<ChatThread> = await API.get<ChatThread>(
+			"/clubs/messages",
+			{
+				params: { id: clubId },
+			}
+		);
 
-		// 	return response.data;
-
-		// Dummy data until backend is working
-		const chatThread = await this.getAllChatThreads();
-		return chatThread[0];
+		return response.data;
 	}
 
 	/**
