@@ -22,6 +22,7 @@ const MemberList = (props: Props) => {
 
 	const removeClubMember = (userId: string) => {
 		setVisible(false);
+		console.log(props.clubId);
 		ClubService.removeMember(props.clubId, userId, "yajha")
 			.then((response) => {
 				console.log(response);

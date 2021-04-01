@@ -102,7 +102,7 @@ export default class ClubService {
 	//TODO: Change to correct endpoint when it is done
 	static async removeMember(clubId: string, userId: string, reason: string) {
 		const response: AxiosResponse = await API.post("/clubs/kick", {
-			id: clubId,
+			clubId: clubId,
 			userId: userId,
 			reason: reason,
 		});

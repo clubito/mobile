@@ -15,6 +15,7 @@ import { Club, Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import ClubListItem from "./ClubListItem";
 import { TouchableHighlight } from "react-native-gesture-handler";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
 	events: Event[];
@@ -23,7 +24,7 @@ type Props = {
 
 const EventList = (props: Props) => {
 	const curDate = new Date();
-	const navigation = useNavigation();
+	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	const getReadableDate = (d: Date) => {
 		if (typeof d === "string") {
@@ -75,10 +76,14 @@ const EventList = (props: Props) => {
 							past === 0 ? styles.current : null,
 						]}
 						onPress={() =>
-							navigation.navigate("Event", {
-								id: item.id,
+							navigation.push("Event", {
 								title: item.name,
-								role: item.role,
+								screen: "Event",
+								params: {
+									id: item.id,
+									title: item.name,
+									role: item.role,
+								},
 							})
 						}
 					>
