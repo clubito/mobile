@@ -18,7 +18,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
-import ChatMessageListItem from "../../components/ChatMessageListItem";
+import ChatMessageIncomingListItem from "../../components/ChatMessageIncomingListItem";
 
 type ChatParamList = {
 	Chat: { id: string };
@@ -91,6 +91,7 @@ const ChatScreen = (props: Props) => {
 		<Layout style={styles.mainContainer}>
 			<Layout style={styles.messagesContainer}>
 				<List
+					contentContainerStyle={styles.messageList}
 					data={chatThread.messages}
 					keyExtractor={(item) =>
 						item.authorId + item.body + item.timestamp
@@ -98,7 +99,7 @@ const ChatScreen = (props: Props) => {
 					keyboardDismissMode="on-drag"
 					ItemSeparatorComponent={Divider}
 					renderItem={({ item }) => (
-						<ChatMessageListItem message={item} />
+						<ChatMessageIncomingListItem message={item} />
 					)}
 				/>
 			</Layout>
@@ -107,7 +108,6 @@ const ChatScreen = (props: Props) => {
 				style={styles.inputContainer}
 				behavior="padding"
 			>
-				<Divider />
 				<Layout style={styles.inputInner}>
 					<Input
 						style={styles.messageInput}
@@ -141,6 +141,9 @@ const styles = StyleSheet.create({
 	},
 	messagesContainer: {
 		flex: 10,
+	},
+	messageList: {
+		paddingHorizontal: 16,
 	},
 	inputContainer: {
 		flex: 1,
