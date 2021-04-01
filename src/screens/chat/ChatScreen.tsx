@@ -34,6 +34,7 @@ const ChatScreen = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 	const [isLoading, setIsLoading] = useState(false);
 	const [chatThread, setChatThread] = useState({} as ChatThread);
+	const [sendButtonDisabled, setSendButtonDisabled] = useState(true);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -70,6 +71,14 @@ const ChatScreen = (props: Props) => {
 		});
 	}, [chatThread]);
 
+	const toggleSendButton = (text: string) => {
+		if (sendButtonDisabled && text.trim().length > 0) {
+			setSendButtonDisabled(false);
+		} else if (!sendButtonDisabled && text.trim().length === 0) {
+			setSendButtonDisabled(true);
+		}
+	};
+
 	if (isLoading) {
 		return (
 			<Layout style={styles.loadingContainer}>
@@ -100,10 +109,14 @@ const ChatScreen = (props: Props) => {
 			>
 				<Divider />
 				<Layout style={styles.inputInner}>
-					<Input style={styles.messageInput} />
+					<Input
+						style={styles.messageInput}
+						onChangeText={toggleSendButton}
+					/>
 					<Button
 						appearance="ghost"
 						style={[styles.iconButton, styles.sendButton]}
+						disabled={sendButtonDisabled}
 						accessoryLeft={() => (
 							<MaterialIcons name="send" size={24} />
 						)}
