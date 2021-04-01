@@ -7,14 +7,7 @@ import {
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import {
-	Avatar,
-	Button,
-	Divider,
-	Input,
-	Layout,
-	List,
-} from "@ui-kitten/components";
+import { Avatar, Button, Input, Layout, List } from "@ui-kitten/components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
@@ -91,13 +84,12 @@ const ChatScreen = (props: Props) => {
 		<Layout style={styles.mainContainer}>
 			<Layout style={styles.messagesContainer}>
 				<List
-					contentContainerStyle={styles.messageList}
+					style={styles.messageList}
 					data={chatThread.messages}
 					keyExtractor={(item) =>
 						item.authorId + item.body + item.timestamp
 					}
 					keyboardDismissMode="on-drag"
-					ItemSeparatorComponent={Divider}
 					renderItem={({ item }) => (
 						<ChatMessageIncomingListItem message={item} />
 					)}
@@ -116,9 +108,12 @@ const ChatScreen = (props: Props) => {
 					<Button
 						appearance="ghost"
 						style={[styles.iconButton, styles.sendButton]}
-						disabled={sendButtonDisabled}
 						accessoryLeft={() => (
-							<MaterialIcons name="send" size={24} />
+							<MaterialIcons
+								name="send"
+								size={24}
+								color={sendButtonDisabled ? "#9E9E9E" : "green"}
+							/>
 						)}
 					/>
 				</Layout>
@@ -144,6 +139,7 @@ const styles = StyleSheet.create({
 	},
 	messageList: {
 		paddingHorizontal: 16,
+		backgroundColor: "transparent",
 	},
 	inputContainer: {
 		flex: 1,
@@ -156,6 +152,9 @@ const styles = StyleSheet.create({
 	messageInput: {
 		flex: 1,
 		marginHorizontal: 8,
+		borderRadius: 20,
+		borderColor: "#EEEEEE",
+		backgroundColor: "#F5F5F5",
 	},
 	sendButton: {
 		marginRight: 4,

@@ -31,7 +31,6 @@ const ChatListScreen = () => {
 
 	return (
 		<Layout style={styles.container}>
-			<SafeAreaView edges={["top"]} />
 
 			<FlatList
 				data={chatThreads}

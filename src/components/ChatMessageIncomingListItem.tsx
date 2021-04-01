@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
 		color: "white",
 		backgroundColor: "green",
 		borderRadius: 15,
-		paddingHorizontal: 8,
-		paddingVertical: 8,
+		padding: 10,
+		overflow: "hidden",
 	},
 	space: {
 		flex: 2,

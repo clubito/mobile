@@ -14,7 +14,13 @@ const Stack = createStackNavigator<ChatParams>();
 
 const ChatNavigator = () => (
 	<Stack.Navigator>
-		<Stack.Screen name="ChatList" component={ChatListScreen} />
+		<Stack.Screen
+			name="ChatList"
+			component={ChatListScreen}
+			options={() => ({
+				title: "Chats",
+			})}
+		/>
 
 		<Stack.Screen
 			name="Chat"
