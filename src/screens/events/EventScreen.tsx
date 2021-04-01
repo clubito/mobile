@@ -39,7 +39,7 @@ const EventScreen = (props: Props) => {
 				.then((data) => {
 					setEventInfo(data);
 					//TODO: Change to clubId when backend has been updated
-					ClubService.getClub(data.club)
+					ClubService.getClub(data.clubId)
 						.then((data) => {
 							setClub(data);
 							setIsOfficer(
@@ -109,52 +109,53 @@ const EventScreen = (props: Props) => {
 	);
 
 	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<View style={ContainerStyles.extraMargin}>
-				<View
-					style={{
-						flex: 1,
-						alignItems: "center",
-						justifyContent: "center",
-						marginBottom: 10,
-					}}
-				>
-					<ImageBackground
-						style={{ height: 200, width: "100%" }}
-						source={{ uri: event.picture }}
-					/>
-				</View>
-				<Card style={ContainerStyles.lowerMargin}>
-					<Text category="s1" style={{ textAlign: "center" }}>
-						{getReadableDate(event.startTime)} to{" "}
-						{getReadableDate(event.endTime)}
-					</Text>
-				</Card>
-				{/* TODO: Add RSVP function */}
-				<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
-					{"RSVP to " + event.name}
-				</Button>
-				<Card style={ContainerStyles.lowerMargin}>
-					<Text>
-						<b>Description:</b> {event.description}
-					</Text>
-				</Card>
-				{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
-				<ClubListItem
-					onPress={() => {
-						navigation.push("ClubNavigator", {
-							title: club.name,
-							screen: "Club",
-							params: {
-								id: club.id,
-								title: club.name,
-								role: club.role,
-							},
-						});
-					}}
-					club={club}
+		<SafeAreaView
+			style={[ContainerStyles.flexContainer, ContainerStyles.extraMargin]}
+		>
+			<View
+				style={{
+					flex: 1,
+					alignItems: "center",
+					justifyContent: "center",
+					marginBottom: 10,
+				}}
+			>
+				<ImageBackground
+					style={{ height: 200, width: "100%" }}
+					source={{ uri: event.picture }}
 				/>
 			</View>
+			<Card style={ContainerStyles.lowerMargin}>
+				<Text category="s1" style={{ textAlign: "center" }}>
+					{getReadableDate(event.startTime)} to{" "}
+					{getReadableDate(event.endTime)}
+				</Text>
+			</Card>
+			{/* TODO: Add RSVP function */}
+			<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
+				{"RSVP to " + event.name}
+			</Button>
+			<Card style={ContainerStyles.lowerMargin}>
+				<Text>
+					<Text style={{ fontWeight: "bold" }}>Description: </Text>
+					{event.description}
+				</Text>
+			</Card>
+			{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
+			<ClubListItem
+				onPress={() => {
+					navigation.push("ClubNavigator", {
+						title: club.name,
+						screen: "Club",
+						params: {
+							id: club.id,
+							title: club.name,
+							role: club.role,
+						},
+					});
+				}}
+				club={club}
+			/>
 		</SafeAreaView>
 	);
 };

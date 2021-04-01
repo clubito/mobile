@@ -70,7 +70,6 @@ const ApplicationList = (props: Props) => {
 						<ListItem
 							onPress={() =>
 								navigation.push("Profile", {
-									//TODO: Change it to .id after backend is updated accordingly
 									userId: item.id,
 								})
 							}
@@ -114,7 +113,6 @@ const ApplicationList = (props: Props) => {
 											/>
 										)}
 										onPress={() => {
-											//TODO: Change _id to id when backend updates
 											triggerModal(
 												true,
 												item.name,
@@ -133,7 +131,6 @@ const ApplicationList = (props: Props) => {
 											/>
 										)}
 										onPress={() => {
-											//TODO: Change _id to id when backend updates
 											triggerModal(
 												false,
 												item.name,

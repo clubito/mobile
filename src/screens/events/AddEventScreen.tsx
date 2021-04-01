@@ -4,6 +4,7 @@ import {
 	StyleSheet,
 	SafeAreaView,
 	ScrollView,
+	View,
 } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { Text, Layout, Button } from "@ui-kitten/components";
@@ -20,6 +21,7 @@ import FormInput from "../../components/FormInput";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 import EventService from "../../services/EventService";
 import { EventParamList } from "./EventNavigator";
+import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -28,6 +30,7 @@ type Props = {
 	route: AddEventRouteProp;
 	navigation: AddEventNavigationProp;
 };
+type modeProp = "date" | "time" | "datetime" | "countdown" | undefined;
 
 const AddEventScreen = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState<Club | null>(null);
@@ -37,6 +40,19 @@ const AddEventScreen = (props: Props) => {
 	const [profilePic, setPFP] = useState("");
 	const [responseError, setResponseError] = React.useState();
 	const savedModel = React.useRef(CreateEventModel.empty());
+	const [date, setDate] = useState(new Date());
+	const [time, setTime] = useState(new Date());
+
+	const onChangeDate = (event: EventService, selectedDate?: Date) => {
+		const currentDate = selectedDate || date;
+		setDate(currentDate);
+		console.log(getDateTime(date, time));
+	};
+	const onChangeTime = (event: EventService, selectedTime?: Date) => {
+		const currentTime = selectedTime || time;
+		setTime(currentTime);
+		console.log(getDateTime(date, time));
+	};
 
 	useEffect(() => {
 		if (clubInfo === null) {
@@ -143,6 +159,17 @@ const AddEventScreen = (props: Props) => {
 			</Layout>
 		);
 	}
+	const getDateTime = (date: Date, time: Date) => {
+		const yy = date.getFullYear();
+		const mm = date.getMonth() + 1;
+		const dd = date.getDate();
+		const hh = time.getHours();
+		const min = time.getMinutes();
+		var interMedDt = new Date(mm + "-" + dd + "-" + yy);
+		interMedDt.setHours(hh);
+		interMedDt.setMinutes(min);
+		return interMedDt;
+	};
 
 	return (
 		<SafeAreaView
@@ -184,6 +211,22 @@ const AddEventScreen = (props: Props) => {
 								id="shortLocation"
 								label="Location"
 								style={styles.input}
+							/>
+							<DateTimePicker
+								testID="datePicker"
+								value={date}
+								mode={"date"}
+								display="default"
+								onChange={onChangeDate}
+								style={{ width: 200 }}
+							/>
+							<DateTimePicker
+								testID="timePicker"
+								value={time}
+								mode={"time"}
+								display="default"
+								onChange={onChangeTime}
+								style={{ width: 200 }}
 							/>
 							<ProfilePicturePicker
 								functionOnConfirm={(image) => setPFP(image)}
