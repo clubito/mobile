@@ -129,12 +129,12 @@ const ClubScreen = (props: Props) => {
 	};
 
 	const addAnEvButton =
-		//TODO: Added member for testing, must remember to remove later
 		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
 			<Popover
 				anchor={renderToggleButton}
 				visible={addVisible}
 				placement={"top end"}
+				style={{ width: 150 }}
 				onBackdropPress={() => setAddVisible(false)}
 			>
 				<Menu>

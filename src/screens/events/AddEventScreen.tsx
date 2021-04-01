@@ -7,7 +7,7 @@ import {
 	View,
 } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { Text, Layout, Button } from "@ui-kitten/components";
+import { Text, Layout, Button, CheckBox } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -22,6 +22,9 @@ import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 import EventService from "../../services/EventService";
 import { EventParamList } from "./EventNavigator";
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
+import FormDateTimePicker from "../../components/DateTimePickerForm";
+import DateTimePickerForm from "../../components/DateTimePickerForm";
+import GeneralModal from "../../components/GeneralModal";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -30,29 +33,45 @@ type Props = {
 	route: AddEventRouteProp;
 	navigation: AddEventNavigationProp;
 };
-type modeProp = "date" | "time" | "datetime" | "countdown" | undefined;
+interface CreateList {
+	name: string;
+	startTime: Date;
+	endTime: Date;
+	clubId: string;
+	description?: string;
+	longitude?: number;
+	latitude?: number;
+	shortLocation?: string;
+	picture?: string;
+}
+interface EditList {
+	name: string;
+	startTime: Date;
+	endTime: Date;
+	eventId: string;
+	description?: string;
+	longitude?: number;
+	latitude?: number;
+	shortLocation?: string;
+	picture?: string;
+	notifyUsers: boolean;
+}
+
+type ParamList = CreateList | EditList;
 
 const AddEventScreen = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState<Club | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [submitted, setSubmitted] = React.useState(false);
+	const [visible, setVisible] = React.useState(false);
 	const navigation = useNavigation();
 	const [profilePic, setPFP] = useState("");
 	const [responseError, setResponseError] = React.useState();
 	const savedModel = React.useRef(CreateEventModel.empty());
-	const [date, setDate] = useState(new Date());
-	const [time, setTime] = useState(new Date());
-
-	const onChangeDate = (event: EventService, selectedDate?: Date) => {
-		const currentDate = selectedDate || date;
-		setDate(currentDate);
-		console.log(getDateTime(date, time));
-	};
-	const onChangeTime = (event: EventService, selectedTime?: Date) => {
-		const currentTime = selectedTime || time;
-		setTime(currentTime);
-		console.log(getDateTime(date, time));
-	};
+	const [startDate, setStartDate] = useState(new Date());
+	const [endDate, setEndDate] = useState(new Date());
+	const [params, setParams] = useState({} as ParamList);
+	const [checked, setChecked] = React.useState(false);
 
 	useEffect(() => {
 		if (clubInfo === null) {
@@ -86,7 +105,10 @@ const AddEventScreen = (props: Props) => {
 								params.latitude = eventInfo.latitude;
 							if (eventInfo.shortLocation)
 								params.shortLocation = eventInfo.shortLocation;
-							if (profilePic) params.picture = profilePic;
+							if (eventInfo.picture && eventInfo.picture != "") {
+								setPFP(eventInfo.picture);
+								params.picture = eventInfo.picture;
+							}
 							savedModel.current = new CreateEventModel(
 								eventInfo.name,
 								eventInfo.description
@@ -107,6 +129,8 @@ const AddEventScreen = (props: Props) => {
 									? eventInfo.picture
 									: "https://picsum.photos/200"
 							);
+							setStartDate(savedModel.current.startTime);
+							setEndDate(savedModel.current.endTime);
 							setLoading(false);
 						}
 					);
@@ -115,41 +139,59 @@ const AddEventScreen = (props: Props) => {
 		}
 	}, []);
 
-	const submitEvent = (model: CreateEventModel) => {
+	const triggerModal = (model: CreateEventModel) => {
 		savedModel.current = model;
-		setLoading(true);
+		// setLoading(true);
 		var params = {
 			name: model.name,
-			startTime: new Date(model.startTime),
-			endTime: new Date(model.endTime),
-		} as {
-			name: string;
-			startTime: Date;
-			endTime: Date;
-			clubId: string;
-			description?: string;
-			longitude?: number;
-			latitude?: number;
-			shortLocation?: string;
-			picture?: string;
-		};
+			startTime: new Date(startDate),
+			endTime: new Date(endDate),
+		} as ParamList;
 		if (model.description) params.description = model.description;
 		if (model.longitude) params.longitude = model.longitude;
 		if (model.latitude) params.latitude = model.latitude;
 		if (model.shortLocation) params.shortLocation = model.shortLocation;
-		if (profilePic) params.picture = profilePic;
-		params.clubId = clubInfo ? clubInfo.id : "";
-		console.log(model);
-		EventService.createEvent(params)
-			.then((message) => {
-				console.log(message);
-				navigation.goBack();
-			})
-			.catch((error) => {
-				//TODO: Make toasts here
-				console.log(error);
-				setLoading(false);
-			});
+		if (profilePic && savedModel.current.picture !== profilePic)
+			params.picture = profilePic;
+		if (props.route.params.eventId) {
+			(params as EditList).eventId = props.route.params.eventId;
+			//TODO: Add checkbox
+			(params as EditList).notifyUsers = checked;
+		} else {
+			(params as CreateList).clubId = clubInfo ? clubInfo.id : "";
+		}
+		setParams(params);
+		setVisible(true);
+	};
+
+	const submitDetails = (params: ParamList) => {
+		if (props.route.params.eventId) {
+			//Edit event if eventID already exists
+			EventService.editEvent(params as EditList)
+				.then((message) => {
+					console.log(message);
+					setVisible(false);
+					navigation.goBack();
+				})
+				.catch((error) => {
+					//TODO: Make toasts here
+					console.log(error);
+					setLoading(false);
+				});
+		} else {
+			//Create event if no eventID
+			EventService.createEvent(params as CreateList)
+				.then((message) => {
+					console.log(message);
+					setVisible(false);
+					navigation.goBack();
+				})
+				.catch((error) => {
+					//TODO: Make toasts here
+					console.log(error);
+					setLoading(false);
+				});
+		}
 	};
 
 	if (clubInfo === null || loading) {
@@ -159,16 +201,33 @@ const AddEventScreen = (props: Props) => {
 			</Layout>
 		);
 	}
-	const getDateTime = (date: Date, time: Date) => {
-		const yy = date.getFullYear();
-		const mm = date.getMonth() + 1;
-		const dd = date.getDate();
-		const hh = time.getHours();
-		const min = time.getMinutes();
-		var interMedDt = new Date(mm + "-" + dd + "-" + yy);
-		interMedDt.setHours(hh);
-		interMedDt.setMinutes(min);
-		return interMedDt;
+
+	const onChangeStart = (event: EventService, selectedDate?: Date) => {
+		const currentDate = selectedDate || startDate;
+		setStartDate(currentDate);
+	};
+
+	const onChangeEnd = (event: EventService, selectedDate?: Date) => {
+		const currentDate = selectedDate || endDate;
+		setEndDate(currentDate);
+	};
+
+	const getReadableDate = (d: Date) => {
+		if (typeof d === "string") {
+			d = new Date(d);
+		}
+		return (
+			String(
+				d.toLocaleDateString([], {
+					month: "2-digit",
+					day: "2-digit",
+				})
+			) +
+			" " +
+			String(
+				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+			)
+		);
 	};
 
 	return (
@@ -180,7 +239,7 @@ const AddEventScreen = (props: Props) => {
 					style={styles.formContainer}
 					initialValues={savedModel.current}
 					validationSchema={CreateEventSchema}
-					onSubmit={submitEvent}
+					onSubmit={triggerModal}
 					validateOnChange={submitted}
 				>
 					{({ handleSubmit }) => (
@@ -198,39 +257,39 @@ const AddEventScreen = (props: Props) => {
 								style={styles.input}
 							/>
 							<FormInput
-								id="startTime"
-								label="Start Time"
-								style={styles.input}
-							/>
-							<FormInput
-								id="endTime"
-								label="End Time"
-								style={styles.input}
-							/>
-							<FormInput
 								id="shortLocation"
 								label="Location"
 								style={styles.input}
 							/>
-							<DateTimePicker
-								testID="datePicker"
-								value={date}
-								mode={"date"}
-								display="default"
-								onChange={onChangeDate}
-								style={{ width: 200 }}
+							<DateTimePickerForm
+								date={startDate}
+								onChange={onChangeStart}
+								style={styles.input}
+								label="Start Date"
 							/>
-							<DateTimePicker
-								testID="timePicker"
-								value={time}
-								mode={"time"}
-								display="default"
-								onChange={onChangeTime}
-								style={{ width: 200 }}
+							<DateTimePickerForm
+								date={endDate}
+								onChange={onChangeEnd}
+								style={styles.input}
+								label="End Date"
 							/>
 							<ProfilePicturePicker
 								functionOnConfirm={(image) => setPFP(image)}
+								pfp={profilePic}
+								style={{ marginBottom: 20 }}
+								isSquare={true}
 							/>
+							{props.route.params.eventId ? (
+								<CheckBox
+									checked={checked}
+									onChange={(nextChecked) =>
+										setChecked(nextChecked)
+									}
+									style={ContainerStyles.lowerMargin}
+								>
+									{`Notify Users of this update: ${checked}`}
+								</CheckBox>
+							) : null}
 							<Button
 								style={styles.submitButton}
 								onPress={() => {
@@ -248,6 +307,36 @@ const AddEventScreen = (props: Props) => {
 					)}
 				</Formik>
 			</ScrollView>
+			<GeneralModal
+				visible={visible}
+				header={
+					"Would you like to " +
+					(props.route.params.eventId ? "edit" : "create") +
+					" an event with these details?"
+				}
+				functionOnConfirm={() => submitDetails(params)}
+				closeFunction={() => setVisible(false)}
+				content={
+					"Name: " +
+					(params.name ? params.name : "None") +
+					"\nDescription: " +
+					(params.description ? params.description : "None") +
+					"\nStart Time: " +
+					(params.startTime
+						? getReadableDate(params.startTime)
+						: "None") +
+					"\nEnd Time: " +
+					(params.endTime
+						? getReadableDate(params.endTime)
+						: "None") +
+					"\nLocation: " +
+					(params.shortLocation ? params.shortLocation : "None") +
+					(props.route.params.eventId
+						? "\nNotify Users: " + (params as EditList).notifyUsers
+						: "")
+				}
+				modalType="basic"
+			/>
 		</SafeAreaView>
 	);
 };

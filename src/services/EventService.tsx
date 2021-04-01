@@ -88,4 +88,30 @@ export default class EventService {
 		}
 		return response.data;
 	}
+
+	static async editEvent(params: {
+		name: string;
+		startTime: Date;
+		endTime: Date;
+		eventId: string;
+		description?: string;
+		longitude?: number;
+		latitude?: number;
+		shortLocation?: string;
+		picture?: string;
+		notifyUsers: boolean;
+	}) {
+		const response: AxiosResponse = await API.put(
+			"/clubs/event/edit",
+			params
+		);
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
 }

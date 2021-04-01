@@ -8,6 +8,7 @@ import {
 	View,
 	Image,
 	ImageBackground,
+	ScrollView,
 } from "react-native";
 import EventService from "../../services/EventService";
 import { ContainerStyles } from "../../styles/CommonStyles";
@@ -35,30 +36,40 @@ const EventScreen = (props: Props) => {
 
 	useEffect(() => {
 		if (event === null) {
-			EventService.getEvent(props.route.params.id)
-				.then((data) => {
-					setEventInfo(data);
-					//TODO: Change to clubId when backend has been updated
-					ClubService.getClub(data.clubId)
-						.then((data) => {
-							setClub(data);
-							setIsOfficer(
-								data.role === "OFFICER" || data.role === "OWNER"
-							);
-							setLoading(false);
-						})
-						.catch(() => {
-							setLoading(false);
-							return <Text>Ha</Text>;
-						});
-					setLoading1(false);
-				})
-				.catch(() => {
-					setLoading(false);
-					setLoading1(false);
-				});
+			pullData();
 		}
 	}, []);
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			pullData();
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+	const pullData = () => {
+		EventService.getEvent(props.route.params.id)
+			.then((data) => {
+				setEventInfo(data);
+				//TODO: Change to clubId when backend has been updated
+				ClubService.getClub(data.clubId)
+					.then((data) => {
+						setClub(data);
+						setIsOfficer(
+							data.role === "OFFICER" || data.role === "OWNER"
+						);
+						setLoading(false);
+					})
+					.catch(() => {
+						setLoading(false);
+						return <Text>Ha</Text>;
+					});
+				setLoading1(false);
+			})
+			.catch(() => {
+				setLoading(false);
+				setLoading1(false);
+			});
+	};
 
 	const getReadableDate = (d: string) => {
 		const date = new Date(d);
@@ -112,35 +123,48 @@ const EventScreen = (props: Props) => {
 		<SafeAreaView
 			style={[ContainerStyles.flexContainer, ContainerStyles.extraMargin]}
 		>
-			<View
-				style={{
-					flex: 1,
-					alignItems: "center",
-					justifyContent: "center",
-					marginBottom: 10,
-				}}
-			>
-				<ImageBackground
-					style={{ height: 200, width: "100%" }}
-					source={{ uri: event.picture }}
-				/>
-			</View>
-			<Card style={ContainerStyles.lowerMargin}>
-				<Text category="s1" style={{ textAlign: "center" }}>
-					{getReadableDate(event.startTime)} to{" "}
-					{getReadableDate(event.endTime)}
-				</Text>
-			</Card>
-			{/* TODO: Add RSVP function */}
-			<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
-				{"RSVP to " + event.name}
-			</Button>
-			<Card style={ContainerStyles.lowerMargin}>
-				<Text>
-					<Text style={{ fontWeight: "bold" }}>Description: </Text>
-					{event.description}
-				</Text>
-			</Card>
+			<ScrollView>
+				<View
+					style={{
+						flex: 1,
+						alignItems: "center",
+						justifyContent: "center",
+						marginBottom: 10,
+					}}
+				>
+					<ImageBackground
+						style={{ height: 200, width: "100%" }}
+						source={{ uri: event.picture }}
+					/>
+				</View>
+				<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
+					{"RSVP to " + event.name}
+				</Button>
+				<Card style={ContainerStyles.upperMargin}>
+					<Text category="s1" style={{ textAlign: "center" }}>
+						{getReadableDate(event.startTime)} to{" "}
+						{getReadableDate(event.endTime)}
+					</Text>
+				</Card>
+				{/* TODO: Add RSVP function */}
+				<Card style={ContainerStyles.upperMargin}>
+					<Text>
+						<Text style={{ fontWeight: "bold" }}>
+							Description:{" "}
+						</Text>
+						{event.description}
+					</Text>
+					{event.shortLocation ? (
+						<Text style={ContainerStyles.upperMargin}>
+							<Text style={{ fontWeight: "bold" }}>
+								Location:{" "}
+							</Text>
+							{event.shortLocation}
+						</Text>
+					) : null}
+				</Card>
+			</ScrollView>
+
 			{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
 			<ClubListItem
 				onPress={() => {
@@ -155,6 +179,7 @@ const EventScreen = (props: Props) => {
 					});
 				}}
 				club={club}
+				style={{ position: "absolute", bottom: 0 }}
 			/>
 		</SafeAreaView>
 	);
