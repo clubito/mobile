@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 	avatarBox: {
 		flex: 1,
 		alignSelf: "center",
-		marginLeft: -10,
+		marginLeft: -20,
 		marginRight: 20,
 	},
 	avatar: {
