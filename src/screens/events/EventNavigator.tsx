@@ -6,11 +6,13 @@ import EventListScreen from "./EventListScreen";
 import EventScreen from "./EventScreen";
 import { Button } from "@ui-kitten/components";
 import ClubNavigator from "../clubs/ClubNavigator";
+import AddEventScreen from "./AddEventScreen";
 
 export type EventParamList = {
 	EventList: undefined;
 	Event: { id: string; title: string; role: string };
 	ClubNavigator: { title: string };
+	AddEvent: { clubId: string; eventId?: string };
 };
 const Stack = createStackNavigator<EventParamList>();
 
@@ -39,6 +41,11 @@ const EventNavigator = () => (
 				title: route.params.title,
 				headerShown: false,
 			})}
+		/>
+		<Stack.Screen
+			name="AddEvent"
+			component={AddEventScreen}
+			options={{ title: "Add Event" }}
 		/>
 	</Stack.Navigator>
 );

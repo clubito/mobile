@@ -13,8 +13,8 @@ interface Event {
 	description: string;
 	startTime: string;
 	endTime: string;
-	longitude: string;
-	latitude: string;
+	longitude: number;
+	latitude: number;
 	shortLocation: string;
 	picture: string;
 	clubId: string;

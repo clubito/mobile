@@ -21,7 +21,7 @@ export default class EventService {
 			theme: "string",
 			joinRequestStatus: {
 				status: "PENDING",
-				approvalDate: new Date(),
+				approvalDate: new Date().toDateString(),
 			},
 		};
 		for (var i = 0; i < 50; i++) {
@@ -29,13 +29,17 @@ export default class EventService {
 				id: "njklnfd",
 				name: "event no. " + i,
 				description: "event" + i + " is an event",
-				startTime: new Date(1616041297644 + i * 100000000),
-				endTime: new Date(1616041297644 + (i + 1) * 100000000),
-				longitude: "0000001",
-				latitude: "123456",
+				startTime: new Date(
+					1616041297644 + i * 100000000
+				).toDateString(),
+				endTime: new Date(
+					1616041297644 + (i + 1) * 100000000
+				).toDateString(),
+				longitude: 0,
+				latitude: 0,
 				shortLocation: "Street go here ya number 1",
 				picture: "https://picsum.photos/200",
-				lastUpdated: new Date(),
+				lastUpdated: new Date().toDateString(),
 				clubId: club1.id,
 				clubName: club1.name,
 			};
@@ -53,40 +57,13 @@ export default class EventService {
 			}
 		);
 		if (response.status !== 200) {
-			const club1: Club = {
-				id: "6062a496e99e023eb29ee1ee",
-				name: "something something",
-				logo: "https://picsum.photos/200",
-				description: "cdsfehnjisljifs",
-				role: "MEMBER",
-				theme: "string",
-				joinRequestStatus: {
-					status: "PENDING",
-					approvalDate: new Date(),
-				},
+			throw {
+				code: response.status,
 			};
-			const ev1: Event = {
-				id: "njklnfd",
-				name: "event no. 1",
-				description:
-					"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-				startTime: new Date(1616041297644 + 2 * 100000000),
-				endTime: new Date(1616041297644 + (2 + 1) * 100000000),
-				longitude: "0000001",
-				latitude: "123456",
-				shortLocation: "Street go here ya number 1",
-				picture: "https://picsum.photos/200",
-				lastUpdated: new Date(),
-				clubId: club1.id,
-				clubName: club1.name,
-			};
-			return ev1;
-			// throw {
-			// 	code: response.status,
-			// };
 		}
 		return response.data;
 	}
+
 	static async createEvent(params: {
 		name: string;
 		startTime: Date;

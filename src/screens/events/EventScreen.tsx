@@ -13,8 +13,9 @@ import EventService from "../../services/EventService";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
 import { Club, Event } from "../../types";
-import { Text, Layout, Card, Button, Avatar } from "@ui-kitten/components";
+import { Text, Layout, Card, Button, Icon } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
+import ClubListItem from "../../components/ClubListItem";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -27,28 +28,43 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [loading1, setLoading1] = useState(true);
 	const [club, setClub] = useState({} as Club);
+	const [isOfficer, setIsOfficer] = useState(false);
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	useEffect(() => {
 		if (event === null) {
-			EventService.getEvent(props.route.params.id).then((data) => {
-				setEventInfo(data);
-				ClubService.getClub(data.club).then((data) => {
-					setClub(data);
+			EventService.getEvent(props.route.params.id)
+				.then((data) => {
+					setEventInfo(data);
+					//TODO: Change to clubId when backend has been updated
+					ClubService.getClub(data.club)
+						.then((data) => {
+							setClub(data);
+							setIsOfficer(
+								data.role === "OFFICER" || data.role === "OWNER"
+							);
+							setLoading(false);
+						})
+						.catch(() => {
+							setLoading(false);
+							return <Text>Ha</Text>;
+						});
+					setLoading1(false);
+				})
+				.catch(() => {
 					setLoading(false);
+					setLoading1(false);
 				});
-			});
 		}
 	}, []);
 
-	const getReadableDate = (d: Date) => {
-		if (typeof d === "string") {
-			d = new Date(d);
-		}
+	const getReadableDate = (d: string) => {
+		const date = new Date(d);
 		return (
 			String(
-				d.toLocaleDateString([], {
+				date.toLocaleDateString([], {
 					year: "2-digit",
 					month: "2-digit",
 					day: "2-digit",
@@ -56,18 +72,41 @@ const EventScreen = (props: Props) => {
 			) +
 			" " +
 			String(
-				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+				date.toLocaleTimeString([], {
+					hour: "2-digit",
+					minute: "2-digit",
+				})
 			)
 		);
 	};
 
-	if (event === null || loading) {
+	if (event === null || loading || loading1) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
 			</Layout>
 		);
 	}
+
+	if (isOfficer) {
+		navigation.setOptions({
+			headerRight: () => (
+				<Button
+					onPress={() =>
+						navigation.navigate("AddEvent", {
+							clubId: club.id,
+							eventId: props.route.params.id,
+						})
+					}
+					accessoryLeft={EditIcon}
+					appearance="ghost"
+				/>
+			),
+		});
+	}
+	const EditIcon = () => (
+		<Icon name="edit-outline" style={{ width: 20, height: 20 }} />
+	);
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
@@ -101,9 +140,8 @@ const EventScreen = (props: Props) => {
 					</Text>
 				</Card>
 				{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
-				<Button
+				<ClubListItem
 					onPress={() => {
-						console.log(club);
 						navigation.push("ClubNavigator", {
 							title: club.name,
 							screen: "Club",
@@ -114,9 +152,8 @@ const EventScreen = (props: Props) => {
 							},
 						});
 					}}
-				>
-					Club Page
-				</Button>
+					club={club}
+				/>
 			</View>
 		</SafeAreaView>
 	);

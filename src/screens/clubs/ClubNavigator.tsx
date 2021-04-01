@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";
-import AddEventScreen from "./AddEventScreen";
+import AddEventScreen from "../events/AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";

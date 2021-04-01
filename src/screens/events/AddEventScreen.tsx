@@ -3,7 +3,6 @@ import {
 	ActivityIndicator,
 	StyleSheet,
 	SafeAreaView,
-	View,
 	ScrollView,
 } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
@@ -12,19 +11,18 @@ import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
 import ClubService from "../../services/ClubService";
-import { ClubParamList } from "./ClubNavigator";
 import { Formik } from "formik";
 import {
 	CreateEventModel,
 	CreateEventSchema,
 } from "../../data/CreateEventData";
 import FormInput from "../../components/FormInput";
-import FormSecureInput from "../../components/FormSecureInput";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 import EventService from "../../services/EventService";
+import { EventParamList } from "./EventNavigator";
 
-type AddEventRouteProp = RouteProp<ClubParamList, "AddEvent">;
-type AddEventNavigationProp = StackNavigationProp<ClubParamList, "AddEvent">;
+type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
+type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
 
 type Props = {
 	route: AddEventRouteProp;
@@ -45,6 +43,58 @@ const AddEventScreen = (props: Props) => {
 			ClubService.getClub(props.route.params.clubId).then((data) => {
 				setClubInfo(data);
 				setLoading(false);
+				if (props.route.params.eventId) {
+					setLoading(true);
+					EventService.getEvent(props.route.params.eventId).then(
+						(eventInfo) => {
+							var params = {
+								name: eventInfo.name,
+								startTime: new Date(eventInfo.startTime),
+								endTime: new Date(eventInfo.endTime),
+							} as {
+								name: string;
+								startTime: Date;
+								endTime: Date;
+								clubId: string;
+								description?: string;
+								longitude?: number;
+								latitude?: number;
+								shortLocation?: string;
+								picture?: string;
+							};
+							if (eventInfo.description)
+								params.description = eventInfo.description;
+							if (eventInfo.longitude)
+								params.longitude = eventInfo.longitude;
+							if (eventInfo.latitude)
+								params.latitude = eventInfo.latitude;
+							if (eventInfo.shortLocation)
+								params.shortLocation = eventInfo.shortLocation;
+							if (profilePic) params.picture = profilePic;
+							savedModel.current = new CreateEventModel(
+								eventInfo.name,
+								eventInfo.description
+									? eventInfo.description
+									: "",
+								eventInfo.startTime
+									? new Date(eventInfo.startTime)
+									: new Date(),
+								eventInfo.endTime
+									? new Date(eventInfo.endTime)
+									: new Date(),
+								eventInfo.longitude ? eventInfo.longitude : 0,
+								eventInfo.latitude ? eventInfo.latitude : 0,
+								eventInfo.shortLocation
+									? eventInfo.shortLocation
+									: "",
+								eventInfo.picture
+									? eventInfo.picture
+									: "https://picsum.photos/200"
+							);
+							setLoading(false);
+						}
+					);
+				}
 			});
 		}
 	}, []);
@@ -52,7 +102,6 @@ const AddEventScreen = (props: Props) => {
 	const submitEvent = (model: CreateEventModel) => {
 		savedModel.current = model;
 		setLoading(true);
-
 		var params = {
 			name: model.name,
 			startTime: new Date(model.startTime),
