@@ -36,7 +36,8 @@ export default class EventService {
 				shortLocation: "Street go here ya number 1",
 				picture: "https://picsum.photos/200",
 				lastUpdated: new Date(),
-				club: club1,
+				clubId: club1.id,
+				clubName: club1.name,
 			};
 			evList.push(ev1);
 		}
@@ -76,12 +77,37 @@ export default class EventService {
 				shortLocation: "Street go here ya number 1",
 				picture: "https://picsum.photos/200",
 				lastUpdated: new Date(),
-				club: club1,
+				clubId: club1.id,
+				clubName: club1.name,
 			};
 			return ev1;
 			// throw {
 			// 	code: response.status,
 			// };
+		}
+		return response.data;
+	}
+	static async createEvent(params: {
+		name: string;
+		startTime: Date;
+		endTime: Date;
+		clubId: string;
+		description?: string;
+		longitude?: number;
+		latitude?: number;
+		shortLocation?: string;
+		picture?: string;
+	}) {
+		const response: AxiosResponse = await API.post(
+			"/clubs/event/create",
+			params
+		);
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
 		}
 		return response.data;
 	}

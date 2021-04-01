@@ -130,9 +130,7 @@ const ClubScreen = (props: Props) => {
 
 	const addAnEvButton =
 		//TODO: Added member for testing, must remember to remove later
-		clubInfo.role === "OWNER" ||
-		clubInfo.role === "OFFICER" ||
-		clubInfo.role === "MEMBER" ? (
+		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
 			<Popover
 				anchor={renderToggleButton}
 				visible={addVisible}

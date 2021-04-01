@@ -113,7 +113,7 @@ const EventList = (props: Props) => {
 											category="s1"
 											style={{ alignSelf: "center" }}
 										>
-											{item.club.name}
+											{item.clubName}
 										</Text>
 									</View>
 								) : null}
