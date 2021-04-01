@@ -28,6 +28,10 @@ const ClubSettings = (props: Props) => {
 	const [isLoading1, setIsLoading1] = useState(true);
 
 	useEffect(() => {
+		refresh();
+	}, []);
+
+	const refresh = () => {
 		ClubService.getClub(props.route.params.clubId).then((data) => {
 			setClubInfo(data);
 			setIsLoading(false);
@@ -36,7 +40,21 @@ const ClubSettings = (props: Props) => {
 			setApplicants(data);
 			setIsLoading1(false);
 		});
-	}, []);
+	};
+
+	const submit = (approval: boolean, clubId: string, userId: string) => {
+		if (approval) {
+			ClubService.approveApplication(clubId, userId).then((data) => {
+				refresh();
+				console.log(data);
+			});
+		} else {
+			ClubService.rejectApplication(clubId, userId).then((data) => {
+				console.log(data);
+			});
+		}
+		//TODO: Add toast
+	};
 
 	if (isLoading || isLoading1) {
 		return (
@@ -54,6 +72,9 @@ const ClubSettings = (props: Props) => {
 					<ApplicationList
 						applicants={applicants}
 						role={clubInfo.role}
+						clubId={clubInfo.id}
+						clubName={clubInfo.name}
+						update={submit}
 					/>
 				) : (
 					<Text>No Applicants available</Text>

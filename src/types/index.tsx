@@ -18,7 +18,8 @@ interface Event {
 	shortLocation: string;
 	picture: string;
 	lastUpdated: Date;
-	club: string;
+	clubId: string;
+	clubName: string;
 }
 
 interface Club {
@@ -38,7 +39,9 @@ interface Club {
 }
 
 interface JoinRequest {
+	name: string;
 	id: string;
+	profilePicture: string;
 	requestedAt: Date;
 	user: User;
 	status: string;

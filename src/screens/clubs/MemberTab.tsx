@@ -22,6 +22,7 @@ const MemberTab = (props: Props) => {
 			members={props.route.params.members}
 			role={props.route.params.role}
 			clubId={props.route.params.clubId}
+			update={props.route.params.update}
 		/>
 	);
 };

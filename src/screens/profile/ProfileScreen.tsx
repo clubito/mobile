@@ -46,10 +46,10 @@ const ProfileScreen = (props: Props) => {
 				setIsLoading(false);
 			})
 			.catch((data) => {
-				AuthService.logout().then(() => {
-					nav.navigate("Home");
-					logOutSuccess();
-				});
+				// AuthService.logout().then(() => {
+				// 	nav.navigate("Home");
+				// 	logOutSuccess();
+				// });
 			});
 	};
 

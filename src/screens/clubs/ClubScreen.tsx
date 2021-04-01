@@ -34,7 +34,12 @@ type Props = {
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
 	EventList: { eventList: Event[] };
-	Members: { members: User[]; role: string; clubId: string };
+	Members: {
+		members: User[];
+		role: string;
+		clubId: string;
+		update: Function;
+	};
 };
 
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
@@ -50,13 +55,24 @@ const ClubScreen = (props: Props) => {
 	const [isMember, setIsMember] = useState(false);
 
 	useEffect(() => {
+		refresh();
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			refresh();
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+	const refresh = () => {
+		setIsLoading(true);
 		ClubService.getClub(props.route.params.id).then((data) => {
-			console.log(data);
 			setClubInfo(data);
 			setIsMember(data.role !== "NONMEMBER");
 			setIsLoading(false);
 		});
-	}, []);
+	};
 
 	if (isLoading) {
 		return (
@@ -95,6 +111,22 @@ const ClubScreen = (props: Props) => {
 			)}
 		/>
 	);
+	const removeClubMember = (
+		clubId: string,
+		userId: string,
+		reason: string
+	) => {
+		ClubService.removeMember(clubId, userId, reason)
+			.then((response) => {
+				console.log(response);
+				refresh();
+			})
+			.catch((error) => {
+				console.log(error);
+				refresh();
+			});
+		//TODO: Add toasts
+	};
 
 	const addAnEvButton =
 		//TODO: Added member for testing, must remember to remove later
@@ -208,6 +240,7 @@ const ClubScreen = (props: Props) => {
 							members: clubInfo.members,
 							role: clubInfo.role,
 							clubId: clubInfo.id,
+							update: removeClubMember,
 						}}
 						options={{ title: "Members" }}
 					/>

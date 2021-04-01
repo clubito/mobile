@@ -65,6 +65,7 @@ export default class ClubService {
 		>("/clubs/requests", {
 			params: { id: clubID },
 		});
+		console.log(response.data);
 		return response.data;
 	}
 
@@ -72,7 +73,7 @@ export default class ClubService {
 		const response: AxiosResponse = await API.post(
 			"/clubs/request/approve",
 			{
-				id: clubId,
+				clubId: clubId,
 				userId: userId,
 			}
 		);
@@ -87,7 +88,7 @@ export default class ClubService {
 
 	static async rejectApplication(clubId: string, userId: string) {
 		const response: AxiosResponse = await API.post("/clubs/request/deny", {
-			id: clubId,
+			clubId: clubId,
 			userId: userId,
 		});
 		if (response.status !== 200) {

@@ -11,15 +11,23 @@ import {
 import { JoinRequest } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import GeneralModal from "./GeneralModal";
+import ClubService from "../services/ClubService";
 
 type Props = {
 	applicants: JoinRequest[];
+	clubId: string;
+	clubName: string;
 	role: string;
+	update: Function;
 };
 
 const ApplicationList = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
-	console.log(props.applicants);
+	const [visible, setVisible] = useState(false);
+	const [approval, setApproval] = useState(false);
+	const [curUserName, setCurUserName] = useState("");
+	const [curUserId, setCurUserId] = useState("");
 
 	const getReadableDate = (d: Date) => {
 		if (typeof d === "string") {
@@ -39,72 +47,124 @@ const ApplicationList = (props: Props) => {
 		);
 	};
 
+	const submit = () => {
+		props.update(approval, props.clubId, curUserId);
+		//TODO: Add toast
+		setVisible(false);
+	};
+
+	const triggerModal = (isApprove: boolean, name: string, id: string) => {
+		setApproval(isApprove);
+		setCurUserId(id);
+		setCurUserName(name);
+		setVisible(true);
+	};
+
 	return (
-		<List
-			data={props.applicants}
-			keyExtractor={(item) => item.id}
-			renderItem={({ item }) => {
-				return (
-					<ListItem
-						onPress={() =>
-							navigation.push("Profile", {
-								userId: item.user.id,
-							})
-						}
-						title={() => (
-							<Text style={styles.title} category="s1">
-								{item.user.name}
-							</Text>
-						)}
-						description={() => (
-							<Text
-								appearance="hint"
-								style={styles.desc}
-								numberOfLines={1}
-							>
-								{getReadableDate(item.requestedAt)}
-							</Text>
-						)}
-						accessoryLeft={() => (
-							<Avatar
-								source={{ uri: item.user.profilePicture }}
-								style={{
-									marginRight: 5,
-									height: 45,
-									width: 45,
-								}}
-							/>
-						)}
-						accessoryRight={() => (
-							<View style={{ flexDirection: "row" }}>
-								<Button
-									style={[styles.button, { marginRight: 5 }]}
-									status="success"
-									accessoryLeft={() => (
-										<Icon
-											name="checkmark-outline"
-											style={styles.icon}
-											fill="white"
-										/>
-									)}
+		<>
+			<List
+				data={props.applicants}
+				keyExtractor={(item) => item.id}
+				renderItem={({ item }) => {
+					return (
+						<ListItem
+							onPress={() =>
+								navigation.push("Profile", {
+									//TODO: Change it to .id after backend is updated accordingly
+									userId: item.id,
+								})
+							}
+							title={() => (
+								<Text style={styles.title} category="s1">
+									{item.name}
+								</Text>
+							)}
+							description={() => (
+								<Text
+									appearance="hint"
+									style={styles.desc}
+									numberOfLines={1}
+								>
+									{getReadableDate(item.requestedAt)}
+								</Text>
+							)}
+							accessoryLeft={() => (
+								<Avatar
+									source={{ uri: item.profilePicture }}
+									style={{
+										marginRight: 5,
+										height: 45,
+										width: 45,
+									}}
 								/>
-								<Button
-									style={styles.button}
-									status="danger"
-									accessoryLeft={() => (
-										<Icon
-											name="close-outline"
-											style={styles.icon}
-											fill="white"
-										/>
-									)}
-								/>
-							</View>
-						)}
-					/>
-				);
-			}}
-		/>
+							)}
+							accessoryRight={() => (
+								<View style={{ flexDirection: "row" }}>
+									<Button
+										style={[
+											styles.button,
+											{ marginRight: 5 },
+										]}
+										status="success"
+										accessoryLeft={() => (
+											<Icon
+												name="checkmark-outline"
+												style={styles.icon}
+												fill="white"
+											/>
+										)}
+										onPress={() => {
+											//TODO: Change _id to id when backend updates
+											triggerModal(
+												true,
+												item.name,
+												item.id
+											);
+										}}
+									/>
+									<Button
+										style={styles.button}
+										status="danger"
+										accessoryLeft={() => (
+											<Icon
+												name="close-outline"
+												style={styles.icon}
+												fill="white"
+											/>
+										)}
+										onPress={() => {
+											//TODO: Change _id to id when backend updates
+											triggerModal(
+												false,
+												item.name,
+												item.id
+											);
+										}}
+									/>
+								</View>
+							)}
+						/>
+					);
+				}}
+			/>
+			<GeneralModal
+				visible={visible}
+				header={"Club Member " + (approval ? "Approval" : "Rejection")}
+				functionOnConfirm={() => submit()}
+				closeFunction={() => {
+					setVisible(false);
+				}}
+				content={
+					"Are you sure you want to " +
+					(approval ? "approve " : "reject ") +
+					curUserName +
+					"'s application into " +
+					props.clubName +
+					"?"
+				}
+				modalType={approval ? "success" : "warning"}
+			/>
+		</>
 	);
 };
 const styles = StyleSheet.create({
