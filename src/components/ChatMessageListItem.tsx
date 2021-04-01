@@ -21,7 +21,7 @@ const ChatMessageListItem = (props: Props) => {
 			)}
 			accessoryRight={() => (
 				<Text appearance="hint" numberOfLines={1}>
-					{message.timestamp.getDate()}
+					{new Date(message.timestamp).getTime()}
 				</Text>
 			)}
 		/>

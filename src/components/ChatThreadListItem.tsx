@@ -10,13 +10,14 @@ interface Props {
 
 const ChatThreadListItem = (props: Props) => {
 	function formatAMPM() {
-		var hours = props.chatThread.messages[0].timestamp.getHours();
-		var minutes = props.chatThread.messages[0].timestamp.getMinutes();
-		var ampm = hours >= 12 ? 'pm' : 'am';
+		const timestamp = new Date(props.chatThread.messages[0].timestamp);
+		var hours = timestamp.getHours();
+		var minutes = timestamp.getMinutes();
+		var ampm = hours >= 12 ? "pm" : "am";
 		hours = hours % 12;
 		hours = hours ? hours : 12; // the hour '0' should be '12'
-		var minutesStr = minutes < 10 ? '0'+minutes : minutes;
-		var strTime = hours + ':' + minutesStr + ' ' + ampm;
+		var minutesStr = minutes < 10 ? "0" + minutes : minutes;
+		var strTime = hours + ":" + minutesStr + " " + ampm;
 		return strTime;
 	}
 
@@ -30,17 +31,18 @@ const ChatThreadListItem = (props: Props) => {
 			)}
 			description={() => (
 				<Text appearance="hint" style={styles.desc} numberOfLines={1}>
-					{props.chatThread.messages[0].authorName}: {props.chatThread.messages[0].body}
+					{props.chatThread.messages[0].authorName}:{" "}
+					{props.chatThread.messages[0].body}
 				</Text>
 			)}
 			accessoryLeft={() => (
 				<Avatar
 					source={{ uri: props.chatThread.clubLogo }}
-					style={{ marginRight: 5, height: 45, width: 45 }}
+					style={styles.avatar}
 				/>
 			)}
 			accessoryRight={() => (
-				<Text appearance="hint" style={styles.time} numberOfLines={1}>
+				<Text appearance="hint" numberOfLines={1}>
 					{formatAMPM()}
 				</Text>
 			)}
@@ -49,6 +51,11 @@ const ChatThreadListItem = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
+	avatar: {
+		marginRight: 5,
+		height: 45,
+		width: 45,
+	},
 	title: {
 		marginLeft: 8,
 		fontSize: 16,
@@ -57,12 +64,6 @@ const styles = StyleSheet.create({
 		marginLeft: 8,
 		fontSize: 14,
 	},
-	time: {
-		...StyleSheet.absoluteFillObject,
-		alignSelf: 'flex-end',
-		marginTop: -5,
-		// position: 'absolute'
-	}
 });
 
 export default ChatThreadListItem;
