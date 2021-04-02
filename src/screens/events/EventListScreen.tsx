@@ -8,8 +8,10 @@ import {
 	DrawerGroup,
 	DrawerItem,
 	ButtonGroup,
+	Icon,
+	Input,
 } from "@ui-kitten/components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, SafeAreaView, View } from "react-native";
 import EventService from "../../services/EventService";
 import { Event } from "../../types";
@@ -28,6 +30,8 @@ const EventListScreen = () => {
 	const [viewAll, setViewAll] = useState(1);
 	const navigation = useNavigation();
 	const [refreshing, setRefreshing] = React.useState(false);
+	const [query, setQuery] = useState("");
+	const textInput = useRef("");
 
 	const onRefresh = React.useCallback(() => {
 		pullAllData();
@@ -92,19 +96,37 @@ const EventListScreen = () => {
 	var listTitle = "";
 	switch (viewAll) {
 		case 0:
-			filteredEvents = eventInfo;
+			filteredEvents = eventInfo.filter(
+				(item) =>
+					item.name.toLowerCase().includes(query.toLowerCase()) ||
+					item.clubName.toLowerCase().includes(query.toLowerCase())
+			);
 			break;
 		case 2:
-			filteredEvents = eventInfo.filter((item) =>
-				isUpcoming(item.startTime)
+			filteredEvents = eventInfo.filter(
+				(item) =>
+					isUpcoming(item.startTime) &&
+					(item.name.toLowerCase().includes(query.toLowerCase()) ||
+						item.clubName
+							.toLowerCase()
+							.includes(query.toLowerCase()))
 			);
 			break;
 		case 3:
-			filteredEvents = rsvps;
+			filteredEvents = rsvps.filter(
+				(item) =>
+					item.name.toLowerCase().includes(query.toLowerCase()) ||
+					item.clubName.toLowerCase().includes(query.toLowerCase())
+			);
 			break;
 		case 4:
-			filteredEvents = eventInfo.filter((item) =>
-				sameDay(item.startTime, date)
+			filteredEvents = eventInfo.filter(
+				(item) =>
+					sameDay(item.startTime, date) &&
+					(item.name.toLowerCase().includes(query.toLowerCase()) ||
+						item.clubName
+							.toLowerCase()
+							.includes(query.toLowerCase()))
 			);
 			listTitle =
 				"Events on " +
@@ -115,14 +137,33 @@ const EventListScreen = () => {
 				});
 			break;
 		default:
-			filteredEvents = eventInfo.filter((item) =>
-				isCurrent(item.startTime, item.endTime)
+			filteredEvents = eventInfo.filter(
+				(item) =>
+					isCurrent(item.startTime, item.endTime) &&
+					(item.name.toLowerCase().includes(query.toLowerCase()) ||
+						item.clubName
+							.toLowerCase()
+							.includes(query.toLowerCase()))
 			);
 			break;
 	}
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
+			<Input
+				placeholder="Search"
+				returnKeyType="search"
+				defaultValue={query}
+				clearButtonMode="while-editing"
+				accessoryRight={() => (
+					<Icon width={20} height={20} name="search-outline" />
+				)}
+				onChangeText={(text) => (textInput.current = text)}
+				onSubmitEditing={(event) => {
+					setQuery(textInput.current);
+				}}
+			/>
+
 			<DrawerGroup title={() => <Text category="h3">Calendar</Text>}>
 				<DrawerItem
 					style={{
