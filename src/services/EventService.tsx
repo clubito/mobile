@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
 import { Club, Event } from "../types";
+import ImageService from "./ImageService";
 
 export default class EventService {
 	/**
@@ -39,6 +40,9 @@ export default class EventService {
 		shortLocation?: string;
 		picture?: string;
 	}) {
+		if (params.picture && !params.picture.startsWith("https")) {
+			params.picture = await ImageService.upload(params.picture);
+		}
 		const response: AxiosResponse = await API.post(
 			"/clubs/event/create",
 			params
@@ -65,6 +69,10 @@ export default class EventService {
 		picture?: string;
 		notifyUsers: boolean;
 	}) {
+		if (params.picture && !params.picture.startsWith("https")) {
+			params.picture = await ImageService.upload(params.picture);
+		}
+
 		const response: AxiosResponse = await API.put(
 			"/clubs/event/edit",
 			params
