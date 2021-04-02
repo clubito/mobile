@@ -166,27 +166,37 @@ const AddEventScreen = (props: Props) => {
 		if (props.route.params.eventId) {
 			//Edit event if eventID already exists
 			EventService.editEvent(params as EditList)
-				.then((message) => {
-					console.log(message);
+				.then((data) => {
 					setVisible(false);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 					navigation.goBack();
 				})
 				.catch((error) => {
-					//TODO: Make toasts here
-					console.log(error);
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
 					setLoading(false);
 				});
 		} else {
 			//Create event if no eventID
 			EventService.createEvent(params as CreateList)
-				.then((message) => {
-					console.log(message);
+				.then((data) => {
 					setVisible(false);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 					navigation.goBack();
 				})
 				.catch((error) => {
-					//TODO: Make toasts here
-					console.log(error);
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
 					setLoading(false);
 				});
 		}
@@ -315,7 +325,6 @@ const AddEventScreen = (props: Props) => {
 						? "\nNotify Users: " + (params as EditList).notifyUsers
 						: "")
 				}
-				modalType="basic"
 			/>
 		</SafeAreaView>
 	);

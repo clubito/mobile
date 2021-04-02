@@ -72,6 +72,7 @@ export default class UserService {
 				message: response.data.error,
 			};
 		}
+		return response.data;
 	}
 
 	/**

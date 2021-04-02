@@ -69,20 +69,28 @@ const EventScreen = (props: Props) => {
 									setLoading(false);
 								})
 								.catch((error) => {
-									console.log(error);
+									if (toast)
+										toast.show(error.message, {
+											type: "danger",
+										});
 									setLoading(false);
 								});
 						} else setLoading(false);
 					})
 					.catch((error) => {
-						//TODO ADD toasts
+						if (toast)
+							toast.show(error.message, {
+								type: "danger",
+							});
 						setLoading(false);
-						console.log(error);
 					});
 			})
 			.catch((error) => {
+				if (toast)
+					toast.show(error.message, {
+						type: "danger",
+					});
 				setLoading(false);
-				console.log(error);
 			});
 	};
 
@@ -118,22 +126,32 @@ const EventScreen = (props: Props) => {
 		if (!isRSVP)
 			EventService.eventRSVP(props.route.params.id)
 				.then((data) => {
-					console.log(data);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 					pullData();
 				})
 				.catch((error) => {
-					//TODO: Set toasts
-					console.log(error);
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
 				});
 		else
 			EventService.cancelRSVP(props.route.params.id)
 				.then((data) => {
-					console.log(data);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 					pullData();
 				})
 				.catch((error) => {
-					//TODO: Set toasts
-					console.log(error);
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
 				});
 	};
 

@@ -119,14 +119,19 @@ const ClubScreen = (props: Props) => {
 	) => {
 		ClubService.removeMember(clubId, userId, reason)
 			.then((response) => {
-				console.log(response);
+				if (toast)
+					toast.show(response.message, {
+						type: "success",
+					});
 				refresh();
 			})
 			.catch((error) => {
-				console.log(error);
+				if (toast)
+					toast.show(error.message, {
+						type: "danger",
+					});
 				refresh();
 			});
-		//TODO: Add toasts
 	};
 
 	const addAnEvButton =

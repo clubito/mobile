@@ -99,7 +99,6 @@ export default class EventService {
 				code: response.status,
 			};
 		}
-		console.log(response.data);
 		return response.data;
 	}
 
@@ -145,13 +144,11 @@ export default class EventService {
 			params: { eventId: eventId },
 		});
 		if (response.status !== 200) {
-			console.log(response);
 			throw {
 				code: response.status,
 				message: response.data,
 			};
 		}
-		console.log(response.data);
 		return response.data.users;
 	}
 }

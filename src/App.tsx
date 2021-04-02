@@ -6,6 +6,7 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import RootNavigator from "./navigation/RootNavigator";
+import Toast from "react-native-fast-toast";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 			<ApplicationProvider {...eva} theme={eva.light}>
 				<RootNavigator />
 			</ApplicationProvider>
+			<Toast ref={(ref) => global['toast'] = ref} />
 		</NavigationContainer>
 	);
 }

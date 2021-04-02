@@ -42,7 +42,6 @@ const MemberList = (props: Props) => {
 		setVisible(true);
 		setUser(user);
 	};
-	console.log(props);
 	return (
 		<>
 			<List

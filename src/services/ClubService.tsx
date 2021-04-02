@@ -35,6 +35,9 @@ export default class ClubService {
 		return response.data.tags;
 	}
 
+	/*
+	 *	Get club information given a clubId
+	 */
 	static async getClub(clubID: string) {
 		const response: AxiosResponse<Club> = await API.get<Club>(
 			"/clubs/profile",
@@ -45,8 +48,10 @@ export default class ClubService {
 		return response.data;
 	}
 
+	/*
+	 *	Submit a request to join a club
+	 */
 	static async requestToJoin(clubID: string) {
-		console.log(clubID);
 		const response: AxiosResponse = await API.post("/clubs/join", {
 			id: clubID,
 		});
@@ -59,16 +64,21 @@ export default class ClubService {
 		return response.data;
 	}
 
+	/*
+	 *	Get all join requests for a given club
+	 */
 	static async getApplicants(clubID: string) {
 		const response: AxiosResponse<JoinRequest[]> = await API.get<
 			JoinRequest[]
 		>("/clubs/requests", {
 			params: { id: clubID },
 		});
-		console.log(response.data);
 		return response.data;
 	}
 
+	/*
+	 *	Approve a prospective club member's registration
+	 */
 	static async approveApplication(clubId: string, userId: string) {
 		const response: AxiosResponse = await API.post(
 			"/clubs/request/approve",
@@ -86,6 +96,9 @@ export default class ClubService {
 		return response.data;
 	}
 
+	/*
+	 *	Reject a prospective club member's registration
+	 */
 	static async rejectApplication(clubId: string, userId: string) {
 		const response: AxiosResponse = await API.post("/clubs/request/deny", {
 			clubId: clubId,
@@ -100,7 +113,10 @@ export default class ClubService {
 		return response.data;
 	}
 
-	//TODO: Change to correct endpoint when it is done
+	/*
+	 *	Remove a member from a club
+	 *	Requires a club, user, and a reason
+	 */
 	static async removeMember(clubId: string, userId: string, reason: string) {
 		const response: AxiosResponse = await API.post("/clubs/kick", {
 			clubId: clubId,

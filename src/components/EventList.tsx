@@ -11,7 +11,7 @@ type Props = {
 	events: Event[];
 	renderClubInfo?: boolean;
 	refresh: boolean;
-	onRefresh: () => void;
+	onRefresh?: () => void;
 };
 
 const EventList = (props: Props) => {

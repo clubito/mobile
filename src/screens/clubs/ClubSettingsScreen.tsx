@@ -4,12 +4,10 @@ import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Layout } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Club, JoinRequest, User } from "../../types";
+import { Club, JoinRequest } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
-import MemberList from "../../components/MemberList";
 import ApplicationList from "../../components/ApplicationList";
-import Toast from "../../components/Toast";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type ClubSettingsNavigationProp = StackNavigationProp<
@@ -27,9 +25,6 @@ const ClubSettings = (props: Props) => {
 	const [applicants, setApplicants] = useState({} as JoinRequest[]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoading1, setIsLoading1] = useState(true);
-	const [toastVisible, setToastVisible] = useState(false);
-	const [toastText, setToastText] = useState("");
-	const [toastSuccess, setToastSuccess] = useState(true);
 
 	useEffect(() => {
 		refresh();
@@ -48,21 +43,35 @@ const ClubSettings = (props: Props) => {
 
 	const submit = (approval: boolean, clubId: string, userId: string) => {
 		if (approval) {
-			ClubService.approveApplication(clubId, userId).then((data) => {
-				refresh();
-				setToastVisible(true);
-				setToastText("Successfully added user to the club");
-				setToastSuccess(true);
-				console.log(data);
-			});
+			ClubService.approveApplication(clubId, userId)
+				.then((data) => {
+					refresh();
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
+				})
+				.catch((error) => {
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
+				});
 		} else {
-			ClubService.rejectApplication(clubId, userId).then((data) => {
-				refresh();
-				setToastVisible(true);
-				setToastText("Removed the user's join request");
-				setToastSuccess(false);
-				console.log(data);
-			});
+			ClubService.rejectApplication(clubId, userId)
+				.then((data) => {
+					refresh();
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
+				})
+				.catch((error) => {
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
+				});
 		}
 	};
 
@@ -90,12 +99,6 @@ const ClubSettings = (props: Props) => {
 					<Text>No Applicants available</Text>
 				)}
 			</View>
-			<Toast
-				text={toastText}
-				visible={toastVisible}
-				status={toastSuccess ? "success" : "failure"}
-				onDismiss={() => setToastVisible(false)}
-			/>
 		</SafeAreaView>
 	);
 };
