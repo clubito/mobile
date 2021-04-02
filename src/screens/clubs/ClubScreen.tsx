@@ -210,7 +210,7 @@ const ClubScreen = (props: Props) => {
 						Member since{" "}
 						{getReadableDate(
 							clubInfo.joinRequestStatus.approvalDate,
-							"numeric"
+							true
 						)}
 					</Text>
 				) : null}
