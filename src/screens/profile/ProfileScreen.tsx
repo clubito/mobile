@@ -79,7 +79,7 @@ const ProfileScreen = (props: Props) => {
 
 	const tagList =
 		profile.tags.length === 0 ? (
-			<Text appearance="hint">
+			<Text style={[styles.text, { marginBottom: 16 }]} appearance="hint">
 				No interests yet. Add interests in settings.
 			</Text>
 		) : (

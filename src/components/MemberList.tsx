@@ -1,22 +1,20 @@
-import React, { ReactElement, useState } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 import {
+	Avatar,
 	Text,
 	List,
 	Card,
 	Button,
 	Icon,
-	Layout,
 	Modal,
 	Input,
 	ListItem,
 } from "@ui-kitten/components";
-import { User } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import GeneralModal from "./GeneralModal";
-import { SafeAreaView } from "react-native-safe-area-context";
-import ClubService from "../services/ClubService";
+import dayjs from "dayjs";
+import { User } from "../types";
 import { ContainerStyles } from "../styles/CommonStyles";
 
 type Props = {
@@ -59,6 +57,15 @@ const MemberList = (props: Props) => {
 									{item.name}
 								</Text>
 							)}
+							// description={dayjs(
+							// 	item.joinRequestStatus.approvalDate
+							// ).format("MM/DD/YYYY")}
+							accessoryLeft={() => (
+								<Avatar
+									source={{ uri: item.profilePicture }}
+									size="small"
+								/>
+							)}
 							accessoryRight={() =>
 								isAdmin && props.clubId && props.update ? (
 									<Button
@@ -69,7 +76,7 @@ const MemberList = (props: Props) => {
 											<Icon
 												name="close-outline"
 												style={styles.icon}
-												fill="red"
+												fill="#EF5350"
 											/>
 										)}
 									/>

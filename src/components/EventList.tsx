@@ -46,7 +46,11 @@ const EventList = (props: Props) => {
 								role: item.role,
 							});
 						}}
-						title={item.name}
+						title={() => (
+							<Text style={styles.title} category="s1">
+								{item.name}
+							</Text>
+						)}
 						accessoryLeft={() => (
 							<Avatar
 								source={{ uri: item.picture }}
@@ -122,6 +126,10 @@ const styles = StyleSheet.create({
 	},
 	infoContainer: {
 		marginLeft: 8,
+	},
+	title: {
+		marginLeft: 8,
+		fontSize: 16,
 	},
 });
 
