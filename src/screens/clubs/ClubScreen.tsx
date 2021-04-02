@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Card, Layout, Button } from "@ui-kitten/components";
-import { RouteProp } from "@react-navigation/native";
+import {
+	Text,
+	Card,
+	Layout,
+	Button,
+	Popover,
+	Menu,
+	MenuItem,
+	IconProps,
+	Icon,
+} from "@ui-kitten/components";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Announcement, Club, Event } from "../../types";
+import { Announcement, Club, Event, User } from "../../types";
 import ClubService from "../../services/ClubService";
 import GeneralModal from "../../components/GeneralModal";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
-import EventList from "./EventList";
+import EventTab from "./EventTab";
+import { ClubParamList } from "./ClubNavigator";
+import MemberTab from "./MemberTab";
+import { getReadableDate } from "../../utils";
 
-type ClubParamList = {
-	Club: { id: string };
-};
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
 
@@ -25,11 +35,19 @@ type Props = {
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
 	EventList: { eventList: Event[] };
+	Members: {
+		members: User[];
+		role: string;
+		clubId: string;
+		update: Function;
+	};
 };
 
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
 
 const ClubScreen = (props: Props) => {
+	const navigation = useNavigation();
+	const [addVisible, setAddVisible] = React.useState(false);
 	const [clubInfo, setClubInfo] = useState({} as Club);
 	const [isLoading, setIsLoading] = useState(true);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -38,12 +56,24 @@ const ClubScreen = (props: Props) => {
 	const [isMember, setIsMember] = useState(false);
 
 	useEffect(() => {
+		refresh();
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			refresh();
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+	const refresh = () => {
+		setIsLoading(true);
 		ClubService.getClub(props.route.params.id).then((data) => {
 			setClubInfo(data);
 			setIsMember(data.role !== "NONMEMBER");
 			setIsLoading(false);
 		});
-	}, []);
+	};
 
 	if (isLoading) {
 		return (
@@ -66,6 +96,76 @@ const ClubScreen = (props: Props) => {
 		</Button>
 	);
 
+	const renderToggleButton = () => (
+		<Button
+			style={{
+				position: "absolute",
+				bottom: 10,
+				right: 10,
+				width: 50,
+				height: 50,
+				borderRadius: 25,
+			}}
+			onPress={() => setAddVisible(true)}
+			accessoryLeft={(props: IconProps) => (
+				<Icon name="plus-outline" {...props} />
+			)}
+		/>
+	);
+	const removeClubMember = (
+		clubId: string,
+		userId: string,
+		reason: string
+	) => {
+		ClubService.removeMember(clubId, userId, reason)
+			.then((response) => {
+				if (toast)
+					toast.show(response.message, {
+						type: "success",
+					});
+				refresh();
+			})
+			.catch((error) => {
+				if (toast)
+					toast.show(error.message, {
+						type: "danger",
+					});
+				refresh();
+			});
+	};
+
+	const addAnEvButton =
+		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
+			<Popover
+				anchor={renderToggleButton}
+				visible={addVisible}
+				placement={"top end"}
+				style={{ width: 150 }}
+				onBackdropPress={() => setAddVisible(false)}
+			>
+				<Menu>
+					<MenuItem
+						title="Add Announcement"
+						onPress={() => {
+							setAddVisible(false);
+							navigation.navigate("AddAnnouncement", {
+								clubId: clubInfo.id,
+							});
+						}}
+					/>
+					<MenuItem
+						title="Add Event"
+						onPress={() => {
+							setAddVisible(false);
+							navigation.navigate("AddEvent", {
+								clubId: clubInfo.id,
+							});
+						}}
+					/>
+				</Menu>
+			</Popover>
+		) : null;
+
 	const sendRequest = () => {
 		setModalVisible(false);
 		ClubService.requestToJoin(clubInfo.id)
@@ -79,66 +179,91 @@ const ClubScreen = (props: Props) => {
 	};
 
 	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<View style={ContainerStyles.horizMargin}>
-				<View
+		<SafeAreaView
+			style={[ContainerStyles.flexContainer, ContainerStyles.horizMargin]}
+		>
+			<View
+				style={{
+					width: "100%",
+					marginVertical: 10,
+				}}
+			>
+				<Image
+					source={{ uri: clubInfo.logo }}
 					style={{
-						width: "100%",
-						marginVertical: 10,
+						width: 300,
+						height: 100,
+						resizeMode: "center",
+						alignSelf: "center",
 					}}
-				>
-					<Image
-						source={{ uri: clubInfo.logo }}
-						style={{
-							width: 300,
-							height: 100,
-							resizeMode: "center",
-							alignSelf: "center",
-						}}
-					/>
-				</View>
-				{requestButton}
-				<Card>
-					<Text>{clubInfo?.description}</Text>
-				</Card>
-				{message != "" ? (
-					<Card status={error ? "danger" : "success"}>
-						<Text>{message}</Text>
-					</Card>
-				) : null}
-
-				<GeneralModal
-					visible={modalVisible}
-					closeFunction={() => setModalVisible(false)}
-					header={"Would you like to join " + clubInfo.name + "?"}
-					functionOnConfirm={sendRequest}
-					content={
-						"If you wish to join " +
-						clubInfo.name +
-						", confirm to send a request to the club owners and executives. They will confirm or deny your request."
-					}
-					modalType={"basic"}
 				/>
-
-				{isMember && (
-					<Tab.Navigator>
-						<Tab.Screen
-							name="AnnouncementList"
-							component={AnnouncementList}
-							initialParams={{
-								announcementList: clubInfo.announcements,
-							}}
-							options={{ title: "Announcements" }}
-						/>
-						<Tab.Screen
-							name="EventList"
-							component={EventList}
-							initialParams={{ eventList: clubInfo.events }}
-							options={{ title: "Events" }}
-						/>
-					</Tab.Navigator>
-				)}
 			</View>
+			{requestButton}
+			<Card>
+				<Text>{clubInfo?.description}</Text>
+				{isMember ? (
+					<Text
+						appearance="hint"
+						category="p2"
+						style={ContainerStyles.upperMargin}
+					>
+						Member since{" "}
+						{getReadableDate(
+							clubInfo.joinRequestStatus.approvalDate,
+							"numeric"
+						)}
+					</Text>
+				) : null}
+			</Card>
+			{message != "" ? (
+				<Card status={error ? "danger" : "success"}>
+					<Text>{message}</Text>
+				</Card>
+			) : null}
+
+			<GeneralModal
+				visible={modalVisible}
+				closeFunction={() => setModalVisible(false)}
+				header={"Would you like to join " + clubInfo.name + "?"}
+				functionOnConfirm={sendRequest}
+				content={
+					"If you wish to join " +
+					clubInfo.name +
+					", confirm to send a request to the club owners and executives. They will confirm or deny your request."
+				}
+				modalType={"basic"}
+			/>
+
+			{isMember && (
+				<Tab.Navigator>
+					<Tab.Screen
+						name="AnnouncementList"
+						component={AnnouncementList}
+						initialParams={{
+							announcementList: clubInfo.announcements,
+						}}
+						options={{ title: "Announcements" }}
+					/>
+					<Tab.Screen
+						name="EventList"
+						component={EventTab}
+						initialParams={{ eventList: clubInfo.events }}
+						options={{ title: "Events" }}
+					/>
+					<Tab.Screen
+						name="Members"
+						component={MemberTab}
+						initialParams={{
+							members: clubInfo.members,
+							role: clubInfo.role,
+							clubId: clubInfo.id,
+							update: removeClubMember,
+						}}
+						options={{ title: "Members" }}
+					/>
+				</Tab.Navigator>
+			)}
+			{addAnEvButton}
 		</SafeAreaView>
 	);
 };

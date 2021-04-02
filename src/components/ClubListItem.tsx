@@ -1,11 +1,12 @@
 import { Avatar, Button, ListItem, Text } from "@ui-kitten/components";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleProp, StyleSheet } from "react-native";
 import { Club } from "../types";
 
 interface Props {
 	club: Club;
 	onPress: () => void;
+	style?: StyleProp<any>;
 }
 
 const ClubListItem = (props: Props) => {
@@ -41,6 +42,7 @@ const ClubListItem = (props: Props) => {
 					{membership}
 				</Button>
 			)}
+			style={[props.style, { width: "100%" }]}
 		/>
 	);
 };

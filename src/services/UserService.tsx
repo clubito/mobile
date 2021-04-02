@@ -25,6 +25,12 @@ export default class UserService {
 		const response: AxiosResponse<User> = await API.get<User>(
 			"/user/profile"
 		);
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.statusText,
+			};
+		}
 		return response.data;
 	}
 
@@ -66,6 +72,7 @@ export default class UserService {
 				message: response.data.error,
 			};
 		}
+		return response.data;
 	}
 
 	/**
@@ -80,6 +87,26 @@ export default class UserService {
 			throw {
 				code: response.status,
 				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/**
+	 * Get another user by profile
+	 */
+	static async getOtherUser(userId: string) {
+		const response: AxiosResponse<User> = await API.get<User>(
+			"/user/other/profile",
+			{
+				params: { id: userId },
+			}
+		);
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
 			};
 		}
 

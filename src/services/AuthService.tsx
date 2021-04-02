@@ -114,5 +114,6 @@ export default class AuthService {
 				message: response.data.error,
 			};
 		}
+		return response.data;
 	}
 }
