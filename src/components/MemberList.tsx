@@ -9,6 +9,7 @@ import {
 	Layout,
 	Modal,
 	Input,
+	ListItem,
 } from "@ui-kitten/components";
 import { User } from "../types";
 import { useNavigation } from "@react-navigation/native";
@@ -48,26 +49,19 @@ const MemberList = (props: Props) => {
 				data={props.members}
 				renderItem={({ item }) => {
 					return (
-						<Card
+						<ListItem
 							onPress={() =>
 								navigation.push("Profile", {
 									userId: item.id,
 								})
 							}
-						>
-							<View
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-								}}
-							>
-								<Text
-									category="h6"
-									style={{ alignSelf: "center" }}
-								>
+							title={() => (
+								<Text style={styles.title} category="s1">
 									{item.name}
 								</Text>
-								{isAdmin && props.clubId && props.update ? (
+							)}
+							accessoryRight={() =>
+								isAdmin && props.clubId && props.update ? (
 									<Button
 										style={styles.deleteButton}
 										appearance="ghost"
@@ -80,9 +74,11 @@ const MemberList = (props: Props) => {
 											/>
 										)}
 									/>
-								) : null}
-							</View>
-						</Card>
+								) : (
+									<></>
+								)
+							}
+						/>
 					);
 				}}
 			/>
@@ -151,6 +147,18 @@ const styles = StyleSheet.create({
 	icon: {
 		width: 30,
 		height: 30,
+	},
+	button: {
+		width: 35,
+		height: 35,
+	},
+	title: {
+		marginLeft: 8,
+		fontSize: 16,
+	},
+	desc: {
+		marginLeft: 8,
+		fontSize: 14,
 	},
 });
 
