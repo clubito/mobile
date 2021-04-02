@@ -42,8 +42,6 @@ const ProfileSettingsScreen = () => {
 	const [submitted1, setSubmitted1] = useState(false);
 	const [responseError, setResponseError] = useState();
 	const [responseError1, setResponseError1] = useState();
-	const [success, setSuccess] = useState("");
-	const [success1, setSuccess1] = useState("");
 	const savedModel = useRef(ChangeProfileModel.empty());
 	const savedPassModel = useRef(ChangePasswordModel.empty());
 
@@ -99,14 +97,20 @@ const ProfileSettingsScreen = () => {
 		props.tags = mapTagSelections(model.tags);
 		if (props.name || props.profilePicture || props.tags) {
 			UserService.updateCurrentUser(props)
-				.then(() => {
+				.then((data) => {
 					pullAllData();
-					setSuccess("Successfully updated profile");
 					setResponseError(undefined);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 				})
 				.catch((error) => setResponseError(error.message));
 		} else {
-			console.log("Nothing was changed");
+			if (toast)
+				toast.show("Nothing was changed", {
+					type: "normal",
+				});
 		}
 	};
 
@@ -125,9 +129,12 @@ const ProfileSettingsScreen = () => {
 	const submitChangePassword = (model: ChangePasswordModel) => {
 		savedPassModel.current = model;
 		AuthService.changePassword(model.curPassword, model.password)
-			.then(() => {
-				setSuccess1("Successfully changed password");
+			.then((data) => {
 				setResponseError1(undefined);
+				if (toast)
+					toast.show(data.message, {
+						type: "success",
+					});
 			})
 			.catch((error) => setResponseError1(error.message));
 	};
@@ -169,11 +176,7 @@ const ProfileSettingsScreen = () => {
 								Apply
 							</Button>
 
-							<Text
-								status={success !== "" ? "success" : "danger"}
-							>
-								{success !== "" ? success! : responseError!}
-							</Text>
+							<Text status="danger">{responseError!}</Text>
 						</Card>
 					)}
 				</Formik>
@@ -218,11 +221,7 @@ const ProfileSettingsScreen = () => {
 								Change Password
 							</Button>
 
-							<Text
-								status={success1 !== "" ? "success" : "danger"}
-							>
-								{success1 !== "" ? success1! : responseError1!}
-							</Text>
+							<Text status="danger">{responseError1!}</Text>
 						</Card>
 					)}
 				</Formik>
@@ -263,12 +262,26 @@ const ProfileSettingsScreen = () => {
 							? () => {
 									AuthService.logout().then(() => {
 										nav.navigate("Home");
+										if (toast)
+											toast.show(
+												"Your account has been successfully logged out",
+												{
+													type: "success",
+												}
+											);
 										logOutSuccess();
 									});
 							  }
 							: () => {
 									UserService.deleteUser().then(() => {
 										nav.navigate("Home");
+										if (toast)
+											toast.show(
+												"Your account has been successfully deleted",
+												{
+													type: "success",
+												}
+											);
 										logOutSuccess();
 									});
 							  }

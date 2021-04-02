@@ -1,9 +1,40 @@
 import { AxiosResponse } from "axios";
+import { io, Socket } from "socket.io-client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "./API";
-import { ChatThread } from "../types";
+import { ChatMessage, ChatThread } from "../types";
 
 export default class ChatService {
-	static subscribers: Map<string, Function>;
+	static socket: Socket;
+	static subscribers: Map<string, Function> = new Map();
+
+	/**
+	 * Open and initialize the socket connection and set receiver.
+	 */
+	static async go() {
+		if (this.socket) return;
+
+		this.socket = io("https://server.clubito.me", {
+			transports: ["websocket"],
+		});
+
+		const token = await AsyncStorage.getItem("user_token");
+		this.socket.emit("login", { bearerToken: "Bearer " + token });
+		this.socket.on("sendMessage", (response: SocketChat) => {
+			this.subscribers.get(response.clubId)!(response.chatMessage);
+		});
+	}
+
+	/**
+	 * Send a message through the opened socket connection.
+	 * This message is not sent to the current sending user.
+	 */
+	static async sendMessage(clubId: string, message: string) {
+		this.socket.emit("sendMessage", {
+			clubId: clubId,
+			body: message,
+		});
+	}
 
 	/**
 	 * Fetch a list of all club chat threads for the current user.
@@ -12,7 +43,7 @@ export default class ChatService {
 	static async getAllChatThreads() {
 		const response: AxiosResponse<ChatThread[]> = await API.get<
 			ChatThread[]
-		>("/chat/thread/all");
+		>("/clubs/threads");
 
 		return response.data;
 	}
@@ -23,7 +54,7 @@ export default class ChatService {
 	 */
 	static async getChatThread(clubId: string) {
 		const response: AxiosResponse<ChatThread> = await API.get<ChatThread>(
-			"/chat/thread",
+			"/clubs/messages",
 			{
 				params: { id: clubId },
 			}
@@ -47,4 +78,9 @@ export default class ChatService {
 	static removeSubscriber(clubId: string) {
 		this.subscribers.delete(clubId);
 	}
+}
+
+interface SocketChat {
+	clubId: string;
+	chatMessage: ChatMessage;
 }

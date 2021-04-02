@@ -9,7 +9,7 @@ interface ModalSettings {
 	functionOnConfirm: FunctionNull;
 	closeFunction: FunctionNull;
 	content: string;
-	modalType: string;
+	modalType?: string;
 }
 
 type FunctionNull = () => void;
@@ -36,13 +36,14 @@ const GeneralModal = (props: ModalSettings) => (
 					<Button
 						onPress={props.closeFunction}
 						style={{ flex: 1, margin: 10 }}
+						status="basic"
 					>
 						Cancel
 					</Button>
 					<Button
 						onPress={props.functionOnConfirm}
 						style={{ flex: 1, margin: 10 }}
-						status={props.modalType}
+						status={props.modalType ? props.modalType : "primary"}
 					>
 						Confirm
 					</Button>

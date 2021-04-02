@@ -4,10 +4,9 @@ import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text, Layout } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Club, JoinRequest, User } from "../../types";
+import { Club, JoinRequest } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
-import MemberList from "../../components/MemberList";
 import ApplicationList from "../../components/ApplicationList";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
@@ -44,16 +43,36 @@ const ClubSettings = (props: Props) => {
 
 	const submit = (approval: boolean, clubId: string, userId: string) => {
 		if (approval) {
-			ClubService.approveApplication(clubId, userId).then((data) => {
-				refresh();
-				console.log(data);
-			});
+			ClubService.approveApplication(clubId, userId)
+				.then((data) => {
+					refresh();
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
+				})
+				.catch((error) => {
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
+				});
 		} else {
-			ClubService.rejectApplication(clubId, userId).then((data) => {
-				console.log(data);
-			});
+			ClubService.rejectApplication(clubId, userId)
+				.then((data) => {
+					refresh();
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
+				})
+				.catch((error) => {
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
+				});
 		}
-		//TODO: Add toast
 	};
 
 	if (isLoading || isLoading1) {

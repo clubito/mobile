@@ -12,8 +12,6 @@ import { JoinRequest } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import GeneralModal from "./GeneralModal";
-import ClubService from "../services/ClubService";
-import EventService from "../services/EventService";
 import { getReadableDate } from "../utils";
 
 type Props = {
@@ -33,7 +31,6 @@ const ApplicationList = (props: Props) => {
 
 	const submit = () => {
 		props.update(approval, props.clubId, curUserId);
-		//TODO: Add toast
 		setVisible(false);
 	};
 

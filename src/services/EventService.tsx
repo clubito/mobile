@@ -99,7 +99,6 @@ export default class EventService {
 				code: response.status,
 			};
 		}
-		console.log(response.data);
 		return response.data;
 	}
 
@@ -139,19 +138,17 @@ export default class EventService {
 	 *	Get all RSVP'd members for an event
 	 */
 	static async getRSVPMembers(eventId: string) {
-		const response: AxiosResponse<User[]> = await API.get<User[]>(
-			"/clubs/event/rsvp",
-			{
-				params: { eventId: eventId },
-			}
-		);
+		const response: AxiosResponse<{ users: User[] }> = await API.get<{
+			users: User[];
+		}>("/clubs/event/rsvp", {
+			params: { eventId: eventId },
+		});
 		if (response.status !== 200) {
 			throw {
 				code: response.status,
 				message: response.data,
 			};
 		}
-		console.log(response.data);
-		return response.data;
+		return response.data.users;
 	}
 }

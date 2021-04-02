@@ -11,13 +11,14 @@ import {
 	ScrollView,
 } from "react-native";
 import EventService from "../../services/EventService";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
-import { Club, Event } from "../../types";
+import { Club, Event, User } from "../../types";
 import { Text, Layout, Card, Button, Icon } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
 import { getReadableDate } from "../../utils";
+import MemberList from "../../components/MemberList";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -33,6 +34,7 @@ const EventScreen = (props: Props) => {
 	const [club, setClub] = useState({} as Club);
 	const [isOfficer, setIsOfficer] = useState(false);
 	const [isRSVP, setRSVP] = useState(false);
+	const [users, setUsers] = useState({} as User[]);
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	useEffect(() => {
@@ -60,17 +62,35 @@ const EventScreen = (props: Props) => {
 							clubData.role === "OFFICER" ||
 								clubData.role === "OWNER"
 						);
-						setLoading(false);
+						if (isOfficer) {
+							EventService.getRSVPMembers(props.route.params.id)
+								.then((data) => {
+									setUsers(data);
+									setLoading(false);
+								})
+								.catch((error) => {
+									if (toast)
+										toast.show(error.message, {
+											type: "danger",
+										});
+									setLoading(false);
+								});
+						} else setLoading(false);
 					})
 					.catch((error) => {
-						//TODO ADD toasts
+						if (toast)
+							toast.show(error.message, {
+								type: "danger",
+							});
 						setLoading(false);
-						console.log(error);
 					});
 			})
 			.catch((error) => {
+				if (toast)
+					toast.show(error.message, {
+						type: "danger",
+					});
 				setLoading(false);
-				console.log(error);
 			});
 	};
 
@@ -106,22 +126,32 @@ const EventScreen = (props: Props) => {
 		if (!isRSVP)
 			EventService.eventRSVP(props.route.params.id)
 				.then((data) => {
-					console.log(data);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 					pullData();
 				})
 				.catch((error) => {
-					//TODO: Set toasts
-					console.log(error);
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
 				});
 		else
 			EventService.cancelRSVP(props.route.params.id)
 				.then((data) => {
-					console.log(data);
+					if (toast)
+						toast.show(data.message, {
+							type: "success",
+						});
 					pullData();
 				})
 				.catch((error) => {
-					//TODO: Set toasts
-					console.log(error);
+					if (toast)
+						toast.show(error.message, {
+							type: "danger",
+						});
 				});
 	};
 
@@ -134,6 +164,30 @@ const EventScreen = (props: Props) => {
 			{(isRSVP ? "Cancel RSVP" : "RSVP") + " to " + event.name}
 		</Button>
 	);
+
+	const members = isOfficer ? (
+		<>
+			<Text
+				category="h4"
+				style={[ContainerStyles.upperMargin, { alignSelf: "center" }]}
+			>
+				RSVP'd Club Members
+			</Text>
+			{users.length > 0 ? (
+				<MemberList members={users} />
+			) : (
+				<Text
+					category="h6"
+					style={[
+						ContainerStyles.upperMargin,
+						{ alignSelf: "center" },
+					]}
+				>
+					No users have RSVP'd to this event
+				</Text>
+			)}
+		</>
+	) : null;
 
 	return (
 		<SafeAreaView
@@ -176,6 +230,7 @@ const EventScreen = (props: Props) => {
 						</Text>
 					) : null}
 				</Card>
+				{members}
 			</ScrollView>
 
 			<ClubListItem

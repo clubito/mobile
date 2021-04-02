@@ -9,6 +9,7 @@ import {
 	Layout,
 	Modal,
 	Input,
+	ListItem,
 } from "@ui-kitten/components";
 import { User } from "../types";
 import { useNavigation } from "@react-navigation/native";
@@ -20,9 +21,9 @@ import { ContainerStyles } from "../styles/CommonStyles";
 
 type Props = {
 	members: User[];
-	role: string;
-	clubId: string;
-	update: Function;
+	role?: string;
+	clubId?: string;
+	update?: Function;
 };
 
 const MemberList = (props: Props) => {
@@ -34,41 +35,32 @@ const MemberList = (props: Props) => {
 
 	const removeClubMember = (userId: string) => {
 		setVisible(false);
-		console.log(props.clubId);
-		props.update(props.clubId, userId, kickReason);
+		if (props.update) props.update(props.clubId, userId, kickReason);
 	};
 
 	const triggerModal = (user: User) => {
 		setVisible(true);
 		setUser(user);
 	};
-
 	return (
 		<>
 			<List
 				data={props.members}
 				renderItem={({ item }) => {
 					return (
-						<Card
+						<ListItem
 							onPress={() =>
 								navigation.push("Profile", {
 									userId: item.id,
 								})
 							}
-						>
-							<View
-								style={{
-									flexDirection: "row",
-									justifyContent: "space-between",
-								}}
-							>
-								<Text
-									category="h6"
-									style={{ alignSelf: "center" }}
-								>
+							title={() => (
+								<Text style={styles.title} category="s1">
 									{item.name}
 								</Text>
-								{isAdmin ? (
+							)}
+							accessoryRight={() =>
+								isAdmin && props.clubId && props.update ? (
 									<Button
 										style={styles.deleteButton}
 										appearance="ghost"
@@ -81,9 +73,11 @@ const MemberList = (props: Props) => {
 											/>
 										)}
 									/>
-								) : null}
-							</View>
-						</Card>
+								) : (
+									<></>
+								)
+							}
+						/>
 					);
 				}}
 			/>
@@ -152,6 +146,18 @@ const styles = StyleSheet.create({
 	icon: {
 		width: 30,
 		height: 30,
+	},
+	button: {
+		width: 35,
+		height: 35,
+	},
+	title: {
+		marginLeft: 8,
+		fontSize: 16,
+	},
+	desc: {
+		marginLeft: 8,
+		fontSize: 14,
 	},
 });
 

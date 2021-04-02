@@ -34,7 +34,6 @@ const ClubNavigator = () => (
 			options={({ navigation, route }) => ({
 				title: route.params.title,
 				headerRight: () => {
-					//TODO: Return this to proper checks
 					return route.params.role === "OWNER" ||
 						route.params.role === "OFFICER" ? (
 						<Button

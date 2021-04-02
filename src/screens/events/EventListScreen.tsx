@@ -18,9 +18,9 @@ import { Event } from "../../types";
 import EventList from "../../components/EventList";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { useNavigation } from "@react-navigation/core";
+import { sameDay, isCurrent, isUpcoming } from "../../utils";
 
 const EventListScreen = () => {
-	const curDate = new Date();
 	const [eventInfo, setEventInfo] = useState<Event[] | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [loading1, setLoading1] = useState(true);
@@ -51,37 +51,28 @@ const EventListScreen = () => {
 	}, [navigation]);
 
 	const pullAllData = () => {
-		EventService.getAllEvents().then((data) => {
-			setEventInfo(data);
-			setLoading(false);
-		});
-		EventService.getAllRSVPs().then((data) => {
-			setRsvps(data);
-			setLoading1(false);
-		});
-	};
-
-	type datestring = Date | string;
-
-	const sameDay = (d1: datestring, d2: datestring) => {
-		const date1 = new Date(d1);
-		const date2 = new Date(d2);
-		return (
-			date1.getFullYear() === date2.getFullYear() &&
-			date1.getMonth() === date2.getMonth() &&
-			date1.getDate() === date2.getDate()
-		);
-	};
-
-	const isCurrent = (start: datestring, end: datestring) => {
-		const startDate = new Date(start);
-		const endDate = new Date(end);
-		return curDate > startDate && curDate < endDate;
-	};
-
-	const isUpcoming = (d: datestring) => {
-		const d1 = new Date(d);
-		return d1 > curDate;
+		EventService.getAllEvents()
+			.then((data) => {
+				setEventInfo(data);
+				setLoading(false);
+			})
+			.catch((error) => {
+				if (toast)
+					toast.show(error.message, {
+						type: "danger",
+					});
+			});
+		EventService.getAllRSVPs()
+			.then((data) => {
+				setRsvps(data);
+				setLoading1(false);
+			})
+			.catch((error) => {
+				if (toast)
+					toast.show(error.message, {
+						type: "danger",
+					});
+			});
 	};
 
 	if (eventInfo === null || loading || loading1) {
