@@ -9,7 +9,7 @@ import {
 	Icon,
 	ListItem,
 } from "@ui-kitten/components";
-import { Club, Event } from "../types";
+import { Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getReadableDate } from "../utils";
@@ -22,26 +22,7 @@ type Props = {
 };
 
 const EventList = (props: Props) => {
-	const curDate = new Date();
 	const navigation = useNavigation<StackNavigationProp<any>>();
-
-	const isPast = (d: Date) => {
-		if (typeof d === "string") {
-			d = new Date(d);
-		}
-		return d < curDate;
-	};
-
-	const isCurrent = (start: Date, end: Date) => {
-		if (typeof start === "string") {
-			start = new Date(start);
-		}
-		if (typeof end === "string") {
-			end = new Date(end);
-		}
-
-		return curDate > start && curDate < end;
-	};
 
 	return (
 		<List
@@ -55,9 +36,6 @@ const EventList = (props: Props) => {
 				/>
 			}
 			renderItem={({ item }) => {
-				var past;
-				if (isCurrent(item.startTime, item.endTime)) past = 0;
-				else isPast(item.endTime) ? (past = 2) : (past = 1);
 				return (
 					<ListItem
 						style={styles.container}
@@ -129,19 +107,11 @@ const styles = StyleSheet.create({
 	list: {
 		backgroundColor: "white",
 	},
-	upcoming: { borderWidth: 1, borderRadius: 5 },
-	current: { borderColor: "red" },
 	icon: {
 		flex: 1,
 		marginRight: 5,
 		height: 12,
 		width: 12,
-	},
-	avatarBox: {
-		flex: 1,
-		alignSelf: "center",
-		marginLeft: -20,
-		marginRight: 20,
 	},
 	avatar: {
 		height: 50,
