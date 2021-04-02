@@ -12,6 +12,8 @@ export default class ChatService {
 	 * Open and initialize the socket connection and set receiver.
 	 */
 	static async go() {
+		if (this.socket) return;
+
 		this.socket = io("https://server.clubito.me", {
 			transports: ["websocket"],
 		});
@@ -57,7 +59,6 @@ export default class ChatService {
 				params: { id: clubId },
 			}
 		);
-		console.log(response.data)
 
 		return response.data;
 	}

@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
 	ActivityIndicator,
 	KeyboardAvoidingView,
+	Platform,
 	StyleSheet,
 	TouchableOpacity,
 } from "react-native";
@@ -31,7 +32,7 @@ const ChatScreen = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 	const [isLoading, setIsLoading] = useState(true);
 	const [messageText, setMessageText] = useState("");
-	const [user, setUser] = useState({} as User);
+	const user = useRef({} as User);
 	const [chatThread, setChatThread] = useState({} as ChatThread);
 	const [sendButtonDisabled, setSendButtonDisabled] = useState(true);
 	const listRef = useRef<List>(null);
@@ -42,7 +43,7 @@ const ChatScreen = (props: Props) => {
 			ChatService.getChatThread(props.route.params.id),
 		])
 			.then((result: [User, ChatThread]) => {
-				setUser(result[0]);
+				user.current = result[0];
 				result[1].messages.reverse();
 				setChatThread(result[1]);
 			})
@@ -83,20 +84,23 @@ const ChatScreen = (props: Props) => {
 
 	const sendMessage = () => {
 		handleMessageInputChange("");
-		ChatService.sendMessage(props.route.params.id, messageText);
 		handleNewMessage({
-			authorId: user.id,
-			authorName: user.name,
-			authorPicture: user.profilePicture,
+			authorId: user.current.id,
+			authorName: user.current.name,
+			authorPicture: user.current.profilePicture,
 			timestamp: new Date().toString(),
 			body: messageText,
 			isSelf: true,
 			isDate: false,
 		});
+		ChatService.sendMessage(props.route.params.id, messageText);
 	};
 
 	const handleNewMessage = (newMessage: ChatMessage) => {
 		setChatThread((prevThread) => {
+			if (user.current.id === newMessage.authorId)
+				newMessage.isSelf = true;
+
 			const messages = prevThread.messages;
 			const lastMessageArray = messages[0];
 			const lastMessage = lastMessageArray[lastMessageArray.length - 1];
@@ -175,15 +179,19 @@ const ChatScreen = (props: Props) => {
 			</Layout>
 
 			<KeyboardAvoidingView
-				keyboardVerticalOffset={110}
+				keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
 				style={styles.inputContainer}
-				behavior="padding"
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
 			>
 				<Layout style={styles.inputInner}>
 					<Input
 						style={styles.messageInput}
 						value={messageText}
 						onChangeText={handleMessageInputChange}
+						returnKeyType="send"
+						onSubmitEditing={() => {
+							if (!sendButtonDisabled) sendMessage();
+						}}
 					/>
 					<Button
 						appearance="ghost"
