@@ -20,9 +20,9 @@ import { ContainerStyles } from "../styles/CommonStyles";
 
 type Props = {
 	members: User[];
-	role: string;
-	clubId: string;
-	update: Function;
+	role?: string;
+	clubId?: string;
+	update?: Function;
 };
 
 const MemberList = (props: Props) => {
@@ -34,15 +34,14 @@ const MemberList = (props: Props) => {
 
 	const removeClubMember = (userId: string) => {
 		setVisible(false);
-		console.log(props.clubId);
-		props.update(props.clubId, userId, kickReason);
+		if (props.update) props.update(props.clubId, userId, kickReason);
 	};
 
 	const triggerModal = (user: User) => {
 		setVisible(true);
 		setUser(user);
 	};
-
+	console.log(props);
 	return (
 		<>
 			<List
@@ -68,7 +67,7 @@ const MemberList = (props: Props) => {
 								>
 									{item.name}
 								</Text>
-								{isAdmin ? (
+								{isAdmin && props.clubId && props.update ? (
 									<Button
 										style={styles.deleteButton}
 										appearance="ghost"

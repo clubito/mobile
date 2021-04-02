@@ -11,13 +11,14 @@ import {
 	ScrollView,
 } from "react-native";
 import EventService from "../../services/EventService";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
-import { Club, Event } from "../../types";
+import { Club, Event, User } from "../../types";
 import { Text, Layout, Card, Button, Icon } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
 import { getReadableDate } from "../../utils";
+import MemberList from "../../components/MemberList";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -30,9 +31,11 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
+	const [loading1, setLoading1] = useState(true);
 	const [club, setClub] = useState({} as Club);
 	const [isOfficer, setIsOfficer] = useState(false);
 	const [isRSVP, setRSVP] = useState(false);
+	const [users, setUsers] = useState({} as User[]);
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	useEffect(() => {
@@ -72,9 +75,15 @@ const EventScreen = (props: Props) => {
 				setLoading(false);
 				console.log(error);
 			});
+
+		EventService.getRSVPMembers(props.route.params.id).then((data) => {
+			console.log(data);
+			setUsers(data);
+			setLoading1(false);
+		});
 	};
 
-	if (event === null || loading) {
+	if (event === null || loading || loading1) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -176,6 +185,28 @@ const EventScreen = (props: Props) => {
 						</Text>
 					) : null}
 				</Card>
+				<Text
+					category="h4"
+					style={[
+						ContainerStyles.upperMargin,
+						{ alignSelf: "center" },
+					]}
+				>
+					RSVP'd Club Members
+				</Text>
+				{users.length > 0 ? (
+					<MemberList members={users} />
+				) : (
+					<Text
+						category="h6"
+						style={[
+							ContainerStyles.upperMargin,
+							{ alignSelf: "center" },
+						]}
+					>
+						No users have RSVP'd to this event
+					</Text>
+				)}
 			</ScrollView>
 
 			<ClubListItem
