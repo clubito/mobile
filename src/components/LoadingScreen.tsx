@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Layout, Spinner } from "@ui-kitten/components";
+import { Layout } from "@ui-kitten/components";
+import { ActivityIndicator } from "react-native";
 
 const LoadingScreen = () => {
 	return (
 		<Layout style={styles.loadingContainer}>
-			<Spinner size="large" />
+			<ActivityIndicator size="large" />
 		</Layout>
 	);
 };
