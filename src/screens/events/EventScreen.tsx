@@ -17,6 +17,7 @@ import { Club, Event } from "../../types";
 import { Text, Layout, Card, Button, Icon } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
+import { getReadableDate } from "../../utils";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -29,9 +30,9 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [loading1, setLoading1] = useState(true);
 	const [club, setClub] = useState({} as Club);
 	const [isOfficer, setIsOfficer] = useState(false);
+	const [isRSVP, setRSVP] = useState(false);
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	useEffect(() => {
@@ -39,6 +40,7 @@ const EventScreen = (props: Props) => {
 			pullData();
 		}
 	}, []);
+
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
 			pullData();
@@ -50,48 +52,29 @@ const EventScreen = (props: Props) => {
 		EventService.getEvent(props.route.params.id)
 			.then((data) => {
 				setEventInfo(data);
-				//TODO: Change to clubId when backend has been updated
+				setRSVP(data.rsvpStatus || data.rsvpStatus === false);
 				ClubService.getClub(data.clubId)
-					.then((data) => {
-						setClub(data);
+					.then((clubData) => {
+						setClub(clubData);
 						setIsOfficer(
-							data.role === "OFFICER" || data.role === "OWNER"
+							clubData.role === "OFFICER" ||
+								clubData.role === "OWNER"
 						);
 						setLoading(false);
 					})
-					.catch(() => {
+					.catch((error) => {
+						//TODO ADD toasts
 						setLoading(false);
-						return <Text>Ha</Text>;
+						console.log(error);
 					});
-				setLoading1(false);
 			})
-			.catch(() => {
+			.catch((error) => {
 				setLoading(false);
-				setLoading1(false);
+				console.log(error);
 			});
 	};
 
-	const getReadableDate = (d: string) => {
-		const date = new Date(d);
-		return (
-			String(
-				date.toLocaleDateString([], {
-					year: "2-digit",
-					month: "2-digit",
-					day: "2-digit",
-				})
-			) +
-			" " +
-			String(
-				date.toLocaleTimeString([], {
-					hour: "2-digit",
-					minute: "2-digit",
-				})
-			)
-		);
-	};
-
-	if (event === null || loading || loading1) {
+	if (event === null || loading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -119,6 +102,39 @@ const EventScreen = (props: Props) => {
 		<Icon name="edit-outline" style={{ width: 20, height: 20 }} />
 	);
 
+	const handleRSVP = () => {
+		if (!isRSVP)
+			EventService.eventRSVP(props.route.params.id)
+				.then((data) => {
+					console.log(data);
+					pullData();
+				})
+				.catch((error) => {
+					//TODO: Set toasts
+					console.log(error);
+				});
+		else
+			EventService.cancelRSVP(props.route.params.id)
+				.then((data) => {
+					console.log(data);
+					pullData();
+				})
+				.catch((error) => {
+					//TODO: Set toasts
+					console.log(error);
+				});
+	};
+
+	const rsvpButton = (
+		<Button
+			status={isRSVP ? "warning" : "primary"}
+			onPress={handleRSVP}
+			style={ContainerStyles.lowerMargin}
+		>
+			{(isRSVP ? "Cancel RSVP" : "RSVP") + " to " + event.name}
+		</Button>
+	);
+
 	return (
 		<SafeAreaView
 			style={[ContainerStyles.flexContainer, ContainerStyles.extraMargin]}
@@ -137,16 +153,13 @@ const EventScreen = (props: Props) => {
 						source={{ uri: event.picture }}
 					/>
 				</View>
-				<Button onPress={() => {}} style={ContainerStyles.lowerMargin}>
-					{"RSVP to " + event.name}
-				</Button>
+				{rsvpButton}
 				<Card style={ContainerStyles.upperMargin}>
 					<Text category="s1" style={{ textAlign: "center" }}>
 						{getReadableDate(event.startTime)} to{" "}
 						{getReadableDate(event.endTime)}
 					</Text>
 				</Card>
-				{/* TODO: Add RSVP function */}
 				<Card style={ContainerStyles.upperMargin}>
 					<Text>
 						<Text style={{ fontWeight: "bold" }}>
@@ -165,7 +178,6 @@ const EventScreen = (props: Props) => {
 				</Card>
 			</ScrollView>
 
-			{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
 			<ClubListItem
 				onPress={() => {
 					navigation.push("ClubNavigator", {

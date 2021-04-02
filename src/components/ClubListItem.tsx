@@ -42,7 +42,7 @@ const ClubListItem = (props: Props) => {
 					{membership}
 				</Button>
 			)}
-			style={props.style}
+			style={[props.style, { width: "100%" }]}
 		/>
 	);
 };

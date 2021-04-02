@@ -22,6 +22,7 @@ import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
 import MemberTab from "./MemberTab";
+import { getReadableDate } from "../../utils";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -195,6 +196,19 @@ const ClubScreen = (props: Props) => {
 			{requestButton}
 			<Card>
 				<Text>{clubInfo?.description}</Text>
+				{isMember ? (
+					<Text
+						appearance="hint"
+						category="p2"
+						style={ContainerStyles.upperMargin}
+					>
+						Member since{" "}
+						{getReadableDate(
+							clubInfo.joinRequestStatus.approvalDate,
+							"numeric"
+						)}
+					</Text>
+				) : null}
 			</Card>
 			{message != "" ? (
 				<Card status={error ? "danger" : "success"}>

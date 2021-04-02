@@ -1,48 +1,25 @@
 import React, { ReactElement, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import { ContainerStyles, TextStyle } from "../styles/CommonStyles";
-import {
-	Text,
-	List,
-	ListItem,
-	Layout,
-	Divider,
-	Avatar,
-	Card,
-	Icon,
-} from "@ui-kitten/components";
+import { Text, List, Avatar, Card, Icon } from "@ui-kitten/components";
 import { Club, Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import ClubListItem from "./ClubListItem";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { getReadableDate } from "../utils";
 
 type Props = {
 	events: Event[];
 	renderClubInfo?: boolean;
+	refresh: boolean;
+	onRefresh: () => void;
 };
 
 const EventList = (props: Props) => {
 	const curDate = new Date();
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
-	const getReadableDate = (d: Date) => {
-		if (typeof d === "string") {
-			d = new Date(d);
-		}
-		return (
-			String(
-				d.toLocaleDateString([], {
-					month: "2-digit",
-					day: "2-digit",
-				})
-			) +
-			" " +
-			String(
-				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-			)
-		);
-	};
 	const isPast = (d: Date) => {
 		if (typeof d === "string") {
 			d = new Date(d);
@@ -64,6 +41,12 @@ const EventList = (props: Props) => {
 	return (
 		<List
 			data={props.events}
+			refreshControl={
+				<RefreshControl
+					refreshing={props.refresh}
+					onRefresh={props.onRefresh}
+				/>
+			}
 			renderItem={({ item }) => {
 				var past;
 				if (isCurrent(item.startTime, item.endTime)) past = 0;
@@ -75,17 +58,13 @@ const EventList = (props: Props) => {
 							past < 2 ? styles.upcoming : null,
 							past === 0 ? styles.current : null,
 						]}
-						onPress={() =>
+						onPress={() => {
 							navigation.push("Event", {
+								id: item.id,
 								title: item.name,
-								screen: "Event",
-								params: {
-									id: item.id,
-									title: item.name,
-									role: item.role,
-								},
-							})
-						}
+								role: item.role,
+							});
+						}}
 					>
 						<View style={styles.default}>
 							<View style={styles.avatarBox}>

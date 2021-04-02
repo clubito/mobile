@@ -13,6 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import GeneralModal from "./GeneralModal";
 import ClubService from "../services/ClubService";
+import EventService from "../services/EventService";
+import { getReadableDate } from "../utils";
 
 type Props = {
 	applicants: JoinRequest[];
@@ -28,24 +30,6 @@ const ApplicationList = (props: Props) => {
 	const [approval, setApproval] = useState(false);
 	const [curUserName, setCurUserName] = useState("");
 	const [curUserId, setCurUserId] = useState("");
-
-	const getReadableDate = (d: Date) => {
-		if (typeof d === "string") {
-			d = new Date(d);
-		}
-		return (
-			String(
-				d.toLocaleDateString([], {
-					month: "2-digit",
-					day: "2-digit",
-				})
-			) +
-			" " +
-			String(
-				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-			)
-		);
-	};
 
 	const submit = () => {
 		props.update(approval, props.clubId, curUserId);
