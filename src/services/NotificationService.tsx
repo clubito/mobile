@@ -46,7 +46,6 @@ export default class NotificationService {
 			await API.post("/user/notifications/register", {
 				pushToken: token,
 			}).then(s=> {
-
 				console.log("8");
 				console.log(s);
 			}).catch(e=> {
