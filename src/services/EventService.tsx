@@ -145,9 +145,10 @@ export default class EventService {
 			params: { eventId: eventId },
 		});
 		if (response.status !== 200) {
+			console.log(response);
 			throw {
 				code: response.status,
-				message: response.data,
+				message: response.data.error,
 			};
 		}
 		console.log(response.data);

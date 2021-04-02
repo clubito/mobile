@@ -31,7 +31,6 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [loading1, setLoading1] = useState(true);
 	const [club, setClub] = useState({} as Club);
 	const [isOfficer, setIsOfficer] = useState(false);
 	const [isRSVP, setRSVP] = useState(false);
@@ -63,7 +62,17 @@ const EventScreen = (props: Props) => {
 							clubData.role === "OFFICER" ||
 								clubData.role === "OWNER"
 						);
-						setLoading(false);
+						if (isOfficer) {
+							EventService.getRSVPMembers(props.route.params.id)
+								.then((data) => {
+									setUsers(data);
+									setLoading(false);
+								})
+								.catch((error) => {
+									console.log(error);
+									setLoading(false);
+								});
+						} else setLoading(false);
 					})
 					.catch((error) => {
 						//TODO ADD toasts
@@ -75,15 +84,9 @@ const EventScreen = (props: Props) => {
 				setLoading(false);
 				console.log(error);
 			});
-
-		EventService.getRSVPMembers(props.route.params.id).then((data) => {
-			console.log(data);
-			setUsers(data);
-			setLoading1(false);
-		});
 	};
 
-	if (event === null || loading || loading1) {
+	if (event === null || loading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -144,6 +147,30 @@ const EventScreen = (props: Props) => {
 		</Button>
 	);
 
+	const members = isOfficer ? (
+		<>
+			<Text
+				category="h4"
+				style={[ContainerStyles.upperMargin, { alignSelf: "center" }]}
+			>
+				RSVP'd Club Members
+			</Text>
+			{users.length > 0 ? (
+				<MemberList members={users} />
+			) : (
+				<Text
+					category="h6"
+					style={[
+						ContainerStyles.upperMargin,
+						{ alignSelf: "center" },
+					]}
+				>
+					No users have RSVP'd to this event
+				</Text>
+			)}
+		</>
+	) : null;
+
 	return (
 		<SafeAreaView
 			style={[ContainerStyles.flexContainer, ContainerStyles.extraMargin]}
@@ -185,28 +212,7 @@ const EventScreen = (props: Props) => {
 						</Text>
 					) : null}
 				</Card>
-				<Text
-					category="h4"
-					style={[
-						ContainerStyles.upperMargin,
-						{ alignSelf: "center" },
-					]}
-				>
-					RSVP'd Club Members
-				</Text>
-				{users.length > 0 ? (
-					<MemberList members={users} />
-				) : (
-					<Text
-						category="h6"
-						style={[
-							ContainerStyles.upperMargin,
-							{ alignSelf: "center" },
-						]}
-					>
-						No users have RSVP'd to this event
-					</Text>
-				)}
+				{members}
 			</ScrollView>
 
 			<ClubListItem
