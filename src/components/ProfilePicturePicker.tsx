@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { View, Platform, TouchableWithoutFeedback } from "react-native";
+import {
+	View,
+	Platform,
+	TouchableWithoutFeedback,
+	StyleProp,
+	ImageBackground,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Avatar, Icon } from "@ui-kitten/components";
+import LoadingScreen from "./LoadingScreen";
 
 interface ProfilePictureSettings {
 	functionOnConfirm: StrFunction;
 	pfp?: string;
+	style?: StyleProp<any>;
+	isSquare?: boolean;
 }
 
 type StrFunction = (arg0: string) => void;
 
 const ProfilePicturePicker = (props: ProfilePictureSettings) => {
 	const [image, setImage] = useState<string>("https://picsum.photos/200");
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		(async () => {
@@ -26,8 +36,12 @@ const ProfilePicturePicker = (props: ProfilePictureSettings) => {
 				}
 			}
 		})();
-		if (props.pfp !== undefined) setImage(props.pfp);
+		if (props.pfp !== undefined && props.pfp != "") {
+			setImage(props.pfp);
+		}
+		setLoading(false);
 	}, []);
+
 	useEffect(() => {
 		if (image !== "") props.functionOnConfirm(image);
 	}, [image]);
@@ -46,14 +60,21 @@ const ProfilePicturePicker = (props: ProfilePictureSettings) => {
 		}
 	};
 
+	if (loading) {
+		return <LoadingScreen />;
+	}
+
 	return (
 		<View
-			style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+			style={[
+				{ flex: 1, alignItems: "center", justifyContent: "center" },
+				props.style,
+			]}
 		>
 			<TouchableWithoutFeedback onPress={pickImage}>
 				<Avatar
 					style={{ height: 200, width: 200 }}
-					shape="round"
+					shape={props.isSquare ? "square" : "round"}
 					source={{ uri: image }}
 				/>
 			</TouchableWithoutFeedback>

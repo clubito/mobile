@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	SafeAreaView,
 	ScrollView,
@@ -18,15 +18,43 @@ import {
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { ProfileParamList } from "./ProfileNavigator";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ClubParamList } from "../clubs/ClubNavigator";
+import AuthService from "../../services/AuthService";
+import { AuthContext } from "../../context/AuthContext";
 
-const ProfileScreen = () => {
-	const nav = useNavigation();
+type ProfileRouteProp = RouteProp<ClubParamList, "Profile">;
+type ProfileNavigationProp = StackNavigationProp<ClubParamList, "Profile">;
+
+type Props = {
+	route: ProfileRouteProp;
+	navigation: ProfileNavigationProp;
+};
+
+const ProfileScreen = (props: Props) => {
+	const nav = useNavigation<StackNavigationProp<any>>();
 	const [profile, setProfile] = useState({} as User);
 	const [isLoading, setIsLoading] = useState(true);
+	const { logOutSuccess } = useContext(AuthContext);
 
 	const getUserData = () => {
-		UserService.getCurrentUser().then((data) => {
+		UserService.getCurrentUser()
+			.then((data) => {
+				setProfile(data);
+				setIsLoading(false);
+			})
+			.catch((data) => {
+				AuthService.logout().then(() => {
+					nav.navigate("Home");
+					logOutSuccess();
+				});
+			});
+	};
+
+	const getOtherUser = (userId: string) => {
+		UserService.getOtherUser(userId).then((data) => {
 			setProfile(data);
 			setIsLoading(false);
 		});
@@ -34,7 +62,9 @@ const ProfileScreen = () => {
 
 	useEffect(() => {
 		const unsubscribe = nav.addListener("focus", () => {
-			getUserData();
+			if (props.route.params && props.route.params.userId) {
+				getOtherUser(props.route.params.userId);
+			} else getUserData();
 		});
 		return unsubscribe;
 	}, [nav]);
@@ -71,6 +101,7 @@ const ProfileScreen = () => {
 				)}
 			/>
 		);
+
 	return (
 		<SafeAreaView>
 			<ScrollView>
@@ -153,7 +184,7 @@ const ProfileScreen = () => {
 						<ClubListItem
 							club={item}
 							onPress={() =>
-								nav.navigate("ClubNavigator", {
+								nav.push("ClubNavigator", {
 									title: item.name,
 									screen: "Club",
 									params: {

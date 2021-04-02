@@ -8,15 +8,19 @@ interface Announcement {
 }
 
 interface Event {
+	id: string;
 	name: string;
 	description: string;
 	startTime: string;
 	endTime: string;
-	longitude: string;
-	latitude: string;
+	longitude: number;
+	latitude: number;
 	shortLocation: string;
 	picture: string;
+	clubId: string;
+	clubName: string;
 	lastUpdated: string;
+	isRsvp: boolean;
 }
 
 interface Club {
@@ -33,6 +37,15 @@ interface Club {
 		status: string;
 		approvalDate: string;
 	};
+}
+
+interface JoinRequest {
+	name: string;
+	id: string;
+	profilePicture: string;
+	requestedAt: Date;
+	user: User;
+	status: string;
 }
 
 interface User {
@@ -62,4 +75,12 @@ interface ChatMessage {
 	body: string;
 }
 
-export { Club, User, Announcement, Event, ChatThread, ChatMessage };
+export {
+	Club,
+	User,
+	Announcement,
+	Event,
+	ChatThread,
+	ChatMessage,
+	JoinRequest,
+};

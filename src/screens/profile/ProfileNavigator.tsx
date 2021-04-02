@@ -5,11 +5,17 @@ import ProfileScreen from "./ProfileScreen";
 import ProfileSettingsScreen from "./ProfileSettingsScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubNavigator from "../clubs/ClubNavigator";
+import EventNavigator from "../events/EventNavigator";
 
-type ProfileParamList = {
+export type ProfileParamList = {
 	Profile: undefined;
 	Settings: undefined;
 	ClubNavigator: { title: string };
+	Event: {
+		id: string;
+		title: string;
+		role: string;
+	};
 };
 const Stack = createStackNavigator<ProfileParamList>();
 
@@ -44,6 +50,7 @@ const ProfileNavigator = () => (
 			component={ClubNavigator}
 			options={({ route }) => ({
 				title: route.params.title,
+				headerShown: false,
 			})}
 		/>
 	</Stack.Navigator>
