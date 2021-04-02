@@ -103,9 +103,13 @@ const ChatScreen = (props: Props) => {
 
 			const messages = prevThread.messages;
 			const lastMessageArray = messages[0];
-			const lastMessage = lastMessageArray[lastMessageArray.length - 1];
+			let lastMessage;
+			
+			if (lastMessageArray) {
+				 lastMessage = lastMessageArray[lastMessageArray.length - 1];
+			}
 
-			if (lastMessage.authorId === newMessage.authorId) {
+			if (lastMessage?.authorId === newMessage.authorId) {
 				lastMessageArray.push(newMessage);
 			} else {
 				messages.unshift([newMessage]);
@@ -138,7 +142,7 @@ const ChatScreen = (props: Props) => {
 	return (
 		<Layout style={styles.mainContainer}>
 			<Layout style={styles.messagesContainer}>
-				{chatThread.messages[0].length > 0 ? (
+				{chatThread.messages.length > 0 && chatThread.messages[0].length > 0 ? (
 					<List
 						inverted={true}
 						ref={listRef}
