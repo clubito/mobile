@@ -14,7 +14,7 @@ export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
 	ClubSettings: { clubId: string };
 	AddEvent: { clubId: string; eventId?: string };
-	AddAnnouncement: { clubId: string; eventId?: string };
+	AddAnnouncement: { clubId: string; announcementId?: string };
 	Profile: { userId?: string };
 	EventNavigator: {
 		id: string;

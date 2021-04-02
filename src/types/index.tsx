@@ -3,8 +3,8 @@
  */
 
 interface Announcement {
-	message: string;
-	timestamp: string;
+	title: string;
+	body: string;
 }
 
 interface Event {

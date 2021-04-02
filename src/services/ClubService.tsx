@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club, JoinRequest, User } from "../types";
+import { Club, JoinRequest, User, Announcement } from "../types";
 
 export default class ClubService {
 	/**
@@ -44,6 +44,49 @@ export default class ClubService {
 		);
 		return response.data;
 	}
+
+	// post an announcement
+	static async createAnnouncement(params: {
+		clubId: string;
+		message: string;
+	}) {
+		const response: AxiosResponse = await API.post(
+			"/clubs/announcement/create",
+			params
+		);
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
+	
+	static async getAllAnnouncements() {
+		const anList = [] as Announcement[];
+		const club1: Club = {
+			id: "6062a496e99e023eb29ee1ee",
+			name: "something something",
+			logo: "https://picsum.photos/200",
+			description: "cdsfehnjisljifs",
+			role: "MEMBER",
+			theme: "string",
+			joinRequestStatus: {
+				status: "PENDING",
+				approvalDate: new Date().toDateString(),
+			},
+		};
+		for (var i = 0; i < 50; i++) {
+			const an1: Announcement = {
+				clubId: club1.id;
+				message: string;
+			};
+			anList.push(an1);
+		}
+		return anList;
+	}
+
 
 	static async requestToJoin(clubID: string) {
 		console.log(clubID);
@@ -115,4 +158,5 @@ export default class ClubService {
 		}
 		return response.data;
 	}
+
 }
