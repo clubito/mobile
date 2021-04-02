@@ -30,7 +30,7 @@ const MainNavigator = () => (
 				}
 
 				return (
-					<MaterialIcons name={iconName} size={size} color={color} />
+					<MaterialIcons name={iconName} size={24} color={color} />
 				);
 			},
 		})}

@@ -56,6 +56,7 @@ interface User {
 	clubs: Club[];
 	joinRequests: string[];
 	tags: string[];
+	approvalDate?: string;
 	role?: string;
 	settings?: {
 		notifications: {

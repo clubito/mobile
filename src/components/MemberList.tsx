@@ -57,9 +57,10 @@ const MemberList = (props: Props) => {
 									{item.name}
 								</Text>
 							)}
-							// description={dayjs(
-							// 	item.joinRequestStatus.approvalDate
-							// ).format("MM/DD/YYYY")}
+							description={
+								"Member since:" +
+								dayjs(item.approvalDate).format("MM/DD/YYYY")
+							}
 							accessoryLeft={() => (
 								<Avatar
 									source={{ uri: item.profilePicture }}

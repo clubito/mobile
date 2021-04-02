@@ -21,7 +21,8 @@ export default class ChatService {
 		const token = await AsyncStorage.getItem("user_token");
 		this.socket.emit("login", { bearerToken: "Bearer " + token });
 		this.socket.on("sendMessage", (response: SocketChat) => {
-			this.subscribers.get(response.clubId)!(response.chatMessage);
+			if (this.subscribers.get(response.clubId))
+				this.subscribers.get(response.clubId)!(response.chatMessage);
 		});
 	}
 
