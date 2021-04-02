@@ -79,8 +79,12 @@ export default class UserService {
 	 * Disable all notfications for current user
 	 */
 	static async setNotificationsEnabled(state: boolean) {
-		const response: AxiosResponse = await API.post("/user/notifications", {
-			enabled: state,
+		const response: AxiosResponse = await API.post("/user/settings", {
+			settings: {
+				notifications: {
+					enabled: state
+				}
+			}
 		});
 
 		if (response.status !== 200) {

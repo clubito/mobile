@@ -12,11 +12,12 @@ import {
 	Input,
 } from "@ui-kitten/components";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import EventService from "../../services/EventService";
 import { Event } from "../../types";
 import EventList from "../../components/EventList";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import EmptyView from "../../components/EmptyView";
 import { useNavigation } from "@react-navigation/core";
 import { sameDay, isCurrent, isUpcoming } from "../../utils";
 
@@ -140,7 +141,9 @@ const EventListScreen = () => {
 	}
 
 	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
+		<Layout style={styles.container}>
+			<SafeAreaView edges={["top"]} />
+			
 			<Input
 				placeholder="Search"
 				returnKeyType="search"
@@ -155,7 +158,7 @@ const EventListScreen = () => {
 				}}
 			/>
 
-			<DrawerGroup title={() => <Text category="h3">Calendar</Text>}>
+			<DrawerGroup title={() => <Text category="s1">Calendar</Text>}>
 				<DrawerItem
 					style={{
 						alignSelf: "center",
@@ -225,12 +228,17 @@ const EventListScreen = () => {
 					onRefresh={onRefresh}
 				/>
 			) : (
-				<Text category="h3" style={{ alignSelf: "center" }}>
-					No events available
-				</Text>
+				<EmptyView message="Nothing's happening nearby :/" />
 			)}
-		</SafeAreaView>
+		</Layout>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		paddingHorizontal: 16,
+		flexGrow: 1,
+	},
+});
 
 export default EventListScreen;

@@ -57,7 +57,11 @@ interface User {
 	joinRequests: string[];
 	tags: string[];
 	role?: string;
-	enableNotifications?: boolean;
+	settings?: {
+		notifications: {
+			enabled: boolean;
+		};
+	};
 }
 
 interface ChatThread {
