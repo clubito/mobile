@@ -62,31 +62,6 @@ export default class ClubService {
 		}
 		return response.data;
 	}
-	
-	static async getAllAnnouncements() {
-		const anList = [] as Announcement[];
-		const club1: Club = {
-			id: "6062a496e99e023eb29ee1ee",
-			name: "something something",
-			logo: "https://picsum.photos/200",
-			description: "cdsfehnjisljifs",
-			role: "MEMBER",
-			theme: "string",
-			joinRequestStatus: {
-				status: "PENDING",
-				approvalDate: new Date().toDateString(),
-			},
-		};
-		for (var i = 0; i < 50; i++) {
-			const an1: Announcement = {
-				clubId: club1.id;
-				message: string;
-			};
-			anList.push(an1);
-		}
-		return anList;
-	}
-
 
 	static async requestToJoin(clubID: string) {
 		console.log(clubID);

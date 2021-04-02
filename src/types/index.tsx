@@ -3,8 +3,8 @@
  */
 
 interface Announcement {
-	title: string;
-	body: string;
+	clubId: string;
+	message: string;
 }
 
 interface Event {

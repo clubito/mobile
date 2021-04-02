@@ -28,8 +28,8 @@ type Props = {
 };
 
 interface CreateList {
-	title: string;
-	body: string;
+	clubId: string;
+	message: string;
 }
 
 type ParamList = CreateList;
@@ -65,8 +65,8 @@ const AddAnnouncementScreen = (props: Props) => {
 	const triggerModal = (model: CreateAnnouncementModel) => {
 		savedModel.current = model;
 		var params = {
-			title: model.title,
-			body: model.body
+			clubId: props.route.params.clubId,
+			message: model.message
 		} as ParamList;
 		setVisible(true);
 		setParams(params);
@@ -74,18 +74,16 @@ const AddAnnouncementScreen = (props: Props) => {
 
 	const submitDetails = (params: ParamList) => {
 		// Create announcement
-		if (!props.route.params.announcementId) {
-			ClubService.createAnnouncement(params as CreateList)
-				.then((message) => {
-					console.log(message);
-					setVisible(false);
-					navigation.goBack();
-				})
-				.catch((error) => {
-					console.log(error);
-					setLoading(false);
-				});	
-		}
+		ClubService.createAnnouncement(params as CreateList)
+			.then((message) => {
+				console.log(message);
+				setVisible(false);
+				navigation.goBack();
+			})
+			.catch((error) => {
+				console.log(error);
+				setLoading(false);
+			});	
 	}
 
 	if (clubInfo === null || loading) {
@@ -108,13 +106,8 @@ const AddAnnouncementScreen = (props: Props) => {
 				{({ handleSubmit }) => (
 					<Layout style={styles.form}>
 						<FormInput
-								id="title"
-								label="Title"
-								style={styles.input}
-							/>
-						<FormInput
-							id="body"
-							label="Body"
+							id="message"
+							label="Message"
 							multiline={true}
 							textStyle={{ minHeight: 100 }}
 							style={styles.input}
@@ -142,8 +135,7 @@ const AddAnnouncementScreen = (props: Props) => {
 				functionOnConfirm={() => submitDetails(params)}
 				closeFunction={() => setVisible(false)}
 				content={
-					"Title: " + (params.title) +
-					"\nBody: " + (params.body)
+					"\nMessage: " + (params.message)
 				}
 				modalType="basic"
 			/>
