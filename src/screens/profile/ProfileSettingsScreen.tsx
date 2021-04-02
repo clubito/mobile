@@ -61,7 +61,7 @@ const ProfileSettingsScreen = () => {
 			setAllTags(data);
 			UserService.getCurrentUser().then((userProfile) => {
 				setProfile(userProfile);
-				setNotificationsEnabled(profile?.enableNotifications!);
+				setNotificationsEnabled(userProfile.settings!.notifications!.enabled);
 				savedModel.current = new ChangeProfileModel(
 					userProfile.name,
 					userProfile.profilePicture,
@@ -264,7 +264,7 @@ const ProfileSettingsScreen = () => {
 										nav.navigate("Home");
 										if (toast)
 											toast.show(
-												"Your account has been successfully logged out",
+												"Successfully logged out",
 												{
 													type: "success",
 												}
