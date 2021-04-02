@@ -64,7 +64,8 @@ interface ChatThread {
 	clubId: string;
 	clubName: string;
 	clubLogo: string;
-	messages: ChatMessage[];
+	messages: [ChatMessage[]];
+	role: string;
 }
 
 interface ChatMessage {
@@ -73,6 +74,8 @@ interface ChatMessage {
 	authorPicture: string;
 	timestamp: string;
 	body: string;
+	isSelf: boolean;
+	isDate: boolean;
 }
 
 export {
