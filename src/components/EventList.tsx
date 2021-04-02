@@ -17,6 +17,7 @@ import EmptyView from "./EmptyView";
 
 type Props = {
 	events: Event[];
+	clubName: string;
 	renderClubInfo?: boolean;
 	refresh: boolean;
 	onRefresh?: () => void;
@@ -67,7 +68,7 @@ const EventList = (props: Props) => {
 										fill="grey"
 									/>
 									<Text appearance="hint" category="c1">
-										{item.clubName}
+										{item.clubName ? item.clubName : props.clubName}
 									</Text>
 								</View>
 

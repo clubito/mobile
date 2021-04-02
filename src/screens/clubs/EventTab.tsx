@@ -19,7 +19,7 @@ type Props = {
 
 const EventTab = (props: Props) => {
 	const [events, setEvents] = useState<Event[]>(props.route.params.eventList);
-	return <EventList events={events} refresh={false} />;
+	return <EventList events={events} clubName={props.route.params.clubName} refresh={false} />;
 };
 
 export default EventTab;

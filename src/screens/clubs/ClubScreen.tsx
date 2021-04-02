@@ -34,7 +34,7 @@ type Props = {
 
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
-	EventList: { eventList: Event[] };
+	EventList: { eventList: Event[], clubName: string };
 	Members: {
 		members: User[];
 		role: string;
@@ -243,7 +243,7 @@ const ClubScreen = (props: Props) => {
 					<Tab.Screen
 						name="EventList"
 						component={EventTab}
-						initialParams={{ eventList: clubInfo.events }}
+						initialParams={{ eventList: clubInfo.events, clubName: clubInfo.name }}
 						options={{ title: "Events" }}
 					/>
 					<Tab.Screen
