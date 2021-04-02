@@ -235,7 +235,7 @@ const ClubScreen = (props: Props) => {
 			/>
 
 			{isMember && (
-				<Tab.Navigator>
+				<Tab.Navigator tabBarOptions={{ scrollEnabled: true }}>
 					<Tab.Screen
 						name="AnnouncementList"
 						component={AnnouncementList}
