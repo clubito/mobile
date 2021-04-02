@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import ClubListItem from "./ClubListItem";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { getReadableDate } from "../utils";
 
 type Props = {
 	events: Event[];
@@ -18,24 +19,6 @@ type Props = {
 const EventList = (props: Props) => {
 	const curDate = new Date();
 	const navigation = useNavigation<StackNavigationProp<any>>();
-
-	const getReadableDate = (d: Date) => {
-		if (typeof d === "string") {
-			d = new Date(d);
-		}
-		return (
-			String(
-				d.toLocaleDateString([], {
-					month: "2-digit",
-					day: "2-digit",
-				})
-			) +
-			" " +
-			String(
-				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-			)
-		);
-	};
 
 	const isPast = (d: Date) => {
 		if (typeof d === "string") {
@@ -68,7 +51,6 @@ const EventList = (props: Props) => {
 				var past;
 				if (isCurrent(item.startTime, item.endTime)) past = 0;
 				else isPast(item.endTime) ? (past = 2) : (past = 1);
-				console.log(item);
 				return (
 					<Card
 						style={[

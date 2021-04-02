@@ -9,6 +9,7 @@ import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";
 import EventNavigator from "../events/EventNavigator";
+import EventScreen from "../events/EventScreen";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
@@ -16,7 +17,7 @@ export type ClubParamList = {
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; eventId?: string };
 	Profile: { userId?: string };
-	EventNavigator: {
+	Event: {
 		id: string;
 		title: string;
 		role: string;
@@ -69,11 +70,7 @@ const ClubNavigator = () => (
 			component={ProfileScreen}
 			options={{ title: "Profile Page" }}
 		/>
-		<Stack.Screen
-			name="EventNavigator"
-			component={EventNavigator}
-			options={{ headerShown: false }}
-		/>
+		<Stack.Screen name="Event" component={EventScreen} />
 	</Stack.Navigator>
 );
 

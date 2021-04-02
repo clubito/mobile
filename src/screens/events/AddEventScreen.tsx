@@ -23,6 +23,7 @@ import EventService from "../../services/EventService";
 import { EventParamList } from "./EventNavigator";
 import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
+import { getReadableDate } from "../../utils";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -207,24 +208,6 @@ const AddEventScreen = (props: Props) => {
 	const onChangeEnd = (event: EventService, selectedDate?: Date) => {
 		const currentDate = selectedDate || endDate;
 		setEndDate(currentDate);
-	};
-
-	const getReadableDate = (d: Date) => {
-		if (typeof d === "string") {
-			d = new Date(d);
-		}
-		return (
-			String(
-				d.toLocaleDateString([], {
-					month: "2-digit",
-					day: "2-digit",
-				})
-			) +
-			" " +
-			String(
-				d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-			)
-		);
 	};
 
 	return (

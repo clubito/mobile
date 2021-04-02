@@ -88,6 +88,44 @@ export default class EventService {
 				code: response.status,
 			};
 		}
+		console.log(response.data);
+		return response.data;
+	}
+
+	static async eventRSVP(eventId: string) {
+		const response: AxiosResponse = await API.post("/clubs/event/rsvp", {
+			eventId: eventId,
+		});
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
+
+	static async cancelRSVP(eventId: string) {
+		const response: AxiosResponse = await API.delete("/clubs/event/rsvp", {
+			data: { eventId: eventId },
+		});
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
+
+	static async getRSVPMembers() {
+		const response: AxiosResponse = await API.post("/clubs/event/rsvp");
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
 		return response.data;
 	}
 }

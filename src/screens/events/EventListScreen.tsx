@@ -185,12 +185,18 @@ const EventListScreen = () => {
 					{listTitle}
 				</Text>
 			) : null}
-			<EventList
-				events={filteredEvents}
-				renderClubInfo={true}
-				refresh={refreshing}
-				onRefresh={onRefresh}
-			/>
+			{filteredEvents.length > 0 ? (
+				<EventList
+					events={filteredEvents}
+					renderClubInfo={true}
+					refresh={refreshing}
+					onRefresh={onRefresh}
+				/>
+			) : (
+				<Text category="h3" style={{ alignSelf: "center" }}>
+					No events available
+				</Text>
+			)}
 		</SafeAreaView>
 	);
 };

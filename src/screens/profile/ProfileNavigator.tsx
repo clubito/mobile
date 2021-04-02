@@ -53,11 +53,6 @@ const ProfileNavigator = () => (
 				headerShown: false,
 			})}
 		/>
-		<Stack.Screen
-			name="Event"
-			component={EventNavigator}
-			options={{ headerShown: false }}
-		/>
 	</Stack.Navigator>
 );
 
