@@ -12,6 +12,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
 import ChatMessageIncomingListItem from "../../components/ChatMessageIncomingListItem";
+import ChatMessageOutgoingListItem from "../../components/ChatMessageOutgoingListItem";
+import ChatMessageDate from "../../components/ChatMessageDate";
 
 type ChatParamList = {
 	Chat: { id: string };
@@ -25,7 +27,7 @@ type Props = {
 
 const ChatScreen = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [chatThread, setChatThread] = useState({} as ChatThread);
 	const [sendButtonDisabled, setSendButtonDisabled] = useState(true);
 
@@ -86,13 +88,18 @@ const ChatScreen = (props: Props) => {
 				<List
 					style={styles.messageList}
 					data={chatThread.messages}
-					keyExtractor={(item) =>
-						item.authorId + item.body + item.timestamp
-					}
+					initialScrollIndex={chatThread.messages.length - 1}
+					keyExtractor={(item, index) => index + item[0].timestamp}
 					keyboardDismissMode="on-drag"
-					renderItem={({ item }) => (
-						<ChatMessageIncomingListItem message={item} />
-					)}
+					renderItem={({ item }) => {
+						return item[0].isDate ? (
+							<ChatMessageDate date={item[0].timestamp} />
+						) : item[0].isSelf ? (
+							<ChatMessageOutgoingListItem messages={item} />
+						) : (
+							<ChatMessageIncomingListItem messages={item} />
+						);
+					}}
 				/>
 			</Layout>
 			<KeyboardAvoidingView
@@ -112,7 +119,9 @@ const ChatScreen = (props: Props) => {
 							<MaterialIcons
 								name="send"
 								size={24}
-								color={sendButtonDisabled ? "#9E9E9E" : "green"}
+								color={
+									sendButtonDisabled ? "#9E9E9E" : "#FC7572"
+								}
 							/>
 						)}
 					/>
