@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Divider, Layout } from "@ui-kitten/components";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
 import ChatThreadListItem from "../../components/ChatThreadListItem";
 import EmptyView from "../../components/EmptyView";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const ChatListScreen = () => {
 	const navigation = useNavigation();
@@ -33,11 +34,7 @@ const ChatListScreen = () => {
 	};
 
 	if (isLoading) {
-		return (
-			<Layout style={styles.loadingContainer}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	return (

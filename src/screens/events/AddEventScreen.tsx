@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-	ActivityIndicator,
-	StyleSheet,
-	SafeAreaView,
-	ScrollView,
-	View,
-} from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { Text, Layout, Button, CheckBox } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
@@ -24,6 +18,7 @@ import { EventParamList } from "./EventNavigator";
 import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
 import { getReadableDate } from "../../utils";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -203,11 +198,7 @@ const AddEventScreen = (props: Props) => {
 	};
 
 	if (clubInfo === null || loading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	const onChangeStart = (event: EventService, selectedDate?: Date) => {

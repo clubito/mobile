@@ -3,8 +3,6 @@ import {
 	Calendar,
 	Text,
 	Layout,
-	Popover,
-	MenuGroup,
 	DrawerGroup,
 	DrawerItem,
 	ButtonGroup,
@@ -12,7 +10,7 @@ import {
 	Input,
 } from "@ui-kitten/components";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventService from "../../services/EventService";
 import { Event } from "../../types";
@@ -20,6 +18,7 @@ import EventList from "../../components/EventList";
 import EmptyView from "../../components/EmptyView";
 import { useNavigation } from "@react-navigation/core";
 import { sameDay, isCurrent, isUpcoming } from "../../utils";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const EventListScreen = () => {
 	const [eventInfo, setEventInfo] = useState<Event[] | null>(null);
@@ -77,11 +76,7 @@ const EventListScreen = () => {
 	};
 
 	if (eventInfo === null || loading || loading1) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	var filteredEvents: Event[];
@@ -143,7 +138,7 @@ const EventListScreen = () => {
 	return (
 		<Layout style={styles.container}>
 			<SafeAreaView edges={["top"]} />
-			
+
 			<Input
 				placeholder="Search"
 				returnKeyType="search"

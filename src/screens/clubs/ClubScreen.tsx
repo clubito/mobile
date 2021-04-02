@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
+import { Image, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import {
 	Text,
 	Card,
-	Layout,
 	Button,
 	Popover,
 	Menu,
@@ -23,6 +22,7 @@ import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
 import MemberTab from "./MemberTab";
 import { getReadableDate } from "../../utils";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -76,11 +76,7 @@ const ClubScreen = (props: Props) => {
 	};
 
 	if (isLoading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	const requestButton = isMember ? null : (

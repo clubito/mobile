@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, SafeAreaView, View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, Layout } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club, JoinRequest } from "../../types";
 import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
 import ApplicationList from "../../components/ApplicationList";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type ClubSettingsNavigationProp = StackNavigationProp<
@@ -76,11 +77,7 @@ const ClubSettings = (props: Props) => {
 	};
 
 	if (isLoading || isLoading1) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	return (

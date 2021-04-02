@@ -3,7 +3,6 @@ import {
 	SafeAreaView,
 	ScrollView,
 	View,
-	ActivityIndicator,
 	StyleSheet,
 	ImageBackground,
 } from "react-native";
@@ -24,6 +23,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ClubParamList } from "../clubs/ClubNavigator";
 import AuthService from "../../services/AuthService";
 import { AuthContext } from "../../context/AuthContext";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type ProfileRouteProp = RouteProp<ClubParamList, "Profile">;
 type ProfileNavigationProp = StackNavigationProp<ClubParamList, "Profile">;
@@ -70,11 +70,7 @@ const ProfileScreen = (props: Props) => {
 	}, [nav]);
 
 	if (isLoading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	const tagList =

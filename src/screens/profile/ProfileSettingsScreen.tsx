@@ -1,11 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-	SafeAreaView,
-	ScrollView,
-	View,
-	ActivityIndicator,
-} from "react-native";
-import { Text, Button, Card, Layout, IndexPath } from "@ui-kitten/components";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import { Text, Button, Card, IndexPath } from "@ui-kitten/components";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { User } from "../../types";
 import UserService from "../../services/UserService";
@@ -28,6 +23,7 @@ import {
 import FormSecureInput from "../../components/FormSecureInput";
 import { useNavigation } from "@react-navigation/core";
 import SettingsItem from "../../components/SettingsItem";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const ProfileSettingsScreen = () => {
 	const nav = useNavigation();
@@ -61,7 +57,9 @@ const ProfileSettingsScreen = () => {
 			setAllTags(data);
 			UserService.getCurrentUser().then((userProfile) => {
 				setProfile(userProfile);
-				setNotificationsEnabled(userProfile.settings!.notifications!.enabled);
+				setNotificationsEnabled(
+					userProfile.settings!.notifications!.enabled
+				);
 				savedModel.current = new ChangeProfileModel(
 					userProfile.name,
 					userProfile.profilePicture,
@@ -77,11 +75,7 @@ const ProfileSettingsScreen = () => {
 	}, []);
 
 	if (isLoading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	const submitChecklist = (model: ChangeProfileModel) => {

@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-	ActivityIndicator,
-	Button,
-	FlatList,
-	StyleSheet,
-	Text,
-} from "react-native";
+import { Button, FlatList, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	Divider,
@@ -20,6 +14,7 @@ import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
 import { useNavigation } from "@react-navigation/native";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -68,11 +63,7 @@ const SearchScreen = () => {
 	};
 
 	if (isLoading) {
-		return (
-			<Layout style={styles.loadingContainer}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	return (

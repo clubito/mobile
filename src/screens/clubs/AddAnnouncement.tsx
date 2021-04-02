@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, SafeAreaView, ScrollView} from "react-native";
-import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { Text, Layout, Button, CheckBox } from "@ui-kitten/components";
+import { StyleSheet, ScrollView } from "react-native";
+import { TextStyle } from "../../styles/CommonStyles";
+import { Text, Layout, Button } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -14,7 +14,7 @@ import {
 	CreateAnnouncementSchema,
 } from "../../data/CreateAnnouncementData";
 import GeneralModal from "../../components/GeneralModal";
-
+import LoadingScreen from "../../components/LoadingScreen";
 
 type AddAnnouncementRouteProp = RouteProp<ClubParamList, "AddAnnouncement">;
 type AddAnnouncementNavigationProp = StackNavigationProp<
@@ -41,7 +41,6 @@ const AddAnnouncementScreen = (props: Props) => {
 	const savedModel = React.useRef(CreateAnnouncementModel.empty());
 	const [params, setParams] = useState({} as ParamList);
 	const [visible, setVisible] = React.useState(false);
-	const [checked, setChecked] = React.useState(false);
 	const [responseError, setResponseError] = React.useState();
 	const navigation = useNavigation();
 
@@ -55,18 +54,14 @@ const AddAnnouncementScreen = (props: Props) => {
 	}, []);
 
 	if (clubInfo === null || loading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	const triggerModal = (model: CreateAnnouncementModel) => {
 		savedModel.current = model;
 		var params = {
 			clubId: props.route.params.clubId,
-			message: model.message
+			message: model.message,
 		} as ParamList;
 		setVisible(true);
 		setParams(params);
@@ -83,16 +78,8 @@ const AddAnnouncementScreen = (props: Props) => {
 			.catch((error) => {
 				console.log(error);
 				setLoading(false);
-			});	
-	}
-
-	if (clubInfo === null || loading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
-	}
+			});
+	};
 
 	return (
 		<ScrollView>
@@ -121,22 +108,16 @@ const AddAnnouncementScreen = (props: Props) => {
 						>
 							Submit
 						</Button>
-						<Text style={TextStyle.error}>
-							{responseError!}
-						</Text>
+						<Text style={TextStyle.error}>{responseError!}</Text>
 					</Layout>
 				)}
 			</Formik>
 			<GeneralModal
 				visible={visible}
-				header={
-					"Would you like to post this announcement?"
-				}
+				header={"Would you like to post this announcement?"}
 				functionOnConfirm={() => submitDetails(params)}
 				closeFunction={() => setVisible(false)}
-				content={
-					"\nMessage: " + (params.message)
-				}
+				content={"\nMessage: " + params.message}
 				modalType="basic"
 			/>
 		</ScrollView>

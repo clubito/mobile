@@ -3,7 +3,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {
-	ActivityIndicator,
 	SafeAreaView,
 	View,
 	Image,
@@ -19,6 +18,7 @@ import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
 import { getReadableDate } from "../../utils";
 import MemberList from "../../components/MemberList";
+import LoadingScreen from "../../components/LoadingScreen";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -95,11 +95,7 @@ const EventScreen = (props: Props) => {
 	};
 
 	if (event === null || loading) {
-		return (
-			<Layout style={{ flex: 1, justifyContent: "center" }}>
-				<ActivityIndicator size="large" />
-			</Layout>
-		);
+		return <LoadingScreen />;
 	}
 
 	if (isOfficer) {
