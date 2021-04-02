@@ -52,7 +52,7 @@ const EventScreen = (props: Props) => {
 		EventService.getEvent(props.route.params.id)
 			.then((data) => {
 				setEventInfo(data);
-				setRSVP(data.rsvpStatus || data.rsvpStatus === false);
+				setRSVP(data.isRsvp);
 				ClubService.getClub(data.clubId)
 					.then((clubData) => {
 						setClub(clubData);

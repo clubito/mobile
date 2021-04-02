@@ -4,8 +4,6 @@ import { ContainerStyles, TextStyle } from "../styles/CommonStyles";
 import { Text, List, Avatar, Card, Icon } from "@ui-kitten/components";
 import { Club, Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
-import ClubListItem from "./ClubListItem";
-import { TouchableHighlight } from "react-native-gesture-handler";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getReadableDate } from "../utils";
 

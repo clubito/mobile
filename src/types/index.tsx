@@ -20,7 +20,7 @@ interface Event {
 	clubId: string;
 	clubName: string;
 	lastUpdated: string;
-	rsvpStatus?: boolean;
+	isRsvp: boolean;
 }
 
 interface Club {
