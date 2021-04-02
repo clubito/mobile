@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, List } from "@ui-kitten/components";
+import { Text, List, ListItem } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Announcement } from "../../types";
@@ -32,7 +32,7 @@ const AnnouncementList = (props: Props) => {
 						<Text appearance="hint">{item.timestamp}</Text>
 					</View>
 				)}
-			></List>
+			/>
 		</View>
 	);
 };
