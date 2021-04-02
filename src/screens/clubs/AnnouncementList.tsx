@@ -1,14 +1,17 @@
 import React from "react";
-import { RefreshControl, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text, List, ListItem, Divider } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Announcement } from "../../types";
 import { ClubTabsParamList } from "./ClubScreen";
+import EmptyView from "../../components/EmptyView";
 import { getReadableDate } from "../../utils";
 
-type AnnouncementListRouteProp = RouteProp<ClubTabsParamList, "AnnouncementList">;
+type AnnouncementListRouteProp = RouteProp<
+	ClubTabsParamList,
+	"AnnouncementList"
+>;
 
 type AnnouncementListNavigationProp = StackNavigationProp<
 	ClubTabsParamList,
@@ -21,7 +24,7 @@ type Props = {
 };
 
 const AnnouncementList = (props: Props) => {
-	return (
+	return props.route.params.announcementList.length > 0 ? (
 		<View style={ContainerStyles.horizMargin}>
 			<List
 				style={styles.list}
@@ -35,28 +38,34 @@ const AnnouncementList = (props: Props) => {
 								<View>
 									<Text style={styles.row}>
 										{item.message}
-									</Text>	
-									<Text style = {styles.row} appearance="hint" numberOfLines={1}>
+									</Text>
+									<Text
+										style={styles.row}
+										appearance="hint"
+										numberOfLines={1}
+									>
 										{getReadableDate(item.timestamp)}
 									</Text>
 								</View>
 							)}
 						/>
-					)
+					);
 				}}
 			/>
 		</View>
+	) : (
+		<EmptyView message="Ain't nobody here :|" />
 	);
 };
 
 const styles = StyleSheet.create({
-	container: { 
+	container: {
 		margin: 5,
 	},
 	list: {
 		backgroundColor: "white",
 		marginLeft: -10,
-		marginRight: -10
+		marginRight: -10,
 	},
 	icon: {
 		flex: 1,
@@ -75,6 +84,5 @@ const styles = StyleSheet.create({
 		marginLeft: 8,
 	},
 });
-
 
 export default AnnouncementList;

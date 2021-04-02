@@ -13,6 +13,7 @@ import { Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getReadableDate } from "../utils";
+import EmptyView from "./EmptyView";
 
 type Props = {
 	events: Event[];
@@ -24,7 +25,7 @@ type Props = {
 const EventList = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
-	return (
+	return props.events.length > 0 ? (
 		<List
 			style={styles.list}
 			data={props.events}
@@ -98,6 +99,8 @@ const EventList = (props: Props) => {
 				);
 			}}
 		/>
+	) : (
+		<EmptyView message="Boooooooooring :|" />
 	);
 };
 

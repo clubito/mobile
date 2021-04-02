@@ -16,6 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
 import { User } from "../types";
 import { ContainerStyles } from "../styles/CommonStyles";
+import EmptyView from "./EmptyView";
 
 type Props = {
 	members: User[];
@@ -40,7 +41,7 @@ const MemberList = (props: Props) => {
 		setVisible(true);
 		setUser(user);
 	};
-	return (
+	return props.members.length > 0 ? (
 		<>
 			<List
 				data={props.members}
@@ -144,6 +145,8 @@ const MemberList = (props: Props) => {
 				</Card>
 			</Modal>
 		</>
+	) : (
+		<EmptyView message="Ain't nobody here :|" />
 	);
 };
 const styles = StyleSheet.create({
