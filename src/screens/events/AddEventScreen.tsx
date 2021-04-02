@@ -21,8 +21,6 @@ import FormInput from "../../components/FormInput";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
 import EventService from "../../services/EventService";
 import { EventParamList } from "./EventNavigator";
-import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
-import FormDateTimePicker from "../../components/DateTimePickerForm";
 import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
 
@@ -155,7 +153,6 @@ const AddEventScreen = (props: Props) => {
 			params.picture = profilePic;
 		if (props.route.params.eventId) {
 			(params as EditList).eventId = props.route.params.eventId;
-			//TODO: Add checkbox
 			(params as EditList).notifyUsers = checked;
 		} else {
 			(params as CreateList).clubId = clubInfo ? clubInfo.id : "";

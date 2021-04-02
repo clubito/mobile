@@ -1,16 +1,7 @@
 import React, { ReactElement, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import { ContainerStyles, TextStyle } from "../styles/CommonStyles";
-import {
-	Text,
-	List,
-	ListItem,
-	Layout,
-	Divider,
-	Avatar,
-	Card,
-	Icon,
-} from "@ui-kitten/components";
+import { Text, List, Avatar, Card, Icon } from "@ui-kitten/components";
 import { Club, Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import ClubListItem from "./ClubListItem";
@@ -20,6 +11,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 type Props = {
 	events: Event[];
 	renderClubInfo?: boolean;
+	refresh: boolean;
+	onRefresh: () => void;
 };
 
 const EventList = (props: Props) => {
@@ -43,6 +36,7 @@ const EventList = (props: Props) => {
 			)
 		);
 	};
+
 	const isPast = (d: Date) => {
 		if (typeof d === "string") {
 			d = new Date(d);
@@ -64,10 +58,17 @@ const EventList = (props: Props) => {
 	return (
 		<List
 			data={props.events}
+			refreshControl={
+				<RefreshControl
+					refreshing={props.refresh}
+					onRefresh={props.onRefresh}
+				/>
+			}
 			renderItem={({ item }) => {
 				var past;
 				if (isCurrent(item.startTime, item.endTime)) past = 0;
 				else isPast(item.endTime) ? (past = 2) : (past = 1);
+				console.log(item);
 				return (
 					<Card
 						style={[
@@ -75,17 +76,13 @@ const EventList = (props: Props) => {
 							past < 2 ? styles.upcoming : null,
 							past === 0 ? styles.current : null,
 						]}
-						onPress={() =>
+						onPress={() => {
 							navigation.push("Event", {
+								id: item.id,
 								title: item.name,
-								screen: "Event",
-								params: {
-									id: item.id,
-									title: item.name,
-									role: item.role,
-								},
-							})
-						}
+								role: item.role,
+							});
+						}}
 					>
 						<View style={styles.default}>
 							<View style={styles.avatarBox}>

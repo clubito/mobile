@@ -29,7 +29,6 @@ type Props = {
 const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [loading1, setLoading1] = useState(true);
 	const [club, setClub] = useState({} as Club);
 	const [isOfficer, setIsOfficer] = useState(false);
 	const navigation = useNavigation<StackNavigationProp<any>>();
@@ -39,6 +38,7 @@ const EventScreen = (props: Props) => {
 			pullData();
 		}
 	}, []);
+
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
 			pullData();
@@ -50,7 +50,6 @@ const EventScreen = (props: Props) => {
 		EventService.getEvent(props.route.params.id)
 			.then((data) => {
 				setEventInfo(data);
-				//TODO: Change to clubId when backend has been updated
 				ClubService.getClub(data.clubId)
 					.then((data) => {
 						setClub(data);
@@ -59,15 +58,15 @@ const EventScreen = (props: Props) => {
 						);
 						setLoading(false);
 					})
-					.catch(() => {
+					.catch((error) => {
+						//TODO ADD toasts
 						setLoading(false);
-						return <Text>Ha</Text>;
+						console.log(error);
 					});
-				setLoading1(false);
 			})
-			.catch(() => {
+			.catch((error) => {
 				setLoading(false);
-				setLoading1(false);
+				console.log(error);
 			});
 	};
 
@@ -91,7 +90,7 @@ const EventScreen = (props: Props) => {
 		);
 	};
 
-	if (event === null || loading || loading1) {
+	if (event === null || loading) {
 		return (
 			<Layout style={{ flex: 1, justifyContent: "center" }}>
 				<ActivityIndicator size="large" />
@@ -165,7 +164,6 @@ const EventScreen = (props: Props) => {
 				</Card>
 			</ScrollView>
 
-			{/* TODO: We gotta put this club link some other way, it looks unwieldy */}
 			<ClubListItem
 				onPress={() => {
 					navigation.push("ClubNavigator", {
