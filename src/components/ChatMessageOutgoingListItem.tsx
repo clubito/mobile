@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
 		borderBottomStartRadius: 15,
 	},
 	bodyBorderMiddle: {
-		borderTopEndRadius: 15,
-		borderBottomEndRadius: 15,
+		borderTopStartRadius: 15,
+		borderBottomStartRadius: 15,
 	},
 	bodyBorderLast: {
 		borderTopStartRadius: 15,

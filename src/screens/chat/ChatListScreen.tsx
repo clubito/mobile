@@ -9,17 +9,28 @@ import EmptyView from "../../components/EmptyView";
 
 const ChatListScreen = () => {
 	const navigation = useNavigation();
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [chatThreads, setChatThreads] = useState([] as ChatThread[]);
 
 	useEffect(() => {
-		setIsLoading(true);
+		loadThreads();
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			loadThreads();
+		});
+		return unsubscribe;
+	}, [navigation]);
+
+	const loadThreads = () => {
+		ChatService.go();
 		ChatService.getAllChatThreads()
 			.then((chatThreadList) => {
 				setChatThreads(chatThreadList);
 			})
 			.finally(() => setIsLoading(false));
-	}, []);
+	};
 
 	if (isLoading) {
 		return (
@@ -32,7 +43,9 @@ const ChatListScreen = () => {
 	return (
 		<Layout style={styles.container}>
 			<FlatList
-				ListEmptyComponent={() => <EmptyView message="Join a club or something!" />}
+				ListEmptyComponent={() => (
+					<EmptyView message="Join a club or something!" />
+				)}
 				data={chatThreads}
 				keyExtractor={(item) => item.clubId}
 				keyboardDismissMode="on-drag"

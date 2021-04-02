@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
 	ActivityIndicator,
 	KeyboardAvoidingView,
@@ -9,8 +9,9 @@ import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Avatar, Button, Input, Layout, List } from "@ui-kitten/components";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ChatThread } from "../../types";
+import { ChatMessage, ChatThread, User } from "../../types";
 import ChatService from "../../services/ChatService";
+import UserService from "../../services/UserService";
 import ChatMessageIncomingListItem from "../../components/ChatMessageIncomingListItem";
 import ChatMessageOutgoingListItem from "../../components/ChatMessageOutgoingListItem";
 import ChatMessageDate from "../../components/ChatMessageDate";
@@ -29,16 +30,29 @@ type Props = {
 const ChatScreen = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 	const [isLoading, setIsLoading] = useState(true);
+	const [messageText, setMessageText] = useState("");
+	const [user, setUser] = useState({} as User);
 	const [chatThread, setChatThread] = useState({} as ChatThread);
 	const [sendButtonDisabled, setSendButtonDisabled] = useState(true);
+	const listRef = useRef<List>(null);
 
 	useEffect(() => {
-		setIsLoading(true);
-		ChatService.getChatThread(props.route.params.id)
-			.then((chatThread) => {
-				setChatThread(chatThread);
+		Promise.all([
+			UserService.getCurrentUser(),
+			ChatService.getChatThread(props.route.params.id),
+		])
+			.then((result: [User, ChatThread]) => {
+				setUser(result[0]);
+				result[1].messages.reverse();
+				setChatThread(result[1]);
 			})
-			.finally(() => setIsLoading(false));
+			.finally(() => {
+				ChatService.addSubscriber(
+					props.route.params.id,
+					handleNewMessage
+				);
+				setIsLoading(false);
+			});
 	}, []);
 
 	useLayoutEffect(() => {
@@ -67,7 +81,41 @@ const ChatScreen = (props: Props) => {
 		});
 	}, [chatThread]);
 
-	const toggleSendButton = (text: string) => {
+	const sendMessage = () => {
+		handleMessageInputChange("");
+		ChatService.sendMessage(props.route.params.id, messageText);
+		handleNewMessage({
+			authorId: user.id,
+			authorName: user.name,
+			authorPicture: user.profilePicture,
+			timestamp: new Date().toString(),
+			body: messageText,
+			isSelf: true,
+			isDate: false,
+		});
+	};
+
+	const handleNewMessage = (newMessage: ChatMessage) => {
+		setChatThread((prevThread) => {
+			const messages = prevThread.messages;
+			const lastMessageArray = messages[0];
+			const lastMessage = lastMessageArray[lastMessageArray.length - 1];
+
+			if (lastMessage.authorId === newMessage.authorId) {
+				lastMessageArray.push(newMessage);
+			} else {
+				messages.unshift([newMessage]);
+			}
+
+			return {
+				...prevThread,
+				messages: messages,
+			};
+		});
+	};
+
+	const handleMessageInputChange = (text: string) => {
+		setMessageText(text);
 		if (sendButtonDisabled && text.trim().length > 0) {
 			setSendButtonDisabled(false);
 		} else if (!sendButtonDisabled && text.trim().length === 0) {
@@ -88,13 +136,29 @@ const ChatScreen = (props: Props) => {
 			<Layout style={styles.messagesContainer}>
 				{chatThread.messages[0].length > 0 ? (
 					<List
+						inverted={true}
+						ref={listRef}
 						style={styles.messageList}
 						data={chatThread.messages}
-						initialScrollIndex={chatThread.messages.length - 1}
-						keyExtractor={(item, index) =>
-							index + item[0].timestamp
+						// onContentSizeChange={() =>
+						// 	listRef.current?.scrollToEnd({
+						// 		animated: true,
+						// 	})
+						// }
+						onLayout={() =>
+							listRef.current?.scrollToIndex({
+								index: 0,
+								animated: true,
+							})
 						}
 						keyboardDismissMode="on-drag"
+						keyExtractor={(item, index) => {
+							return (
+								item[0].body +
+								item[0].authorId +
+								item[0].timestamp
+							);
+						}}
 						renderItem={({ item }) => {
 							return item[0].isDate ? (
 								<ChatMessageDate date={item[0].timestamp} />
@@ -109,6 +173,7 @@ const ChatScreen = (props: Props) => {
 					<EmptyView message="Be the first to chat!" />
 				)}
 			</Layout>
+
 			<KeyboardAvoidingView
 				keyboardVerticalOffset={110}
 				style={styles.inputContainer}
@@ -117,11 +182,14 @@ const ChatScreen = (props: Props) => {
 				<Layout style={styles.inputInner}>
 					<Input
 						style={styles.messageInput}
-						onChangeText={toggleSendButton}
+						value={messageText}
+						onChangeText={handleMessageInputChange}
 					/>
 					<Button
 						appearance="ghost"
-						style={[styles.iconButton, styles.sendButton]}
+						style={styles.sendButton}
+						onPress={sendMessage}
+						disabled={sendButtonDisabled}
 						accessoryLeft={() => (
 							<MaterialIcons
 								name="send"
@@ -174,12 +242,11 @@ const styles = StyleSheet.create({
 	},
 	sendButton: {
 		marginRight: 4,
-	},
-	iconButton: {
 		paddingHorizontal: -5,
 		paddingVertical: -5,
 		width: 32,
 		height: 32,
+		backgroundColor: "transparent",
 	},
 });
 
