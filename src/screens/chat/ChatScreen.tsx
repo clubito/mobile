@@ -14,6 +14,7 @@ import ChatService from "../../services/ChatService";
 import ChatMessageIncomingListItem from "../../components/ChatMessageIncomingListItem";
 import ChatMessageOutgoingListItem from "../../components/ChatMessageOutgoingListItem";
 import ChatMessageDate from "../../components/ChatMessageDate";
+import EmptyView from "../../components/EmptyView";
 
 type ChatParamList = {
 	Chat: { id: string };
@@ -85,22 +86,28 @@ const ChatScreen = (props: Props) => {
 	return (
 		<Layout style={styles.mainContainer}>
 			<Layout style={styles.messagesContainer}>
-				<List
-					style={styles.messageList}
-					data={chatThread.messages}
-					initialScrollIndex={chatThread.messages.length - 1}
-					keyExtractor={(item, index) => index + item[0].timestamp}
-					keyboardDismissMode="on-drag"
-					renderItem={({ item }) => {
-						return item[0].isDate ? (
-							<ChatMessageDate date={item[0].timestamp} />
-						) : item[0].isSelf ? (
-							<ChatMessageOutgoingListItem messages={item} />
-						) : (
-							<ChatMessageIncomingListItem messages={item} />
-						);
-					}}
-				/>
+				{chatThread.messages[0].length > 0 ? (
+					<List
+						style={styles.messageList}
+						data={chatThread.messages}
+						initialScrollIndex={chatThread.messages.length - 1}
+						keyExtractor={(item, index) =>
+							index + item[0].timestamp
+						}
+						keyboardDismissMode="on-drag"
+						renderItem={({ item }) => {
+							return item[0].isDate ? (
+								<ChatMessageDate date={item[0].timestamp} />
+							) : item[0].isSelf ? (
+								<ChatMessageOutgoingListItem messages={item} />
+							) : (
+								<ChatMessageIncomingListItem messages={item} />
+							);
+						}}
+					/>
+				) : (
+					<EmptyView message="Be the first to chat!" />
+				)}
 			</Layout>
 			<KeyboardAvoidingView
 				keyboardVerticalOffset={110}

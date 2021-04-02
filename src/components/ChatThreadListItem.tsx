@@ -1,11 +1,11 @@
-import { Avatar, Button, ListItem, Text } from "@ui-kitten/components";
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Avatar, ListItem, Text } from "@ui-kitten/components";
 import dayjs from "dayjs";
-import { ChatThread } from "../types";
 import relativeTime from "dayjs/plugin/relativeTime";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
+import { ChatThread } from "../types";
 
 interface Props {
 	chatThread: ChatThread;
@@ -18,6 +18,8 @@ dayjs.extend(isYesterday);
 
 const ChatThreadListItem = (props: Props) => {
 	const { chatThread, onPress } = props;
+	const threadHasMessages =
+		chatThread.messages.length > 0 && chatThread.messages[0].length > 0;
 
 	const formatTime = (date: string) => {
 		if (dayjs(date).isToday()) {
@@ -39,8 +41,13 @@ const ChatThreadListItem = (props: Props) => {
 			)}
 			description={() => (
 				<Text appearance="hint" style={styles.desc} numberOfLines={1}>
-					{chatThread.messages[0][0].authorName}:{" "}
-					{chatThread.messages[0][0].body}
+					{threadHasMessages
+						? (chatThread.messages[0][0].isSelf
+								? "You"
+								: chatThread.messages[0][0].authorName) +
+						  ": " +
+						  chatThread.messages[0][0].body
+						: "No messages yet"}
 				</Text>
 			)}
 			accessoryLeft={() => (
@@ -51,7 +58,9 @@ const ChatThreadListItem = (props: Props) => {
 			)}
 			accessoryRight={() => (
 				<Text appearance="hint" numberOfLines={1}>
-					{formatTime(chatThread.messages[0][0].timestamp)}
+					{threadHasMessages
+						? formatTime(chatThread.messages[0][0].timestamp)
+						: ""}
 				</Text>
 			)}
 		/>

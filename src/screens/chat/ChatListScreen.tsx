@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Divider, Layout } from "@ui-kitten/components";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
 import ChatThreadListItem from "../../components/ChatThreadListItem";
+import EmptyView from "../../components/EmptyView";
 
 const ChatListScreen = () => {
 	const navigation = useNavigation();
@@ -31,8 +31,8 @@ const ChatListScreen = () => {
 
 	return (
 		<Layout style={styles.container}>
-
 			<FlatList
+				ListEmptyComponent={() => <EmptyView message="Join a club or something!" />}
 				data={chatThreads}
 				keyExtractor={(item) => item.clubId}
 				keyboardDismissMode="on-drag"
