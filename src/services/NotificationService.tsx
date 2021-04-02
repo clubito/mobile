@@ -15,28 +15,43 @@ export default class NotificationService {
 			}),
 		});
 
+		console.log("1");
 		if (Constants.isDevice) {
+			console.log("2");
 			const {
 				status: existingStatus,
 			} = await Notifications.getPermissionsAsync();
-
+			
+			console.log("3");
 			let finalStatus = existingStatus;
 			if (existingStatus !== "granted") {
+				console.log("4");
 				const {
 					status,
 				} = await Notifications.requestPermissionsAsync();
 				finalStatus = status;
 			}
-
+			console.log("5");
+			
 			if (finalStatus !== "granted") {
+				console.log("6");
 				alert("Failed to get push token for push notification!");
 				return;
 			}
-
+			
+			console.log("7");
 			// Fetch and send expo device token to backend
 			const token: string = (await Notifications.getExpoPushTokenAsync()).data;
+			console.log("8");
 			await API.post("/user/notifications/register", {
 				pushToken: token,
+			}).then(s=> {
+
+				console.log("8");
+				console.log(s);
+			}).catch(e=> {
+				console.log("9");
+				console.log(e);
 			});
 		} else {
 			alert("Must use physical device for Push Notifications");
