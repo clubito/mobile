@@ -7,6 +7,7 @@ export default class AuthService {
 	 * Validate the current user's token if it exists.
 	 */
 	static async isAnyoneLoggedIn() {
+		this.logout();
 		const token = await AsyncStorage.getItem("user_token");
 
 		if (token === null) {
@@ -64,6 +65,7 @@ export default class AuthService {
 	 * Clear local data store (user_token etc).
 	 */
 	static async logout() {
+		await API.post("/token/verify");
 		await AsyncStorage.clear();
 	}
 
