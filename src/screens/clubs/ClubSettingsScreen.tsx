@@ -9,6 +9,7 @@ import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
 import MemberList from "../../components/MemberList";
 import ApplicationList from "../../components/ApplicationList";
+import Toast from "../../components/Toast";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type ClubSettingsNavigationProp = StackNavigationProp<
@@ -26,6 +27,9 @@ const ClubSettings = (props: Props) => {
 	const [applicants, setApplicants] = useState({} as JoinRequest[]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoading1, setIsLoading1] = useState(true);
+	const [toastVisible, setToastVisible] = useState(false);
+	const [toastText, setToastText] = useState("");
+	const [toastSuccess, setToastSuccess] = useState(true);
 
 	useEffect(() => {
 		refresh();
@@ -46,14 +50,20 @@ const ClubSettings = (props: Props) => {
 		if (approval) {
 			ClubService.approveApplication(clubId, userId).then((data) => {
 				refresh();
+				setToastVisible(true);
+				setToastText("Successfully added user to the club");
+				setToastSuccess(true);
 				console.log(data);
 			});
 		} else {
 			ClubService.rejectApplication(clubId, userId).then((data) => {
+				refresh();
+				setToastVisible(true);
+				setToastText("Removed the user's join request");
+				setToastSuccess(false);
 				console.log(data);
 			});
 		}
-		//TODO: Add toast
 	};
 
 	if (isLoading || isLoading1) {
@@ -80,6 +90,12 @@ const ClubSettings = (props: Props) => {
 					<Text>No Applicants available</Text>
 				)}
 			</View>
+			<Toast
+				text={toastText}
+				visible={toastVisible}
+				status={toastSuccess ? "success" : "failure"}
+				onDismiss={() => setToastVisible(false)}
+			/>
 		</SafeAreaView>
 	);
 };

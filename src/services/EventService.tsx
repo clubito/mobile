@@ -148,7 +148,7 @@ export default class EventService {
 			console.log(response);
 			throw {
 				code: response.status,
-				message: response.data.error,
+				message: response.data,
 			};
 		}
 		console.log(response.data);
