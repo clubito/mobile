@@ -25,7 +25,7 @@ import { useNavigation } from "@react-navigation/core";
 import SettingsItem from "../../components/SettingsItem";
 import LoadingScreen from "../../components/LoadingScreen";
 
-const ProfileSettingsScreen = () => {
+const EditProfileScreen = () => {
 	const nav = useNavigation();
 	const [modalVisible, setModalVisible] = useState(false);
 	const [modalType, setModalType] = useState(0);
@@ -292,4 +292,4 @@ const ProfileSettingsScreen = () => {
 	);
 };
 
-export default ProfileSettingsScreen;
+export default EditProfileScreen;

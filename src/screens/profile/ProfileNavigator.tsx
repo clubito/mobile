@@ -1,21 +1,18 @@
 import React from "react";
+import { View } from "react-native";
 import { Button } from "@ui-kitten/components";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
-import ProfileSettingsScreen from "./ProfileSettingsScreen";
+import EditProfileScreen from "./EditProfileScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubNavigator from "../clubs/ClubNavigator";
-import EventNavigator from "../events/EventNavigator";
+import SettingsScreen from "../settings/SettingsScreen";
 
 export type ProfileParamList = {
 	Profile: undefined;
+	EditProfile: undefined;
 	Settings: undefined;
 	ClubNavigator: { title: string };
-	Event: {
-		id: string;
-		title: string;
-		role: string;
-	};
 };
 const Stack = createStackNavigator<ProfileParamList>();
 
@@ -32,19 +29,30 @@ const ProfileNavigator = () => (
 			options={({ navigation }) => ({
 				title: "My Profile",
 				headerRight: () => (
-					<Button
-						onPress={() => navigation.navigate("Settings")}
-						accessoryLeft={SettingsIcon}
-						appearance="ghost"
-					/>
+					<View style={{ flexDirection: "row" }}>
+						<Button
+							onPress={() => navigation.navigate("EditProfile")}
+							accessoryLeft={EditIcon}
+							appearance="ghost"
+						/>
+						<Button
+							onPress={() => navigation.navigate("Settings")}
+							accessoryLeft={SettingsIcon}
+							appearance="ghost"
+						/>
+					</View>
 				),
 			})}
 		/>
+
 		<Stack.Screen
-			name="Settings"
-			component={ProfileSettingsScreen}
-			options={{ title: "Profile Settings" }}
+			name="EditProfile"
+			component={EditProfileScreen}
+			options={{ title: "Edit Profile" }}
 		/>
+
+		<Stack.Screen name="Settings" component={SettingsScreen} />
+
 		<Stack.Screen
 			name="ClubNavigator"
 			component={ClubNavigator}
@@ -55,6 +63,8 @@ const ProfileNavigator = () => (
 		/>
 	</Stack.Navigator>
 );
+
+const EditIcon = () => <MaterialIcons name="edit" size={20} />;
 
 const SettingsIcon = () => <MaterialIcons name="settings" size={20} />;
 
