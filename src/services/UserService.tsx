@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import ImageService from "./ImageService";
-import { User } from "../types";
+import { Settings, User } from "../types";
 
 export default class UserService {
 	/**
@@ -32,6 +32,29 @@ export default class UserService {
 			};
 		}
 		return response.data;
+	}
+
+	/**
+	 * Get current user settings from backend
+	 */
+	static async getCurrentUserSettings() {
+		// const response: AxiosResponse<Settings> = await API.get<Settings>(
+		// 	"/user/settings"
+		// );
+		// if (response.status !== 200) {
+		// 	throw {
+		// 		code: response.status,
+		// 		message: response.statusText,
+		// 	};
+		// }
+		// return response.data;
+
+		// Dummy return until backend is setup
+		return {
+			notifications: {
+				enabled: true,
+			},
+		};
 	}
 
 	/**
@@ -82,9 +105,9 @@ export default class UserService {
 		const response: AxiosResponse = await API.post("/user/settings", {
 			settings: {
 				notifications: {
-					enabled: state
-				}
-			}
+					enabled: state,
+				},
+			},
 		});
 
 		if (response.status !== 200) {
