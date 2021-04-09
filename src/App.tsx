@@ -6,19 +6,29 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import RootNavigator from "./navigation/RootNavigator";
+import { ThemeContext } from "./context/ThemeContext";
 import Toast from "react-native-fast-toast";
 
-function App() {
+const App = () => {
+	const [theme, setTheme] = React.useState("light");
+
+	const toggleTheme = () => {
+		const nextTheme = theme === "light" ? "dark" : "light";
+		setTheme(nextTheme);
+	};
+
 	return (
 		<NavigationContainer>
 			{StatusBar.setBarStyle("dark-content", true)}
 			<IconRegistry icons={EvaIconsPack} />
-			<ApplicationProvider {...eva} theme={eva.dark}>
-				<RootNavigator />
-			</ApplicationProvider>
-			<Toast ref={(ref) => global['toast'] = ref} />
+			<ThemeContext.Provider value={{ theme, toggleTheme }}>
+				<ApplicationProvider {...eva} theme={eva[theme]}>
+					<RootNavigator />
+				</ApplicationProvider>
+				<Toast ref={(ref) => (global["toast"] = ref)} />
+			</ThemeContext.Provider>
 		</NavigationContainer>
 	);
-}
+};
 
 export default registerRootComponent(App);
