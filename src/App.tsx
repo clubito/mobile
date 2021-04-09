@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { registerRootComponent } from "expo";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+	DarkTheme,
+	DefaultTheme,
+	NavigationContainer,
+} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "react-native";
 import * as eva from "@eva-design/eva";
@@ -9,6 +13,16 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import RootNavigator from "./navigation/RootNavigator";
 import { ThemeContext } from "./context/ThemeContext";
 import Toast from "react-native-fast-toast";
+
+const AppDarkTheme = {
+	...DarkTheme,
+	...eva["dark"],
+};
+
+const AppLightTheme = {
+	...DefaultTheme,
+	...eva["light"],
+};
 
 const App = () => {
 	const [theme, setTheme] = React.useState("light");
@@ -26,11 +40,16 @@ const App = () => {
 	};
 
 	return (
-		<NavigationContainer>
+		<NavigationContainer
+			theme={theme == "dark" ? AppDarkTheme : AppLightTheme}
+		>
 			{StatusBar.setBarStyle("dark-content", true)}
 			<IconRegistry icons={EvaIconsPack} />
 			<ThemeContext.Provider value={{ theme, toggleTheme }}>
-				<ApplicationProvider {...eva} theme={eva[theme]}>
+				<ApplicationProvider
+					{...eva}
+					theme={theme == "dark" ? AppDarkTheme : AppLightTheme}
+				>
 					<RootNavigator />
 				</ApplicationProvider>
 				<Toast ref={(ref) => (global["toast"] = ref)} />
