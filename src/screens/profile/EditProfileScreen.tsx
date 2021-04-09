@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { SafeAreaView, ScrollView } from "react-native";
 import { Text, Button, Card, IndexPath } from "@ui-kitten/components";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { User } from "../../types";
 import UserService from "../../services/UserService";
-import GeneralModal from "../../components/GeneralModal";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
-import { AuthContext } from "../../context/AuthContext";
 import AuthService from "../../services/AuthService";
 import ClubService from "../../services/ClubService";
 import { Formik } from "formik";
@@ -21,17 +19,10 @@ import {
 	ChangePasswordSchema,
 } from "../../data/ChangePasswordData";
 import FormSecureInput from "../../components/FormSecureInput";
-import { useNavigation } from "@react-navigation/core";
-import SettingsItem from "../../components/SettingsItem";
 import LoadingScreen from "../../components/LoadingScreen";
 
 const EditProfileScreen = () => {
-	const nav = useNavigation();
-	const [modalVisible, setModalVisible] = useState(false);
-	const [modalType, setModalType] = useState(0);
-	const { logOutSuccess } = useContext(AuthContext);
 	const [profile, setProfile] = useState<User>({} as User);
-	const [enableNotifications, setNotificationsEnabled] = useState(true);
 	const [allTags, setAllTags] = useState([] as string[]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [submitted, setSubmitted] = useState(false);
@@ -57,9 +48,6 @@ const EditProfileScreen = () => {
 			setAllTags(data);
 			UserService.getCurrentUser().then((userProfile) => {
 				setProfile(userProfile);
-				setNotificationsEnabled(
-					userProfile.settings!.notifications!.enabled
-				);
 				savedModel.current = new ChangeProfileModel(
 					userProfile.name,
 					userProfile.profilePicture,
@@ -175,17 +163,6 @@ const EditProfileScreen = () => {
 					)}
 				</Formik>
 
-				<Card style={ContainerStyles.extraMargin}>
-					<SettingsItem
-						text="Notifications"
-						enabled={enableNotifications}
-						onToggle={(state) => {
-							setNotificationsEnabled(state);
-							UserService.setNotificationsEnabled(state);
-						}}
-					/>
-				</Card>
-
 				<Formik
 					initialValues={savedPassModel.current}
 					validationSchema={ChangePasswordSchema}
@@ -219,74 +196,6 @@ const EditProfileScreen = () => {
 						</Card>
 					)}
 				</Formik>
-				<View style={ContainerStyles.containerStart}>
-					<Button
-						appearance="ghost"
-						onPress={() => {
-							setModalType(0);
-							setModalVisible(true);
-						}}
-						status="warning"
-					>
-						Logout
-					</Button>
-				</View>
-				<View style={ContainerStyles.containerStart}>
-					<Button
-						appearance="ghost"
-						onPress={() => {
-							setModalType(1);
-							setModalVisible(true);
-						}}
-						status="danger"
-					>
-						Delete Account
-					</Button>
-				</View>
-				<GeneralModal
-					visible={modalVisible}
-					closeFunction={() => setModalVisible(false)}
-					header={
-						modalType == 0
-							? "Are you sure you want to log out?"
-							: "Are you sure you want to delete your account?"
-					}
-					functionOnConfirm={
-						modalType == 0
-							? () => {
-									AuthService.logout().then(() => {
-										nav.navigate("Home");
-										if (toast)
-											toast.show(
-												"Successfully logged out",
-												{
-													type: "success",
-												}
-											);
-										logOutSuccess();
-									});
-							  }
-							: () => {
-									UserService.deleteUser().then(() => {
-										nav.navigate("Home");
-										if (toast)
-											toast.show(
-												"Your account has been successfully deleted",
-												{
-													type: "success",
-												}
-											);
-										logOutSuccess();
-									});
-							  }
-					}
-					content={
-						modalType == 0
-							? "Are you sure you want to log out? Your user data will be removed from this device."
-							: "Are you sure you want to delete your account? Your user data will be removed from the database and you will no longer be able to log in. This action is irreversible."
-					}
-					modalType={modalType == 0 ? "warning" : "danger"}
-				/>
 			</ScrollView>
 		</SafeAreaView>
 	);
