@@ -1,6 +1,6 @@
 import React from "react";
 
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import HomeNavigator from "../screens/home/HomeNavigator";
@@ -9,11 +9,10 @@ import EventNavigator from "../screens/events/EventNavigator";
 import ProfileNavigator from "../screens/profile/ProfileNavigator";
 import SearchNavigator from "../screens/search/SearchNavigator";
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const MainNavigator = () => (
 	<Tab.Navigator
-		barStyle={{ backgroundColor: "rgba(11, 49, 118, 0.7)" }}
 		screenOptions={({ route }) => ({
 			tabBarIcon: ({ color }) => {
 				let iconName;
