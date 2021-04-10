@@ -4,6 +4,7 @@ import {
 	Platform,
 	StyleSheet,
 	TouchableOpacity,
+	View,
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,6 +18,7 @@ import ChatMessageOutgoingListItem from "../../components/ChatMessageOutgoingLis
 import ChatMessageDate from "../../components/ChatMessageDate";
 import EmptyView from "../../components/EmptyView";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
 
 type ChatParamList = {
 	Chat: { id: string };
@@ -136,8 +138,8 @@ const ChatScreen = (props: Props) => {
 	}
 
 	return (
-		<Layout style={styles.mainContainer}>
-			<Layout style={styles.messagesContainer}>
+		<View style={styles.mainContainer}>
+			<CoolView style={styles.messagesContainer}>
 				{chatThread.messages.length > 0 &&
 				chatThread.messages[0].length > 0 ? (
 					<List
@@ -177,14 +179,14 @@ const ChatScreen = (props: Props) => {
 				) : (
 					<EmptyView message="Be the first to chat!" />
 				)}
-			</Layout>
+			</CoolView>
 
 			<KeyboardAvoidingView
 				keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
 				style={styles.inputContainer}
 				behavior={Platform.OS === "ios" ? "padding" : "height"}
 			>
-				<Layout style={styles.inputInner}>
+				<CoolView style={styles.inputInner}>
 					<Input
 						style={styles.messageInput}
 						value={messageText}
@@ -209,9 +211,9 @@ const ChatScreen = (props: Props) => {
 							/>
 						)}
 					/>
-				</Layout>
+				</CoolView>
 			</KeyboardAvoidingView>
-		</Layout>
+		</View>
 	);
 };
 
@@ -246,8 +248,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginHorizontal: 8,
 		borderRadius: 20,
-		borderColor: "#EEEEEE",
-		backgroundColor: "#F5F5F5",
 	},
 	sendButton: {
 		marginRight: 4,

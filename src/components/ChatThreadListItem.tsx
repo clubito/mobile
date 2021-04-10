@@ -33,6 +33,7 @@ const ChatThreadListItem = (props: Props) => {
 
 	return (
 		<ListItem
+			style={styles.container}
 			onPress={onPress}
 			title={() => (
 				<Text style={styles.title} category="s1">
@@ -68,6 +69,10 @@ const ChatThreadListItem = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
+	container: {
+		paddingHorizontal: 16,
+        backgroundColor: "transparent"
+	},
 	avatar: {
 		marginRight: 5,
 		height: 45,

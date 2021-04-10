@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Layout } from "@ui-kitten/components";
 import { ActivityIndicator } from "react-native";
+import CoolView from "./CoolView";
 
 const LoadingScreen = () => {
 	return (
-		<Layout style={styles.loadingContainer}>
+		<CoolView style={styles.loadingContainer}>
 			<ActivityIndicator size="large" />
-		</Layout>
+		</CoolView>
 	);
 };
 
