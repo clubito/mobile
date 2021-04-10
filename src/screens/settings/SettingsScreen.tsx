@@ -2,12 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Divider, Layout } from "@ui-kitten/components";
 import { AuthContext } from "../../context/AuthContext";
-import { Settings } from "../../types";
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
-import SettingsItem from "../../components/SettingsItem";
+import SettingsButton from "../../components/SettingsButton";
 import GeneralModal from "../../components/GeneralModal";
-import LoadingScreen from "../../components/LoadingScreen";
 import { ContainerStyles } from "../../styles/CommonStyles";
 
 const SettingsScreen = () => {
@@ -19,10 +17,9 @@ const SettingsScreen = () => {
 
 	return (
 		<Layout>
-			<SettingsItem
+			<SettingsButton
 				text="Notifications"
-				enabled={true}
-				onToggle={(state) => {
+				onPress={() => {
 					nav.navigate("NotificationSettings");
 				}}
 			/>
@@ -41,6 +38,9 @@ const SettingsScreen = () => {
 					Logout
 				</Button>
 			</Layout>
+
+			<Divider />
+
 			<Layout style={ContainerStyles.containerStart}>
 				<Button
 					appearance="ghost"
@@ -53,6 +53,7 @@ const SettingsScreen = () => {
 					Delete Account
 				</Button>
 			</Layout>
+
 			<GeneralModal
 				visible={modalVisible}
 				closeFunction={() => setModalVisible(false)}
