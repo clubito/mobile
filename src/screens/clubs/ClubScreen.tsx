@@ -23,6 +23,7 @@ import { ClubParamList } from "./ClubNavigator";
 import MemberTab from "./MemberTab";
 import { getReadableDate } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolCard from "../../components/CoolCard";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -175,9 +176,7 @@ const ClubScreen = (props: Props) => {
 	};
 
 	return (
-		<SafeAreaView
-			style={[ContainerStyles.flexContainer, ContainerStyles.horizMargin]}
-		>
+		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<View
 				style={{
 					width: "100%",
@@ -195,7 +194,7 @@ const ClubScreen = (props: Props) => {
 				/>
 			</View>
 			{requestButton}
-			<Card>
+			<CoolCard yip>
 				<Text>{clubInfo?.description}</Text>
 				{isMember ? (
 					<Text
@@ -210,7 +209,7 @@ const ClubScreen = (props: Props) => {
 						)}
 					</Text>
 				) : null}
-			</Card>
+			</CoolCard>
 			{message != "" ? (
 				<Card status={error ? "danger" : "success"}>
 					<Text>{message}</Text>
@@ -243,7 +242,10 @@ const ClubScreen = (props: Props) => {
 					<Tab.Screen
 						name="EventList"
 						component={EventTab}
-						initialParams={{ eventList: clubInfo.events, clubName: clubInfo.name }}
+						initialParams={{
+							eventList: clubInfo.events,
+							clubName: clubInfo.name,
+						}}
 						options={{ title: "Events" }}
 					/>
 					<Tab.Screen

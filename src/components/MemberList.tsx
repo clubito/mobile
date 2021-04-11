@@ -1,15 +1,15 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import {
 	Avatar,
 	Text,
-	List,
 	Card,
 	Button,
 	Icon,
 	Modal,
 	Input,
 	ListItem,
+	Divider,
 } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { User } from "../types";
 import { ContainerStyles } from "../styles/CommonStyles";
 import EmptyView from "./EmptyView";
+import CoolView from "./CoolView";
 
 type Props = {
 	members: User[];
@@ -42,12 +43,15 @@ const MemberList = (props: Props) => {
 		setUser(user);
 	};
 	return props.members.length > 0 ? (
-		<>
-			<List
+		<CoolView>
+			<FlatList
 				data={props.members}
+				ItemSeparatorComponent={Divider}
+				ListFooterComponent={Divider}
 				renderItem={({ item }) => {
 					return (
 						<ListItem
+							style={styles.memberContainer}
 							onPress={() =>
 								navigation.push("Profile", {
 									userId: item.id,
@@ -59,7 +63,7 @@ const MemberList = (props: Props) => {
 								</Text>
 							)}
 							description={
-								"Member since:" +
+								"Member since " +
 								dayjs(item.approvalDate).format("MM/DD/YYYY")
 							}
 							accessoryLeft={() => (
@@ -144,12 +148,16 @@ const MemberList = (props: Props) => {
 					/>
 				</Card>
 			</Modal>
-		</>
+		</CoolView>
 	) : (
 		<EmptyView message="Ain't nobody here :|" />
 	);
 };
 const styles = StyleSheet.create({
+	memberContainer: {
+		paddingHorizontal: 16,
+		backgroundColor: "transparent",
+	},
 	deleteButton: {
 		width: 35,
 		height: 35,
