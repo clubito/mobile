@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, FlatList, StyleSheet, Text } from "react-native";
+import { Button, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	Divider,
-	Icon,
 	IndexPath,
 	Input,
-	Layout,
 	Select,
 	SelectItem,
+	Text,
 } from "@ui-kitten/components";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
+import { SearchIcon } from "../../components/Icons";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -67,7 +68,7 @@ const SearchScreen = () => {
 	}
 
 	return (
-		<Layout style={styles.container}>
+		<CoolView style={styles.container}>
 			<SafeAreaView edges={["top"]} />
 
 			<Input
@@ -75,18 +76,16 @@ const SearchScreen = () => {
 				returnKeyType="search"
 				defaultValue={query.current}
 				clearButtonMode="while-editing"
-				accessoryRight={() => (
-					<Icon width={20} height={20} name="search-outline" />
-				)}
+				accessoryRight={SearchIcon}
 				onChangeText={(text) => (query.current = text)}
 				onSubmitEditing={(event) => {
 					handleSearch();
 				}}
 			/>
 
-			<Layout style={styles.selectContainer}>
+			<CoolView style={styles.selectContainer}>
 				<Select
-					placeholder="Select Filters"
+					placeholder={() => <Text>"Select Filters"</Text>}
 					multiSelect={true}
 					style={styles.select}
 					value={() => (
@@ -120,7 +119,7 @@ const SearchScreen = () => {
 						return <SelectItem title={filter} key={filter} />;
 					})}
 				</Select>
-			</Layout>
+			</CoolView>
 
 			<FlatList
 				data={clubs}
@@ -145,7 +144,7 @@ const SearchScreen = () => {
 					/>
 				)}
 			/>
-		</Layout>
+		</CoolView>
 	);
 };
 

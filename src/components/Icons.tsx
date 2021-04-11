@@ -19,6 +19,18 @@ const EditIcon = (props: IconProps) => (
 	/>
 );
 
+const SearchIcon = (props: IconProps) => (
+	<Icon
+		name="search-outline"
+		{...props}
+		style={{
+			width: 20,
+			height: 20,
+			fill: getColor(),
+		}}
+	/>
+);
+
 const SettingsIcon = (props: IconProps) => (
 	<Icon
 		name="settings-outline"
@@ -31,4 +43,4 @@ const SettingsIcon = (props: IconProps) => (
 	/>
 );
 
-export { EditIcon, SettingsIcon };
+export { EditIcon, SearchIcon, SettingsIcon };
