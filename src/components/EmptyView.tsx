@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Layout, Text } from "@ui-kitten/components";
+import { Text } from "@ui-kitten/components";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ContainerStyles } from "../styles/CommonStyles";
+import CoolView from "./CoolView";
 
 interface Props {
 	message: string;
@@ -12,13 +13,13 @@ const EmptyView = (props: Props) => {
 	const { message } = props;
 
 	return (
-		<Layout style={ContainerStyles.center}>
+		<CoolView style={ContainerStyles.center}>
 			<FontAwesome5 name="sad-tear" size={32} color="#FC7572" />
 			<Text style={styles.title} category="s1">
 				Oh... it's looking a little lonely in here
 			</Text>
 			<Text appearance="hint">{message}</Text>
-		</Layout>
+		</CoolView>
 	);
 };
 

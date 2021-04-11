@@ -1,14 +1,6 @@
-import React, { ReactElement, useState } from "react";
-import { RefreshControl, StyleSheet, View } from "react-native";
-import { ContainerStyles, TextStyle } from "../styles/CommonStyles";
-import {
-	Text,
-	List,
-	Avatar,
-	Divider,
-	Icon,
-	ListItem,
-} from "@ui-kitten/components";
+import React from "react";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { Text, Avatar, Divider, Icon, ListItem } from "@ui-kitten/components";
 import { Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -27,8 +19,7 @@ const EventList = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 
 	return props.events.length > 0 ? (
-		<List
-			style={styles.list}
+		<FlatList
 			data={props.events}
 			ItemSeparatorComponent={Divider}
 			refreshControl={
@@ -68,7 +59,9 @@ const EventList = (props: Props) => {
 										fill="grey"
 									/>
 									<Text appearance="hint" category="c1">
-										{item.clubName ? item.clubName : props.clubName}
+										{item.clubName
+											? item.clubName
+											: props.clubName}
 									</Text>
 								</View>
 
@@ -111,9 +104,9 @@ const EventList = (props: Props) => {
 	If an event is currently ongoing, change border to red
  */
 const styles = StyleSheet.create({
-	container: { margin: 5 },
-	list: {
-		backgroundColor: "white",
+	container: {
+		margin: 5,
+		backgroundColor: "transparent",
 	},
 	icon: {
 		flex: 1,
