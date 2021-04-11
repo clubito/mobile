@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { StyleSheet } from "react-native";
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import AuthService from "../../services/AuthService";
 import { SignupModel, SignupSchema } from "../../data/SignupData";
@@ -10,6 +10,7 @@ import NotifyScreen from "../../components/NotifyScreen";
 import LoadingScreen from "../../components/LoadingScreen";
 import FormInput from "../../components/FormInput";
 import FormSecureInput from "../../components/FormSecureInput";
+import CoolView from "../../components/CoolView";
 
 const SignupScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -46,7 +47,7 @@ const SignupScreen = () => {
 		>
 			{({ handleSubmit }) => (
 				<KeyboardAwareLayout>
-					<Layout style={ContainerStyles.center}>
+					<CoolView style={ContainerStyles.center} yip>
 						<Text category="h2" style={styles.title}>
 							Sign Up
 						</Text>
@@ -80,7 +81,7 @@ const SignupScreen = () => {
 						</Button>
 
 						<Text style={TextStyle.error}>{responseError!}</Text>
-					</Layout>
+					</CoolView>
 				</KeyboardAwareLayout>
 			)}
 		</Formik>

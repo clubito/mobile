@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { StyleSheet } from "react-native";
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import AuthService from "../../services/AuthService";
 import {
@@ -12,6 +12,7 @@ import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 import LoadingScreen from "../../components/LoadingScreen";
 import NotifyScreen from "../../components/NotifyScreen";
 import FormInput from "../../components/FormInput";
+import CoolView from "../../components/CoolView";
 
 const ForgotPasswordScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -48,7 +49,7 @@ const ForgotPasswordScreen = () => {
 		>
 			{({ handleSubmit }) => (
 				<KeyboardAwareLayout>
-					<Layout style={ContainerStyles.center}>
+					<CoolView style={ContainerStyles.center} yip>
 						<Text category="h2" style={styles.title}>
 							Forgot Password
 						</Text>
@@ -70,7 +71,7 @@ const ForgotPasswordScreen = () => {
 						</Button>
 
 						<Text style={TextStyle.error}>{responseError!}</Text>
-					</Layout>
+					</CoolView>
 				</KeyboardAwareLayout>
 			)}
 		</Formik>
