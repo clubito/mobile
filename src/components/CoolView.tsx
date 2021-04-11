@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { StyleProp, View, ViewProps, ViewStyle } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
+import Colors from "../styles/colors";
 
 export interface CoolViewProps extends ViewProps {
 	children?: React.ReactNode;
@@ -17,7 +18,7 @@ const CoolView = (props: CoolViewProps): React.ReactElement => {
 			style={[
 				theme.theme === "light"
 					? { backgroundColor: "white" }
-					: yip && { backgroundColor: "#0d1113" },
+					: yip && { backgroundColor: Colors.darkModeBackground },
 				style,
 			]}
 		>

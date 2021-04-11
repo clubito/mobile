@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "@ui-kitten/components";
 import dayjs from "dayjs";
 import { ThemeContext } from "../context/ThemeContext";
+import Colors from "../styles/colors";
 
 interface Props {
 	date: string;
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#EEEEEE",
 	},
 	darkBg: {
-		backgroundColor: "#0d1113",
+		backgroundColor: Colors.darkModeBackground,
 	},
 });
 

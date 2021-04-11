@@ -5,7 +5,6 @@ import {
 	DrawerGroup,
 	DrawerItem,
 	ButtonGroup,
-	Icon,
 	Input,
 } from "@ui-kitten/components";
 import React, { useEffect, useRef, useState } from "react";

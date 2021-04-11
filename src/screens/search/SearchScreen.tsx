@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import { SearchIcon } from "../../components/Icons";
+import EmptyView from "../../components/EmptyView";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -62,10 +63,6 @@ const SearchScreen = () => {
 	const mapSortSelection = () => {
 		return sorts[sortSelection?.row ?? 0];
 	};
-
-	if (isLoading) {
-		return <LoadingScreen />;
-	}
 
 	return (
 		<CoolView style={styles.container}>
@@ -121,29 +118,36 @@ const SearchScreen = () => {
 				</Select>
 			</CoolView>
 
-			<FlatList
-				data={clubs}
-				keyExtractor={(item) => item.id}
-				keyboardDismissMode="on-drag"
-				contentContainerStyle={styles.clubList}
-				ItemSeparatorComponent={Divider}
-				renderItem={({ item }) => (
-					<ClubListItem
-						club={item}
-						onPress={() =>
-							navigation.navigate("ClubNavigator", {
-								title: item.name,
-								screen: "Club",
-								params: {
-									id: item.id,
+			{isLoading ? (
+				<LoadingScreen />
+			) : (
+				<FlatList
+					data={clubs}
+					keyExtractor={(item) => item.id}
+					keyboardDismissMode="on-drag"
+					contentContainerStyle={styles.clubList}
+					ItemSeparatorComponent={Divider}
+					ListEmptyComponent={() => (
+						<EmptyView message="No clubs found" />
+					)}
+					renderItem={({ item }) => (
+						<ClubListItem
+							club={item}
+							onPress={() =>
+								navigation.navigate("ClubNavigator", {
 									title: item.name,
-									role: item.role,
-								},
-							})
-						}
-					/>
-				)}
-			/>
+									screen: "Club",
+									params: {
+										id: item.id,
+										title: item.name,
+										role: item.role,
+									},
+								})
+							}
+						/>
+					)}
+				/>
+			)}
 		</CoolView>
 	);
 };

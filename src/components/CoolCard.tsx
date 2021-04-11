@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { Card, CardProps } from "@ui-kitten/components";
 import { ThemeContext } from "../context/ThemeContext";
+import Colors from "../styles/colors";
 
 export interface CoolCardProps extends CardProps {
 	children?: React.ReactNode;
@@ -18,7 +19,7 @@ const CoolCard = (props: CoolCardProps): React.ReactElement => {
 			style={[
 				theme.theme === "light"
 					? { backgroundColor: "white" }
-					: yip && { backgroundColor: "#0d1113" },
+					: yip && { backgroundColor: Colors.darkModeBackground },
 				style,
 			]}
 		>

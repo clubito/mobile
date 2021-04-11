@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import NotificationService from "../../services/NotificationService";
-import { Text, View } from "react-native";
-import { TextStyle } from "../../styles/CommonStyles";
 import { useNavigation } from "@react-navigation/core";
+import { Text } from "@ui-kitten/components";
+import NotificationService from "../../services/NotificationService";
+import CoolView from "../../components/CoolView";
+import { TextStyle } from "../../styles/CommonStyles";
 
 const HomeScreen = () => {
 	const navigation = useNavigation();
@@ -12,9 +13,9 @@ const HomeScreen = () => {
 	}, []);
 
 	return (
-		<View style={TextStyle.center}>
+		<CoolView style={TextStyle.center}>
 			<Text>Home Screen</Text>
-		</View>
+		</CoolView>
 	);
 };
 

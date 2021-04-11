@@ -19,6 +19,7 @@ import ChatMessageDate from "../../components/ChatMessageDate";
 import EmptyView from "../../components/EmptyView";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
+import Colors from "../../styles/colors";
 
 type ChatParamList = {
 	Chat: { id: string };
@@ -206,7 +207,9 @@ const ChatScreen = (props: Props) => {
 								name="send"
 								size={24}
 								color={
-									sendButtonDisabled ? "#9E9E9E" : "#FC7572"
+									sendButtonDisabled
+										? "#9E9E9E"
+										: Colors.primary
 								}
 							/>
 						)}
