@@ -62,9 +62,16 @@ interface User {
 }
 
 interface Settings {
-	notifications: {
+	notifications: NotificationSettings;
+}
+
+interface NotificationSettings {
+	enabled: boolean;
+	clubs: {
 		enabled: boolean;
-	};
+		id: string;
+		name: string;
+	}[];
 }
 
 interface ChatThread {
@@ -89,6 +96,7 @@ export {
 	Club,
 	User,
 	Settings,
+    NotificationSettings,
 	Announcement,
 	Event,
 	ChatThread,

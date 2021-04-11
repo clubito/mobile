@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import ClubNavigator from "../clubs/ClubNavigator";
-import SettingsScreen from "../settings/SettingsScreen";
+import SettingsNavigator from "../settings/SettingsNavigator";
 import { EditIcon, SettingsIcon } from "../../components/Icons";
 
 export type ProfileParamList = {
@@ -51,7 +51,11 @@ const ProfileNavigator = () => (
 			options={{ title: "Edit Profile" }}
 		/>
 
-		<Stack.Screen name="Settings" component={SettingsScreen} />
+		<Stack.Screen
+			name="Settings"
+			component={SettingsNavigator}
+			options={{ headerShown: false }}
+		/>
 
 		<Stack.Screen
 			name="ClubNavigator"

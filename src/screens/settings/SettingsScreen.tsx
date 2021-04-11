@@ -4,20 +4,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Divider, Layout } from "@ui-kitten/components";
 import { AuthContext } from "../../context/AuthContext";
 import { ThemeContext } from "../../context/ThemeContext";
-import { Settings } from "../../types";
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
-import SettingsItem from "../../components/SettingsItem";
+import SettingsButton from "../../components/SettingsButton";
 import GeneralModal from "../../components/GeneralModal";
-import LoadingScreen from "../../components/LoadingScreen";
 import { ContainerStyles } from "../../styles/CommonStyles";
+import SettingsToggle from "../../components/SettingsToggle";
 
 const SettingsScreen = () => {
 	const nav = useNavigation();
 	const { logOutSuccess } = useContext(AuthContext);
 	const { toggleTheme } = useContext(ThemeContext);
-	const [isLoading, setIsLoading] = useState(true);
-	const [settings, setSettings] = useState({} as Settings);
 	const [enableDarkMode, setDarkModeEnabled] = useState(false);
 
 	const [modalType, setModalType] = useState(0);
@@ -28,37 +25,20 @@ const SettingsScreen = () => {
 		AsyncStorage.getItem("setting_dark_mode_enabled").then((state) => {
 			setDarkModeEnabled(state === "true");
 		});
-
-		UserService.getCurrentUserSettings().then((data) => {
-			setSettings(data);
-			setIsLoading(false);
-		});
 	}, []);
-
-	if (isLoading) {
-		return <LoadingScreen />;
-	}
 
 	return (
 		<Layout>
-			<SettingsItem
+			<SettingsButton
 				text="Notifications"
-				enabled={settings.notifications.enabled}
-				onToggle={(state) => {
-					setSettings({
-						...settings,
-						notifications: {
-							...settings.notifications,
-							enabled: state,
-						},
-					});
-					UserService.setNotificationsEnabled(state);
+				onPress={() => {
+					nav.navigate("NotificationSettings");
 				}}
 			/>
 
 			<Divider />
 
-			<SettingsItem
+			<SettingsToggle
 				text="Dark Mode"
 				enabled={enableDarkMode}
 				onToggle={(state) => {
@@ -85,6 +65,9 @@ const SettingsScreen = () => {
 					Logout
 				</Button>
 			</Layout>
+
+			<Divider />
+
 			<Layout style={ContainerStyles.containerStart}>
 				<Button
 					appearance="ghost"
@@ -97,6 +80,7 @@ const SettingsScreen = () => {
 					Delete Account
 				</Button>
 			</Layout>
+
 			<GeneralModal
 				visible={modalVisible}
 				closeFunction={() => setModalVisible(false)}
