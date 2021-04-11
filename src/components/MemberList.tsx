@@ -8,7 +8,6 @@ import {
 	Icon,
 	Modal,
 	Input,
-	ListItem,
 	Divider,
 } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
@@ -18,6 +17,7 @@ import { User } from "../types";
 import { ContainerStyles } from "../styles/CommonStyles";
 import EmptyView from "./EmptyView";
 import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
 
 type Props = {
 	members: User[];
@@ -50,7 +50,7 @@ const MemberList = (props: Props) => {
 				ListFooterComponent={Divider}
 				renderItem={({ item }) => {
 					return (
-						<ListItem
+						<CoolListItem
 							style={styles.memberContainer}
 							onPress={() =>
 								navigation.push("Profile", {
@@ -156,7 +156,6 @@ const MemberList = (props: Props) => {
 const styles = StyleSheet.create({
 	memberContainer: {
 		paddingHorizontal: 16,
-		backgroundColor: "transparent",
 	},
 	deleteButton: {
 		width: 35,

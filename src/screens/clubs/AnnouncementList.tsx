@@ -1,12 +1,13 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Text, ListItem, Divider } from "@ui-kitten/components";
+import { Text, Divider } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ClubTabsParamList } from "./ClubScreen";
 import EmptyView from "../../components/EmptyView";
 import { getReadableDate } from "../../utils";
 import CoolView from "../../components/CoolView";
+import CoolListItem from "../../components/CoolListItem";
 
 type AnnouncementListRouteProp = RouteProp<
 	ClubTabsParamList,
@@ -32,7 +33,7 @@ const AnnouncementList = (props: Props) => {
                 ListFooterComponent={Divider}
 				renderItem={({ item }) => {
 					return (
-						<ListItem
+						<CoolListItem
 							style={styles.announcementContainer}
 							description={() => (
 								<View>
@@ -61,7 +62,6 @@ const AnnouncementList = (props: Props) => {
 const styles = StyleSheet.create({
 	announcementContainer: {
 		paddingHorizontal: 16,
-		backgroundColor: "transparent",
 	},
 	icon: {
 		flex: 1,

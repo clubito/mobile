@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { ScrollViewProps, StyleProp, ViewStyle } from "react-native";
-import { Card } from "@ui-kitten/components";
+import { StyleProp, ViewStyle } from "react-native";
+import { Card, CardProps } from "@ui-kitten/components";
 import { ThemeContext } from "../context/ThemeContext";
 
-export interface CoolCardProps extends ScrollViewProps {
+export interface CoolCardProps extends CardProps {
 	children?: React.ReactNode;
 	style?: StyleProp<ViewStyle>;
 	yip?: boolean;

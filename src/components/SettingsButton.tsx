@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Icon, ListItem } from "@ui-kitten/components";
+import { Icon } from "@ui-kitten/components";
 import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
 
 interface SectionProps {
 	text: string;
@@ -16,9 +17,8 @@ const SettingsButton = (
 
 	return (
 		<CoolView style={styles.container} yip>
-			<ListItem
+			<CoolListItem
 				title={text}
-				style={styles.item}
 				accessoryLeft={(props) => <Icon name={icon} {...props} />}
 				onPress={onPress}
 			/>
@@ -29,9 +29,6 @@ const SettingsButton = (
 const styles = StyleSheet.create({
 	container: {
 		paddingVertical: 8,
-	},
-	item: {
-		backgroundColor: "transparent",
 	},
 });
 

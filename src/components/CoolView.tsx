@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { ScrollViewProps, StyleProp, View, ViewStyle } from "react-native";
+import { StyleProp, View, ViewProps, ViewStyle } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
 
-export interface CoolViewProps extends ScrollViewProps {
+export interface CoolViewProps extends ViewProps {
 	children?: React.ReactNode;
 	style?: StyleProp<ViewStyle>;
 	yip?: boolean;

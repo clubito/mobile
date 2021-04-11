@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Text, Button, Icon, ListItem, Avatar } from "@ui-kitten/components";
+import { Text, Button, Icon, Avatar } from "@ui-kitten/components";
 import { JoinRequest } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import GeneralModal from "./GeneralModal";
 import { getReadableDate } from "../utils";
+import CoolListItem from "./CoolListItem";
 
 type Props = {
 	applicants: JoinRequest[];
@@ -41,8 +42,7 @@ const ApplicationList = (props: Props) => {
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => {
 					return (
-						<ListItem
-							style={styles.item}
+						<CoolListItem
 							onPress={() =>
 								navigation.push("Profile", {
 									userId: item.id,
@@ -140,9 +140,6 @@ const ApplicationList = (props: Props) => {
 	);
 };
 const styles = StyleSheet.create({
-	item: {
-		backgroundColor: "transparent",
-	},
 	button: {
 		width: 35,
 		height: 35,

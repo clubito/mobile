@@ -1,12 +1,13 @@
 import React from "react";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
-import { Text, Avatar, Divider, Icon, ListItem } from "@ui-kitten/components";
+import { Text, Avatar, Divider, Icon } from "@ui-kitten/components";
 import { Event } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getReadableDate } from "../utils";
 import EmptyView from "./EmptyView";
 import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
 
 type Props = {
 	events: Event[];
@@ -33,7 +34,7 @@ const EventList = (props: Props) => {
 				}
 				renderItem={({ item }) => {
 					return (
-						<ListItem
+						<CoolListItem
 							style={styles.container}
 							onPress={() => {
 								navigation.push("Event", {
@@ -110,7 +111,6 @@ const EventList = (props: Props) => {
 const styles = StyleSheet.create({
 	container: {
 		margin: 5,
-		backgroundColor: "transparent",
 	},
 	icon: {
 		flex: 1,

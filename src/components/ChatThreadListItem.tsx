@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Avatar, ListItem, Text } from "@ui-kitten/components";
+import { Avatar, Text } from "@ui-kitten/components";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import { ChatThread } from "../types";
+import CoolListItem from "./CoolListItem";
 
 interface Props {
 	chatThread: ChatThread;
@@ -32,7 +33,7 @@ const ChatThreadListItem = (props: Props) => {
 	};
 
 	return (
-		<ListItem
+		<CoolListItem
 			style={styles.container}
 			onPress={onPress}
 			title={() => (
@@ -71,7 +72,6 @@ const ChatThreadListItem = (props: Props) => {
 const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 16,
-        backgroundColor: "transparent"
 	},
 	avatar: {
 		marginRight: 5,

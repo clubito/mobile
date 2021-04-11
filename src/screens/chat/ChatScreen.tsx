@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Avatar, Button, Input, Layout, List } from "@ui-kitten/components";
+import { Avatar, Button, Input, List } from "@ui-kitten/components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ChatMessage, ChatThread, User } from "../../types";
 import ChatService from "../../services/ChatService";

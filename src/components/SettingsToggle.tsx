@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Icon, ListItem, Toggle } from "@ui-kitten/components";
+import { Icon, Toggle } from "@ui-kitten/components";
 import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
 
 interface SectionProps {
 	text: string;
@@ -17,9 +18,8 @@ const SettingsToggle = (
 
 	return (
 		<CoolView style={styles.container} yip>
-			<ListItem
+			<CoolListItem
 				title={text}
-				style={styles.item}
 				accessoryLeft={(props) =>
 					icon ? <Icon name={icon} {...props} /> : <></>
 				}
@@ -39,9 +39,6 @@ const SettingsToggle = (
 const styles = StyleSheet.create({
 	container: {
 		paddingVertical: 4,
-	},
-	item: {
-		backgroundColor: "transparent",
 	},
 });
 
