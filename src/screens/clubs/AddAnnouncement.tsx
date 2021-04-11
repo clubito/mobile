@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { TextStyle } from "../../styles/CommonStyles";
-import { Text, Layout, Button } from "@ui-kitten/components";
+import { Text, Button } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -15,6 +15,7 @@ import {
 } from "../../data/CreateAnnouncementData";
 import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
 
 type AddAnnouncementRouteProp = RouteProp<ClubParamList, "AddAnnouncement">;
 type AddAnnouncementNavigationProp = StackNavigationProp<
@@ -91,7 +92,7 @@ const AddAnnouncementScreen = (props: Props) => {
 				validateOnChange={submitted}
 			>
 				{({ handleSubmit }) => (
-					<Layout style={styles.form}>
+					<CoolView style={styles.form}>
 						<FormInput
 							id="message"
 							label="Message"
@@ -109,7 +110,7 @@ const AddAnnouncementScreen = (props: Props) => {
 							Submit
 						</Button>
 						<Text style={TextStyle.error}>{responseError!}</Text>
-					</Layout>
+					</CoolView>
 				)}
 			</Formik>
 			<GeneralModal
