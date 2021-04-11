@@ -1,43 +1,47 @@
 import React from "react";
-import {
-	StyleSheet,
-	TouchableOpacity,
-	TouchableOpacityProps,
-} from "react-native";
-import { Layout, Text, Toggle } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Icon, ListItem, Toggle } from "@ui-kitten/components";
+import CoolView from "./CoolView";
 
-interface SectionProps extends TouchableOpacityProps {
+interface SectionProps {
 	text: string;
+	icon?: string;
 	enabled: boolean;
 	onToggle: (state: boolean) => void;
 }
 
 const SettingsToggle = (
 	props: SectionProps
-): React.ReactElement<TouchableOpacityProps> => {
-	const { text, enabled, onToggle } = props;
+): React.ReactElement<SectionProps> => {
+	const { text, icon, enabled, onToggle } = props;
 
 	return (
-		<Layout>
-			<TouchableOpacity activeOpacity={1.0} style={styles.container}>
-				<Text category="s2">{text}</Text>
-				<Toggle
-					checked={enabled}
-					onChange={(state: boolean) => {
-						onToggle(state);
-					}}
-				/>
-			</TouchableOpacity>
-		</Layout>
+		<CoolView style={styles.container} yip>
+			<ListItem
+				title={text}
+				style={styles.item}
+				accessoryLeft={(props) =>
+					icon ? <Icon name={icon} {...props} /> : <></>
+				}
+				accessoryRight={() => (
+					<Toggle
+						checked={enabled}
+						onChange={(state: boolean) => {
+							onToggle(state);
+						}}
+					/>
+				)}
+			/>
+		</CoolView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		padding: 16,
+		paddingVertical: 4,
+	},
+	item: {
+		backgroundColor: "transparent",
 	},
 });
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Divider, Layout } from "@ui-kitten/components";
+import { Button, Divider } from "@ui-kitten/components";
 import { AuthContext } from "../../context/AuthContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import UserService from "../../services/UserService";
@@ -10,6 +10,7 @@ import SettingsButton from "../../components/SettingsButton";
 import GeneralModal from "../../components/GeneralModal";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import SettingsToggle from "../../components/SettingsToggle";
+import CoolView from "../../components/CoolView";
 
 const SettingsScreen = () => {
 	const nav = useNavigation();
@@ -20,7 +21,6 @@ const SettingsScreen = () => {
 	const [modalType, setModalType] = useState(0);
 	const [modalVisible, setModalVisible] = useState(false);
 
-
 	useEffect(() => {
 		AsyncStorage.getItem("setting_dark_mode_enabled").then((state) => {
 			setDarkModeEnabled(state === "true");
@@ -28,9 +28,10 @@ const SettingsScreen = () => {
 	}, []);
 
 	return (
-		<Layout>
+		<CoolView>
 			<SettingsButton
 				text="Notifications"
+				icon="bell-outline"
 				onPress={() => {
 					nav.navigate("NotificationSettings");
 				}}
@@ -40,6 +41,7 @@ const SettingsScreen = () => {
 
 			<SettingsToggle
 				text="Dark Mode"
+				icon="moon-outline"
 				enabled={enableDarkMode}
 				onToggle={(state) => {
 					setDarkModeEnabled(state);
@@ -53,7 +55,7 @@ const SettingsScreen = () => {
 
 			<Divider />
 
-			<Layout style={ContainerStyles.containerStart}>
+			<CoolView style={ContainerStyles.containerStart} yip>
 				<Button
 					appearance="ghost"
 					onPress={() => {
@@ -64,11 +66,11 @@ const SettingsScreen = () => {
 				>
 					Logout
 				</Button>
-			</Layout>
+			</CoolView>
 
 			<Divider />
 
-			<Layout style={ContainerStyles.containerStart}>
+			<CoolView style={ContainerStyles.containerStart} yip>
 				<Button
 					appearance="ghost"
 					onPress={() => {
@@ -79,7 +81,7 @@ const SettingsScreen = () => {
 				>
 					Delete Account
 				</Button>
-			</Layout>
+			</CoolView>
 
 			<GeneralModal
 				visible={modalVisible}
@@ -122,7 +124,7 @@ const SettingsScreen = () => {
 				}
 				modalType={modalType == 0 ? "warning" : "danger"}
 			/>
-		</Layout>
+		</CoolView>
 	);
 };
 
