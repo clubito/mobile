@@ -13,7 +13,7 @@ const EmptyView = (props: Props) => {
 	const { message } = props;
 
 	return (
-		<CoolView style={ContainerStyles.center}>
+		<CoolView style={[ContainerStyles.center, styles.container]}>
 			<FontAwesome5 name="sad-tear" size={32} color="#FC7572" />
 			<Text style={styles.title} category="s1">
 				Oh... it's looking a little lonely in here
@@ -24,6 +24,9 @@ const EmptyView = (props: Props) => {
 };
 
 const styles = StyleSheet.create({
+	container: {
+		backgroundColor: "transparent",
+	},
 	title: {
 		color: "#6A7CF7",
 		fontWeight: "600",

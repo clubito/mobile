@@ -1,13 +1,6 @@
-import React, { ReactElement, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import {
-	Text,
-	List,
-	Button,
-	Icon,
-	ListItem,
-	Avatar,
-} from "@ui-kitten/components";
+import React, { useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Text, Button, Icon, ListItem, Avatar } from "@ui-kitten/components";
 import { JoinRequest } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -43,12 +36,13 @@ const ApplicationList = (props: Props) => {
 
 	return (
 		<>
-			<List
+			<FlatList
 				data={props.applicants}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => {
 					return (
 						<ListItem
+							style={styles.item}
 							onPress={() =>
 								navigation.push("Profile", {
 									userId: item.id,
@@ -146,6 +140,9 @@ const ApplicationList = (props: Props) => {
 	);
 };
 const styles = StyleSheet.create({
+	item: {
+		backgroundColor: "transparent",
+	},
 	button: {
 		width: 35,
 		height: 35,
