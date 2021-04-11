@@ -7,6 +7,7 @@ import EditProfileScreen from "./EditProfileScreen";
 import { MaterialIcons } from "@expo/vector-icons";
 import ClubNavigator from "../clubs/ClubNavigator";
 import SettingsScreen from "../settings/SettingsScreen";
+import SettingsNavigator from "../settings/SettingsNavigator";
 
 export type ProfileParamList = {
 	Profile: undefined;
@@ -51,7 +52,11 @@ const ProfileNavigator = () => (
 			options={{ title: "Edit Profile" }}
 		/>
 
-		<Stack.Screen name="Settings" component={SettingsScreen} />
+		<Stack.Screen
+			name="Settings"
+			component={SettingsNavigator}
+			options={{ headerShown: false }}
+		/>
 
 		<Stack.Screen
 			name="ClubNavigator"

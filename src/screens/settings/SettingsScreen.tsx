@@ -1,30 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Button, Layout } from "@ui-kitten/components";
+import { Button, Divider, Layout } from "@ui-kitten/components";
 import { AuthContext } from "../../context/AuthContext";
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
-import SettingsItem from "../../components/SettingsItem";
+import SettingsButton from "../../components/SettingsButton";
 import GeneralModal from "../../components/GeneralModal";
 import { ContainerStyles } from "../../styles/CommonStyles";
 
 const SettingsScreen = () => {
 	const nav = useNavigation();
-	const [modalVisible, setModalVisible] = useState(false);
-	const [modalType, setModalType] = useState(0);
 	const { logOutSuccess } = useContext(AuthContext);
-	const [enableNotifications, setNotificationsEnabled] = useState(true);
+
+	const [modalType, setModalType] = useState(0);
+	const [modalVisible, setModalVisible] = useState(false);
 
 	return (
 		<Layout>
-			<SettingsItem
+			<SettingsButton
 				text="Notifications"
-				enabled={enableNotifications}
-				onToggle={(state) => {
-					setNotificationsEnabled(state);
-					UserService.setNotificationsEnabled(state);
+				onPress={() => {
+					nav.navigate("NotificationSettings");
 				}}
 			/>
+
+			<Divider />
+
 			<Layout style={ContainerStyles.containerStart}>
 				<Button
 					appearance="ghost"
@@ -37,6 +38,9 @@ const SettingsScreen = () => {
 					Logout
 				</Button>
 			</Layout>
+
+			<Divider />
+
 			<Layout style={ContainerStyles.containerStart}>
 				<Button
 					appearance="ghost"
@@ -49,6 +53,7 @@ const SettingsScreen = () => {
 					Delete Account
 				</Button>
 			</Layout>
+
 			<GeneralModal
 				visible={modalVisible}
 				closeFunction={() => setModalVisible(false)}

@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import ImageService from "./ImageService";
-import { User } from "../types";
+import { Settings, User } from "../types";
 
 export default class UserService {
 	/**
@@ -32,6 +32,49 @@ export default class UserService {
 			};
 		}
 		return response.data;
+	}
+
+	/**
+	 * Get current user settings from backend
+	 */
+	static async getCurrentUserNotificationSettings() {
+		// const response: AxiosResponse<NotificationSettings> = await API.get<NotificationSettings>(
+		// 	"/user/settings"
+		// );
+		// if (response.status !== 200) {
+		// 	throw {
+		// 		code: response.status,
+		// 		message: response.statusText,
+		// 	};
+		// }
+		// return response.data;
+
+		// Dummy return until backend is setup
+		return {
+			enabled: true,
+			clubs: [
+				{
+					enabled: true,
+					id: "id1",
+					name: "LOL",
+				},
+				{
+					enabled: false,
+					id: "id2",
+					name: "LMAO",
+				},
+				{
+					enabled: true,
+					id: "id3",
+					name: "ROFL",
+				},
+				{
+					enabled: false,
+					id: "id4",
+					name: "FUCK",
+				},
+			],
+		};
 	}
 
 	/**
@@ -78,13 +121,40 @@ export default class UserService {
 	/**
 	 * Disable all notfications for current user
 	 */
-	static async setNotificationsEnabled(state: boolean) {
+	static async setGlobalNotificationsEnabled(state: boolean) {
 		const response: AxiosResponse = await API.post("/user/settings", {
 			settings: {
 				notifications: {
-					enabled: state
-				}
-			}
+					enabled: state,
+				},
+			},
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/**
+	 * Disable all notfications for current user
+	 */
+	static async setClubNotificationsEnabled(clubId: string, state: boolean) {
+		const response: AxiosResponse = await API.put("/user/settings", {
+			settings: {
+				notifications: {
+					clubs: [
+						{
+							enabled: state,
+							id: clubId,
+						},
+					],
+				},
+			},
 		});
 
 		if (response.status !== 200) {

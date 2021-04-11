@@ -58,11 +58,20 @@ interface User {
 	tags: string[];
 	approvalDate?: string;
 	role?: string;
-	settings?: {
-		notifications: {
-			enabled: boolean;
-		};
-	};
+	settings?: Settings;
+}
+
+interface Settings {
+	notifications: NotificationSettings;
+}
+
+interface NotificationSettings {
+	enabled: boolean;
+	clubs: {
+		enabled: boolean;
+		id: string;
+		name: string;
+	}[];
 }
 
 interface ChatThread {
@@ -86,6 +95,8 @@ interface ChatMessage {
 export {
 	Club,
 	User,
+	Settings,
+    NotificationSettings,
 	Announcement,
 	Event,
 	ChatThread,

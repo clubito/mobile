@@ -12,7 +12,7 @@ interface SectionProps extends TouchableOpacityProps {
 	onToggle: (state: boolean) => void;
 }
 
-const SettingsItem = (
+const SettingsToggle = (
 	props: SectionProps
 ): React.ReactElement<TouchableOpacityProps> => {
 	const { text, enabled, onToggle } = props;
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		padding: 8,
+		padding: 16,
 	},
 });
 
-export default SettingsItem;
+export default SettingsToggle;
