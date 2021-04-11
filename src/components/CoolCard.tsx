@@ -1,19 +1,20 @@
 import React, { useContext } from "react";
-import { ScrollViewProps, StyleProp, View, ViewStyle } from "react-native";
+import { ScrollViewProps, StyleProp, ViewStyle } from "react-native";
+import { Card } from "@ui-kitten/components";
 import { ThemeContext } from "../context/ThemeContext";
 
-export interface CoolViewProps extends ScrollViewProps {
+export interface CoolCardProps extends ScrollViewProps {
 	children?: React.ReactNode;
 	style?: StyleProp<ViewStyle>;
 	yip?: boolean;
 }
 
-const CoolView = (props: CoolViewProps): React.ReactElement => {
+const CoolCard = (props: CoolCardProps): React.ReactElement => {
 	const { children, style, yip } = props;
 	const theme = useContext(ThemeContext);
 
 	return (
-		<View
+		<Card
 			style={[
 				theme.theme === "light"
 					? { backgroundColor: "white" }
@@ -22,8 +23,8 @@ const CoolView = (props: CoolViewProps): React.ReactElement => {
 			]}
 		>
 			{children}
-		</View>
+		</Card>
 	);
 };
 
-export default CoolView;
+export default CoolCard;

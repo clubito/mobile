@@ -42,12 +42,16 @@ const ClubListItem = (props: Props) => {
 					{membership}
 				</Button>
 			)}
-			style={[props.style, { width: "100%" }]}
+			style={[styles.container, props.style]}
 		/>
 	);
 };
 
 const styles = StyleSheet.create({
+	container: {
+		backgroundColor: "transparent",
+		width: "100%",
+	},
 	title: {
 		marginLeft: 8,
 		fontSize: 16,

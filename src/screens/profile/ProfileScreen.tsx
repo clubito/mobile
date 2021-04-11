@@ -5,25 +5,25 @@ import {
 	View,
 	StyleSheet,
 	ImageBackground,
+	FlatList,
 } from "react-native";
 import {
 	Text,
 	Card,
 	List,
 	Avatar,
-	Layout,
 	Divider,
 } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import { ProfileParamList } from "./ProfileNavigator";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ClubParamList } from "../clubs/ClubNavigator";
 import AuthService from "../../services/AuthService";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
 
 type ProfileRouteProp = RouteProp<ClubParamList, "Profile">;
 type ProfileNavigationProp = StackNavigationProp<ClubParamList, "Profile">;
@@ -155,7 +155,7 @@ const ProfileScreen = (props: Props) => {
 					</View>
 				</ImageBackground>
 
-				<Layout>
+				<CoolView yip>
 					<Text style={[styles.label, styles.text]} category="s1">
 						About
 					</Text>
@@ -171,29 +171,30 @@ const ProfileScreen = (props: Props) => {
 					</Text>
 
 					{tagList}
-				</Layout>
+				</CoolView>
 
-				<List
-					data={profile.clubs}
-					ItemSeparatorComponent={Divider}
-					renderItem={({ item }) => (
-						<ClubListItem
-							club={item}
-							onPress={() =>
-								nav.push("ClubNavigator", {
-									title: item.name,
-									screen: "Club",
-									params: {
-										id: item.id,
+				<CoolView style={{ marginVertical: 10 }} yip>
+					<FlatList
+						data={profile.clubs}
+						ItemSeparatorComponent={Divider}
+						renderItem={({ item }) => (
+							<ClubListItem
+								club={item}
+								onPress={() =>
+									nav.push("ClubNavigator", {
 										title: item.name,
-										role: item.role,
-									},
-								})
-							}
-						/>
-					)}
-					style={{ marginVertical: 10 }}
-				/>
+										screen: "Club",
+										params: {
+											id: item.id,
+											title: item.name,
+											role: item.role,
+										},
+									})
+								}
+							/>
+						)}
+					/>
+				</CoolView>
 			</ScrollView>
 		</SafeAreaView>
 	);
