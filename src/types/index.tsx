@@ -71,6 +71,7 @@ interface NotificationSettings {
 		enabled: boolean;
 		id: string;
 		name: string;
+        logo: string;
 	}[];
 }
 

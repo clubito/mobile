@@ -12,7 +12,6 @@ import {
 	Card,
 	List,
 	Avatar,
-	Divider,
 } from "@ui-kitten/components";
 import UserService from "../../services/UserService";
 import { User } from "../../types";
@@ -24,6 +23,7 @@ import AuthService from "../../services/AuthService";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
+import CoolDivider from "../../components/CoolDivider";
 
 type ProfileRouteProp = RouteProp<ClubParamList, "Profile">;
 type ProfileNavigationProp = StackNavigationProp<ClubParamList, "Profile">;
@@ -176,7 +176,7 @@ const ProfileScreen = (props: Props) => {
 				<CoolView style={{ marginVertical: 10 }} yip>
 					<FlatList
 						data={profile.clubs}
-						ItemSeparatorComponent={Divider}
+						ItemSeparatorComponent={CoolDivider}
 						renderItem={({ item }) => (
 							<ClubListItem
 								club={item}

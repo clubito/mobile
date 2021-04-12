@@ -57,21 +57,25 @@ export default class UserService {
 					enabled: true,
 					id: "id1",
 					name: "LOL",
+					logo: "https://picsum.photos/200/200",
 				},
 				{
 					enabled: false,
 					id: "id2",
 					name: "LMAO",
+					logo: "https://picsum.photos/200/200",
 				},
 				{
 					enabled: true,
 					id: "id3",
 					name: "ROFL",
+					logo: "https://picsum.photos/200/200",
 				},
 				{
 					enabled: false,
 					id: "id4",
 					name: "FUCK",
+					logo: "https://picsum.photos/200/200",
 				},
 			],
 		};

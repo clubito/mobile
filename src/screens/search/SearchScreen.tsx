@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-	Divider,
 	IndexPath,
 	Input,
 	Select,
@@ -17,6 +16,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import { SearchIcon } from "../../components/Icons";
 import EmptyView from "../../components/EmptyView";
+import CoolDivider from "../../components/CoolDivider";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -126,7 +126,7 @@ const SearchScreen = () => {
 					keyExtractor={(item) => item.id}
 					keyboardDismissMode="on-drag"
 					contentContainerStyle={styles.clubList}
-					ItemSeparatorComponent={Divider}
+					ItemSeparatorComponent={CoolDivider}
 					ListEmptyComponent={() => (
 						<EmptyView message="No clubs found" />
 					)}

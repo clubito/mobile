@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Divider } from "@ui-kitten/components";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
 import ChatThreadListItem from "../../components/ChatThreadListItem";
 import EmptyView from "../../components/EmptyView";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
+import CoolDivider from "../../components/CoolDivider";
 
 const ChatListScreen = () => {
 	const navigation = useNavigation();
@@ -47,7 +47,7 @@ const ChatListScreen = () => {
 				data={chatThreads}
 				keyExtractor={(item) => item.clubId}
 				keyboardDismissMode="on-drag"
-				ItemSeparatorComponent={Divider}
+				ItemSeparatorComponent={CoolDivider}
 				renderItem={({ item }) => (
 					<ChatThreadListItem
 						chatThread={item}

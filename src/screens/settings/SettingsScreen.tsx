@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button, Divider } from "@ui-kitten/components";
+import { Button } from "@ui-kitten/components";
 import { AuthContext } from "../../context/AuthContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import UserService from "../../services/UserService";
@@ -11,6 +11,7 @@ import GeneralModal from "../../components/GeneralModal";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import SettingsToggle from "../../components/SettingsToggle";
 import CoolView from "../../components/CoolView";
+import CoolDivider from "../../components/CoolDivider";
 
 const SettingsScreen = () => {
 	const nav = useNavigation();
@@ -37,7 +38,7 @@ const SettingsScreen = () => {
 				}}
 			/>
 
-			<Divider />
+			<CoolDivider />
 
 			<SettingsToggle
 				text="Dark Mode"
@@ -53,7 +54,7 @@ const SettingsScreen = () => {
 				}}
 			/>
 
-			<Divider />
+			<CoolDivider />
 
 			<CoolView style={ContainerStyles.containerStart} yip>
 				<Button
@@ -68,7 +69,7 @@ const SettingsScreen = () => {
 				</Button>
 			</CoolView>
 
-			<Divider />
+			<CoolDivider />
 
 			<CoolView style={ContainerStyles.containerStart} yip>
 				<Button

@@ -8,7 +8,6 @@ import {
 	Icon,
 	Modal,
 	Input,
-	Divider,
 } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -18,6 +17,7 @@ import { ContainerStyles } from "../styles/CommonStyles";
 import EmptyView from "./EmptyView";
 import CoolView from "./CoolView";
 import CoolListItem from "./CoolListItem";
+import CoolDivider from "./CoolDivider";
 
 type Props = {
 	members: User[];
@@ -46,8 +46,8 @@ const MemberList = (props: Props) => {
 		<CoolView>
 			<FlatList
 				data={props.members}
-				ItemSeparatorComponent={Divider}
-				ListFooterComponent={Divider}
+				ItemSeparatorComponent={CoolDivider}
+				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
 					return (
 						<CoolListItem
