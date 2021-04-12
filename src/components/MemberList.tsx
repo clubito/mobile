@@ -7,7 +7,6 @@ import {
 	Button,
 	Icon,
 	Modal,
-	Input,
 } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -18,6 +17,7 @@ import EmptyView from "./EmptyView";
 import CoolView from "./CoolView";
 import CoolListItem from "./CoolListItem";
 import CoolDivider from "./CoolDivider";
+import CoolInput from "./CoolInput";
 
 type Props = {
 	members: User[];
@@ -142,7 +142,7 @@ const MemberList = (props: Props) => {
 							" will have to sign up again if they wish to rejoin the club."}
 					</Text>
 					<Text category="c1">Reason for Removing Member</Text>
-					<Input
+					<CoolInput
 						placeholder="Reason for removing member"
 						onChangeText={(nextValue) => setKickReason(nextValue)}
 					/>

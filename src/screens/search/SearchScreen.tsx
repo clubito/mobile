@@ -1,13 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-	IndexPath,
-	Input,
-	Select,
-	SelectItem,
-	Text,
-} from "@ui-kitten/components";
+import { IndexPath, Select, SelectItem, Text } from "@ui-kitten/components";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
@@ -17,6 +11,7 @@ import CoolView from "../../components/CoolView";
 import { SearchIcon } from "../../components/Icons";
 import EmptyView from "../../components/EmptyView";
 import CoolDivider from "../../components/CoolDivider";
+import CoolInput from "../../components/CoolInput";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -68,7 +63,7 @@ const SearchScreen = () => {
 		<CoolView style={styles.container}>
 			<SafeAreaView edges={["top"]} />
 
-			<Input
+			<CoolInput
 				placeholder="Search"
 				returnKeyType="search"
 				defaultValue={query.current}

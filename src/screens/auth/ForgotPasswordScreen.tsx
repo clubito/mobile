@@ -49,7 +49,7 @@ const ForgotPasswordScreen = () => {
 		>
 			{({ handleSubmit }) => (
 				<KeyboardAwareLayout>
-					<CoolView style={ContainerStyles.center} yip>
+					<CoolView style={ContainerStyles.center}>
 						<Text category="h2" style={styles.title}>
 							Forgot Password
 						</Text>

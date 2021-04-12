@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Avatar, Button, Input, List } from "@ui-kitten/components";
+import { Avatar, Button, List } from "@ui-kitten/components";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ChatMessage, ChatThread, User } from "../../types";
 import ChatService from "../../services/ChatService";
@@ -20,6 +20,7 @@ import EmptyView from "../../components/EmptyView";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import Colors from "../../styles/colors";
+import CoolInput from "../../components/CoolInput";
 
 type ChatParamList = {
 	Chat: { id: string };
@@ -188,7 +189,7 @@ const ChatScreen = (props: Props) => {
 				behavior={Platform.OS === "ios" ? "padding" : "height"}
 			>
 				<CoolView style={styles.inputInner}>
-					<Input
+					<CoolInput
 						style={styles.messageInput}
 						value={messageText}
 						onChangeText={handleMessageInputChange}

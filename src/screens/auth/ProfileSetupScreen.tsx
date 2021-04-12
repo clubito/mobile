@@ -60,7 +60,7 @@ const ProfileSetupScreen = () => {
 	}
 
 	return (
-		<CoolView style={ContainerStyles.flexContainer} yip>
+		<CoolView style={ContainerStyles.flexContainer}>
 			<Formik
 				initialValues={savedModel.current}
 				validationSchema={ProfileSetupSchema}

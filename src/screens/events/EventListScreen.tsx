@@ -5,7 +5,6 @@ import {
 	DrawerGroup,
 	DrawerItem,
 	ButtonGroup,
-	Input,
 } from "@ui-kitten/components";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -19,6 +18,7 @@ import { sameDay, isCurrent, isUpcoming } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import { SearchIcon } from "../../components/Icons";
+import CoolInput from "../../components/CoolInput";
 
 const EventListScreen = () => {
 	const [eventInfo, setEventInfo] = useState<Event[] | null>(null);
@@ -139,7 +139,7 @@ const EventListScreen = () => {
 		<CoolView style={styles.container}>
 			<SafeAreaView edges={["top"]} />
 
-			<Input
+			<CoolInput
 				placeholder="Search"
 				returnKeyType="search"
 				defaultValue={query}

@@ -2,11 +2,11 @@ import React from "react";
 import {
 	Icon,
 	IconProps,
-	Input,
 	InputElement,
 	InputProps,
 } from "@ui-kitten/components";
 import { useFormikContext } from "formik";
+import CoolInput from "./CoolInput";
 
 interface FormInputProps extends InputProps {
 	id: string;
@@ -31,7 +31,7 @@ const FormInput = ({ id, ...inputProps }: FormInputProps): InputElement => {
 	};
 
 	return (
-		<Input
+		<CoolInput
 			{...inputProps}
 			{...fieldProps}
 			placeholder={inputProps.placeholder ?? inputProps.label}

@@ -40,7 +40,7 @@ const LoginScreen = () => {
 	}
 
 	return (
-		<CoolView style={{ height: "100%" }} yip>
+		<CoolView style={{ height: "100%" }}>
 			<KeyboardAwareLayout>
 				<ImageBackground
 					style={styles.appBar}

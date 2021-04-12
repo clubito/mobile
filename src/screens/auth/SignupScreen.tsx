@@ -47,7 +47,7 @@ const SignupScreen = () => {
 		>
 			{({ handleSubmit }) => (
 				<KeyboardAwareLayout>
-					<CoolView style={ContainerStyles.center} yip>
+					<CoolView style={ContainerStyles.center}>
 						<Text category="h2" style={styles.title}>
 							Sign Up
 						</Text>
