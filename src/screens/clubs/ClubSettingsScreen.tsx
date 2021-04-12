@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";

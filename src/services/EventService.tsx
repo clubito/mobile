@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club, Event, User } from "../types";
+import { Event, User } from "../types";
 import ImageService from "./ImageService";
 
 export default class EventService {

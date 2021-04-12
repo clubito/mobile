@@ -1,5 +1,4 @@
 import React from "react";
-
 import { createStackNavigator } from "@react-navigation/stack";
 import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";

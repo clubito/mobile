@@ -4,10 +4,9 @@ import {
 	Platform,
 	TouchableWithoutFeedback,
 	StyleProp,
-	ImageBackground,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Avatar, Icon } from "@ui-kitten/components";
+import { Avatar } from "@ui-kitten/components";
 import LoadingScreen from "./LoadingScreen";
 
 interface ProfilePictureSettings {

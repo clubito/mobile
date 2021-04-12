@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club, JoinRequest, User, Announcement } from "../types";
+import { Club, JoinRequest } from "../types";
 
 export default class ClubService {
 	/**

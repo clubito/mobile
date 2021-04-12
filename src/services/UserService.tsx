@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import ImageService from "./ImageService";
-import { Settings, User } from "../types";
+import { User } from "../types";
 
 export default class UserService {
 	/**
