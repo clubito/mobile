@@ -18,13 +18,15 @@ const RootNavigator = () => {
 
 	useEffect(() => {
 		if (state.isLoading)
-			AuthService.isAnyoneLoggedIn().then((data: boolean[]) =>
-				setState({
-					isLoading: false,
-					isLoggedIn: data[0],
-					isProfileSetup: data[1],
-				})
-			);
+			setTimeout(() => {
+				AuthService.isAnyoneLoggedIn().then((data: boolean[]) =>
+					setState({
+						isLoading: false,
+						isLoggedIn: data[0],
+						isProfileSetup: data[1],
+					})
+				);
+			}, 1500);
 	});
 
 	const authContext = React.useMemo(() => {
