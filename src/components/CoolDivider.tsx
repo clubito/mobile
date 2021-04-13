@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Divider } from "@ui-kitten/components";
 import { ThemeContext } from "../context/ThemeContext";
-import Colors from "../styles/colors";
+import Colors from "../styles/Colors";
 
 const CoolDivider = (): React.ReactElement => {
 	const theme = useContext(ThemeContext);

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { IndexPath, Select, SelectItem, Text } from "@ui-kitten/components";
+import { IndexPath, Text } from "@ui-kitten/components";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
@@ -12,6 +12,8 @@ import { SearchIcon } from "../../components/Icons";
 import EmptyView from "../../components/EmptyView";
 import CoolDivider from "../../components/CoolDivider";
 import CoolInput from "../../components/CoolInput";
+import CoolSelect from "../../components/CoolSelect";
+import CoolSelectItem from "../../components/CoolSelectItem";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -76,7 +78,7 @@ const SearchScreen = () => {
 			/>
 
 			<CoolView style={styles.selectContainer}>
-				<Select
+				<CoolSelect
 					placeholder={() => <Text>"Select Filters"</Text>}
 					multiSelect={true}
 					style={styles.select}
@@ -93,11 +95,11 @@ const SearchScreen = () => {
 				>
 					<Button title="Apply" onPress={() => handleSearch()} />
 					{filters.map((filter) => {
-						return <SelectItem title={filter} key={filter} />;
+						return <CoolSelectItem title={filter} key={filter} />;
 					})}
-				</Select>
+				</CoolSelect>
 
-				<Select
+				<CoolSelect
 					placeholder="Sort By"
 					style={styles.select}
 					value={mapSortSelection()}
@@ -108,9 +110,9 @@ const SearchScreen = () => {
 					}}
 				>
 					{sorts.map((filter) => {
-						return <SelectItem title={filter} key={filter} />;
+						return <CoolSelectItem title={filter} key={filter} />;
 					})}
-				</Select>
+				</CoolSelect>
 			</CoolView>
 
 			{isLoading ? (

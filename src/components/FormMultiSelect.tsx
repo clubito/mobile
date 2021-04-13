@@ -2,13 +2,13 @@ import React from "react";
 import {
 	Icon,
 	IconProps,
-	Select,
 	SelectElement,
-	SelectItem,
 	SelectProps,
 	Text,
 } from "@ui-kitten/components";
 import { useFormikContext } from "formik";
+import CoolSelect from "./CoolSelect";
+import CoolSelectItem from "./CoolSelectItem";
 
 interface FormSelectProps extends SelectProps {
 	id: string;
@@ -37,7 +37,7 @@ const FormInput = ({
 	};
 
 	return (
-		<Select
+		<CoolSelect
 			{...selectProps}
 			{...fieldProps}
 			placeholder={selectProps.placeholder ?? selectProps.label}
@@ -50,9 +50,9 @@ const FormInput = ({
 			caption={error}
 		>
 			{data.map((item: string) => {
-				return <SelectItem title={item} key={item} />;
+				return <CoolSelectItem title={item} key={item} />;
 			})}
-		</Select>
+		</CoolSelect>
 	);
 };
 

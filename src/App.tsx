@@ -41,9 +41,12 @@ const App = () => {
 
 	return (
 		<NavigationContainer
-			theme={theme == "dark" ? AppDarkTheme : AppLightTheme}
+			theme={theme === "dark" ? AppDarkTheme : AppLightTheme}
 		>
-			{StatusBar.setBarStyle("dark-content", true)}
+			{StatusBar.setBarStyle(
+				theme === "dark" ? "light-content" : "dark-content",
+				true
+			)}
 			<IconRegistry icons={EvaIconsPack} />
 			<ThemeContext.Provider value={{ theme, toggleTheme }}>
 				<ApplicationProvider

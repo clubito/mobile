@@ -14,8 +14,8 @@ const EditIcon = (props: IconProps) => (
 		style={{
 			width: 24,
 			height: 24,
-			fill: getColor(),
 		}}
+		fill={getColor()}
 	/>
 );
 
@@ -26,8 +26,8 @@ const SearchIcon = (props: IconProps) => (
 		style={{
 			width: 20,
 			height: 20,
-			fill: getColor(),
 		}}
+		fill={getColor()}
 	/>
 );
 
@@ -38,8 +38,8 @@ const SettingsIcon = (props: IconProps) => (
 		style={{
 			width: 20,
 			height: 20,
-			fill: getColor(),
 		}}
+		fill={getColor()}
 	/>
 );
 
