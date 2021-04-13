@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ContainerStyles } from "../styles/CommonStyles";
-import Colors from "../styles/colors";
+import Colors from "../styles/Colors";
 import CoolView from "./CoolView";
 
 interface Props {

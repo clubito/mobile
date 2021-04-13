@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Text } from "@ui-kitten/components";
 import CoolView from "../components/CoolView";
 import { TextStyle } from "../styles/CommonStyles";
-import Colors from "../styles/colors";
+import Colors from "../styles/Colors";
 
 const SplashScreen = () => (
 	<CoolView style={TextStyle.center} yip>

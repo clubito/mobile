@@ -19,7 +19,7 @@ import ChatMessageDate from "../../components/ChatMessageDate";
 import EmptyView from "../../components/EmptyView";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
-import Colors from "../../styles/colors";
+import Colors from "../../styles/Colors";
 import CoolInput from "../../components/CoolInput";
 
 type ChatParamList = {

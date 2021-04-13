@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Avatar, Text } from "@ui-kitten/components";
 import dayjs from "dayjs";
 import { ChatMessage } from "../types";
-import Colors from "../styles/colors";
+import Colors from "../styles/Colors";
 
 interface Props {
 	messages: ChatMessage[];

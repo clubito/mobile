@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { StyleProp, View, ViewProps, ViewStyle } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
-import Colors from "../styles/colors";
+import Colors from "../styles/Colors";
 
 export interface CoolViewProps extends ViewProps {
 	children?: React.ReactNode;

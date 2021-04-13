@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "@ui-kitten/components";
 import dayjs from "dayjs";
 import { ThemeContext } from "../context/ThemeContext";
-import Colors from "../styles/colors";
+import Colors from "../styles/Colors";
 
 interface Props {
 	date: string;
