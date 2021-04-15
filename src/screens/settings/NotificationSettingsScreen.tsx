@@ -44,7 +44,7 @@ const NotificationSettingsScreen = () => {
 					renderItem={({ item, index }) => (
 						<SettingsToggle
 							text={item.name}
-                            avatar={item.logo}
+							avatar={item.logo}
 							enabled={item.enabled}
 							onToggle={(state) => {
 								setClubToggles((oldToggles) => {
@@ -52,6 +52,7 @@ const NotificationSettingsScreen = () => {
 										enabled: state,
 										id: item.id,
 										name: item.name,
+										logo: item.logo,
 									};
 									return Array.from(oldToggles);
 								});

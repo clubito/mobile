@@ -19,7 +19,9 @@ const SettingsButton = (
 		<CoolView style={styles.container} yip>
 			<CoolListItem
 				title={text}
-				accessoryLeft={(props) => <Icon name={icon} {...props} />}
+				accessoryLeft={(props) =>
+					icon ? <Icon name={icon} {...props} /> : <></>
+				}
 				onPress={onPress}
 			/>
 		</CoolView>

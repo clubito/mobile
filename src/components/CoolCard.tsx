@@ -11,7 +11,7 @@ export interface CoolCardProps extends CardProps {
 }
 
 const CoolCard = (props: CoolCardProps): React.ReactElement => {
-	const { children, style, yip } = props;
+	const { children, style, yip, ...stuff } = props;
 	const theme = useContext(ThemeContext);
 
 	return (
@@ -22,6 +22,7 @@ const CoolCard = (props: CoolCardProps): React.ReactElement => {
 					: yip && { backgroundColor: Colors.darkModeBackground },
 				style,
 			]}
+			{...stuff}
 		>
 			{children}
 		</Card>

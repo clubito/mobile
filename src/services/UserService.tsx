@@ -74,7 +74,7 @@ export default class UserService {
 				{
 					enabled: false,
 					id: "id4",
-					name: "FUCK",
+					name: "YOLO",
 					logo: "https://picsum.photos/200/200",
 				},
 			],

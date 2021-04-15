@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button } from "@ui-kitten/components";
 import { AuthContext } from "../../context/AuthContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
 import SettingsButton from "../../components/SettingsButton";
 import GeneralModal from "../../components/GeneralModal";
-import { ContainerStyles } from "../../styles/CommonStyles";
 import SettingsToggle from "../../components/SettingsToggle";
-import CoolView from "../../components/CoolView";
 import CoolDivider from "../../components/CoolDivider";
 
 const SettingsScreen = () => {
@@ -29,7 +27,7 @@ const SettingsScreen = () => {
 	}, []);
 
 	return (
-		<CoolView>
+		<View>
 			<SettingsButton
 				text="Notifications"
 				icon="bell-outline"
@@ -54,35 +52,25 @@ const SettingsScreen = () => {
 				}}
 			/>
 
-			<CoolDivider />
+			<View style={styles.divider} />
 
-			<CoolView style={ContainerStyles.containerStart} yip>
-				<Button
-					appearance="ghost"
-					onPress={() => {
-						setModalType(0);
-						setModalVisible(true);
-					}}
-					status="warning"
-				>
-					Logout
-				</Button>
-			</CoolView>
+			<SettingsButton
+				text="Logout"
+				onPress={() => {
+					setModalType(0);
+					setModalVisible(true);
+				}}
+			/>
 
-			<CoolDivider />
+			<View style={styles.divider} />
 
-			<CoolView style={ContainerStyles.containerStart} yip>
-				<Button
-					appearance="ghost"
-					onPress={() => {
-						setModalType(1);
-						setModalVisible(true);
-					}}
-					status="danger"
-				>
-					Delete Account
-				</Button>
-			</CoolView>
+			<SettingsButton
+				text="Delete Account"
+				onPress={() => {
+					setModalType(1);
+					setModalVisible(true);
+				}}
+			/>
 
 			<GeneralModal
 				visible={modalVisible}
@@ -125,8 +113,15 @@ const SettingsScreen = () => {
 				}
 				modalType={modalType == 0 ? "warning" : "danger"}
 			/>
-		</CoolView>
+		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	divider: {
+		height: 16,
+		backgroundColor: "transparent",
+	},
+});
 
 export default SettingsScreen;
