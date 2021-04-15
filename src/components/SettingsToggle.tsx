@@ -1,43 +1,60 @@
 import React from "react";
-import {
-	StyleSheet,
-	TouchableOpacity,
-	TouchableOpacityProps,
-} from "react-native";
-import { Layout, Text, Toggle } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Avatar, Icon, Toggle } from "@ui-kitten/components";
+import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
 
-interface SectionProps extends TouchableOpacityProps {
+interface SectionProps {
 	text: string;
+	icon?: string;
+	avatar?: string;
 	enabled: boolean;
 	onToggle: (state: boolean) => void;
 }
 
 const SettingsToggle = (
 	props: SectionProps
-): React.ReactElement<TouchableOpacityProps> => {
-	const { text, enabled, onToggle } = props;
+): React.ReactElement<SectionProps> => {
+	const { text, icon, avatar, enabled, onToggle } = props;
 
 	return (
-		<Layout>
-			<TouchableOpacity activeOpacity={1.0} style={styles.container}>
-				<Text category="s2">{text}</Text>
-				<Toggle
-					checked={enabled}
-					onChange={(state: boolean) => {
-						onToggle(state);
-					}}
-				/>
-			</TouchableOpacity>
-		</Layout>
+		<CoolView style={styles.container} yip>
+			<CoolListItem
+				title={text}
+				accessoryLeft={(props) =>
+					icon ? (
+						<Icon name={icon} {...props} />
+					) : avatar ? (
+						<Avatar
+							source={{ uri: avatar }}
+							style={styles.avatar}
+						/>
+					) : (
+						<></>
+					)
+				}
+				accessoryRight={() => (
+					<Toggle
+						checked={enabled}
+						onChange={(state: boolean) => {
+							onToggle(state);
+						}}
+					/>
+				)}
+			/>
+		</CoolView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		padding: 16,
+		paddingVertical: 4,
+	},
+	avatar: {
+		marginLeft: 8,
+		marginRight: 5,
+		height: 45,
+		width: 45,
 	},
 });
 

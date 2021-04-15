@@ -1,10 +1,7 @@
 import React from "react";
-
 import { createStackNavigator } from "@react-navigation/stack";
-import { MaterialIcons } from "@expo/vector-icons";
 import EventListScreen from "./EventListScreen";
 import EventScreen from "./EventScreen";
-import { Button } from "@ui-kitten/components";
 import ClubNavigator from "../clubs/ClubNavigator";
 import AddEventScreen from "./AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";

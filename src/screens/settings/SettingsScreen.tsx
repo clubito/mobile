@@ -1,58 +1,76 @@
 import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Button, Divider, Layout } from "@ui-kitten/components";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../context/AuthContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import UserService from "../../services/UserService";
 import AuthService from "../../services/AuthService";
 import SettingsButton from "../../components/SettingsButton";
 import GeneralModal from "../../components/GeneralModal";
-import { ContainerStyles } from "../../styles/CommonStyles";
+import SettingsToggle from "../../components/SettingsToggle";
+import CoolDivider from "../../components/CoolDivider";
 
 const SettingsScreen = () => {
 	const nav = useNavigation();
 	const { logOutSuccess } = useContext(AuthContext);
+	const { toggleTheme } = useContext(ThemeContext);
+	const [enableDarkMode, setDarkModeEnabled] = useState(false);
 
 	const [modalType, setModalType] = useState(0);
 	const [modalVisible, setModalVisible] = useState(false);
 
+	useEffect(() => {
+		AsyncStorage.getItem("setting_dark_mode_enabled").then((state) => {
+			setDarkModeEnabled(state === "true");
+		});
+	}, []);
+
 	return (
-		<Layout>
+		<View>
 			<SettingsButton
 				text="Notifications"
+				icon="bell-outline"
 				onPress={() => {
 					nav.navigate("NotificationSettings");
 				}}
 			/>
 
-			<Divider />
+			<CoolDivider />
 
-			<Layout style={ContainerStyles.containerStart}>
-				<Button
-					appearance="ghost"
-					onPress={() => {
-						setModalType(0);
-						setModalVisible(true);
-					}}
-					status="warning"
-				>
-					Logout
-				</Button>
-			</Layout>
+			<SettingsToggle
+				text="Dark Mode"
+				icon="moon-outline"
+				enabled={enableDarkMode}
+				onToggle={(state) => {
+					setDarkModeEnabled(state);
+					toggleTheme();
+					AsyncStorage.setItem(
+						"setting_dark_mode_enabled",
+						state.toString()
+					);
+				}}
+			/>
 
-			<Divider />
+			<View style={styles.divider} />
 
-			<Layout style={ContainerStyles.containerStart}>
-				<Button
-					appearance="ghost"
-					onPress={() => {
-						setModalType(1);
-						setModalVisible(true);
-					}}
-					status="danger"
-				>
-					Delete Account
-				</Button>
-			</Layout>
+			<SettingsButton
+				text="Logout"
+				onPress={() => {
+					setModalType(0);
+					setModalVisible(true);
+				}}
+			/>
+
+			<View style={styles.divider} />
+
+			<SettingsButton
+				text="Delete Account"
+				onPress={() => {
+					setModalType(1);
+					setModalVisible(true);
+				}}
+			/>
 
 			<GeneralModal
 				visible={modalVisible}
@@ -95,8 +113,15 @@ const SettingsScreen = () => {
 				}
 				modalType={modalType == 0 ? "warning" : "danger"}
 			/>
-		</Layout>
+		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	divider: {
+		height: 16,
+		backgroundColor: "transparent",
+	},
+});
 
 export default SettingsScreen;

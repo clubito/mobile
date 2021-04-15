@@ -1,6 +1,6 @@
 import React from "react";
 import { ImageBackground, StyleSheet } from "react-native";
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import { TextStyle } from "../../styles/CommonStyles";
@@ -11,6 +11,7 @@ import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 import FormInput from "../../components/FormInput";
 import FormSecureInput from "../../components/FormSecureInput";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
 
 const LoginScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -39,7 +40,7 @@ const LoginScreen = () => {
 	}
 
 	return (
-		<Layout style={{ height: "100%" }}>
+		<CoolView style={{ height: "100%" }}>
 			<KeyboardAwareLayout>
 				<ImageBackground
 					style={styles.appBar}
@@ -54,7 +55,7 @@ const LoginScreen = () => {
 					validateOnChange={submitted}
 				>
 					{({ handleSubmit }) => (
-						<Layout style={styles.form}>
+						<CoolView style={styles.form}>
 							<FormInput
 								id="email"
 								label="Email"
@@ -98,11 +99,11 @@ const LoginScreen = () => {
 							>
 								Signup for Clubito
 							</Button>
-						</Layout>
+						</CoolView>
 					)}
 				</Formik>
 			</KeyboardAwareLayout>
-		</Layout>
+		</CoolView>
 	);
 };
 

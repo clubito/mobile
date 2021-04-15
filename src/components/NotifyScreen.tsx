@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Text, Layout, Button, Icon, IconProps } from "@ui-kitten/components";
-import { ContainerStyles } from "../styles/CommonStyles";
+import { Text, Button, Icon, IconProps } from "@ui-kitten/components";
 import { View } from "react-native";
 
 interface Props {

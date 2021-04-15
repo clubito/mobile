@@ -1,15 +1,12 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import {
 	Avatar,
 	Text,
-	List,
 	Card,
 	Button,
 	Icon,
 	Modal,
-	Input,
-	ListItem,
 } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,6 +14,10 @@ import dayjs from "dayjs";
 import { User } from "../types";
 import { ContainerStyles } from "../styles/CommonStyles";
 import EmptyView from "./EmptyView";
+import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
+import CoolDivider from "./CoolDivider";
+import CoolInput from "./CoolInput";
 
 type Props = {
 	members: User[];
@@ -42,12 +43,15 @@ const MemberList = (props: Props) => {
 		setUser(user);
 	};
 	return props.members.length > 0 ? (
-		<>
-			<List
+		<CoolView>
+			<FlatList
 				data={props.members}
+				ItemSeparatorComponent={CoolDivider}
+				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
 					return (
-						<ListItem
+						<CoolListItem
+							style={styles.memberContainer}
 							onPress={() =>
 								navigation.push("Profile", {
 									userId: item.id,
@@ -59,7 +63,7 @@ const MemberList = (props: Props) => {
 								</Text>
 							)}
 							description={
-								"Member since:" +
+								"Member since " +
 								dayjs(item.approvalDate).format("MM/DD/YYYY")
 							}
 							accessoryLeft={() => (
@@ -138,18 +142,21 @@ const MemberList = (props: Props) => {
 							" will have to sign up again if they wish to rejoin the club."}
 					</Text>
 					<Text category="c1">Reason for Removing Member</Text>
-					<Input
+					<CoolInput
 						placeholder="Reason for removing member"
 						onChangeText={(nextValue) => setKickReason(nextValue)}
 					/>
 				</Card>
 			</Modal>
-		</>
+		</CoolView>
 	) : (
 		<EmptyView message="Ain't nobody here :|" />
 	);
 };
 const styles = StyleSheet.create({
+	memberContainer: {
+		paddingHorizontal: 16,
+	},
 	deleteButton: {
 		width: 35,
 		height: 35,

@@ -1,15 +1,13 @@
 import React from "react";
-
 import { createStackNavigator } from "@react-navigation/stack";
-import { MaterialIcons } from "@expo/vector-icons";
 import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";
 import AddEventScreen from "../events/AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";
-import EventNavigator from "../events/EventNavigator";
 import EventScreen from "../events/EventScreen";
+import { SettingsIcon } from "../../components/Icons";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
@@ -72,7 +70,5 @@ const ClubNavigator = () => (
 		<Stack.Screen name="Event" component={EventScreen} />
 	</Stack.Navigator>
 );
-
-const SettingsIcon = () => <MaterialIcons name="settings" size={20} />;
 
 export default ClubNavigator;

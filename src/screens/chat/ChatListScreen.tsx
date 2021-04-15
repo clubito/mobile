@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Divider, Layout } from "@ui-kitten/components";
 import { ChatThread } from "../../types";
 import ChatService from "../../services/ChatService";
 import ChatThreadListItem from "../../components/ChatThreadListItem";
 import EmptyView from "../../components/EmptyView";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
+import CoolDivider from "../../components/CoolDivider";
 
 const ChatListScreen = () => {
 	const navigation = useNavigation();
@@ -38,7 +39,7 @@ const ChatListScreen = () => {
 	}
 
 	return (
-		<Layout style={styles.container}>
+		<CoolView style={styles.listContainer}>
 			<FlatList
 				ListEmptyComponent={() => (
 					<EmptyView message="Join a club or something!" />
@@ -46,8 +47,7 @@ const ChatListScreen = () => {
 				data={chatThreads}
 				keyExtractor={(item) => item.clubId}
 				keyboardDismissMode="on-drag"
-				contentContainerStyle={styles.chatList}
-				ItemSeparatorComponent={Divider}
+				ItemSeparatorComponent={CoolDivider}
 				renderItem={({ item }) => (
 					<ChatThreadListItem
 						chatThread={item}
@@ -61,20 +61,16 @@ const ChatListScreen = () => {
 					/>
 				)}
 			/>
-		</Layout>
+		</CoolView>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		paddingHorizontal: 8,
-	},
 	loadingContainer: {
 		flex: 1,
 		justifyContent: "center",
 	},
-	chatList: {
+	listContainer: {
 		flexGrow: 1,
 	},
 });

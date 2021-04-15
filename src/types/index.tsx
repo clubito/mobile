@@ -71,6 +71,7 @@ interface NotificationSettings {
 		enabled: boolean;
 		id: string;
 		name: string;
+		logo: string;
 	}[];
 }
 
@@ -96,7 +97,7 @@ export {
 	Club,
 	User,
 	Settings,
-    NotificationSettings,
+	NotificationSettings,
 	Announcement,
 	Event,
 	ChatThread,

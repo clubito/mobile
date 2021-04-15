@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Divider, Layout, List } from "@ui-kitten/components";
+import { FlatList, StyleSheet, View } from "react-native";
 import UserService from "../../services/UserService";
 import SettingsToggle from "../../components/SettingsToggle";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
+import CoolDivider from "../../components/CoolDivider";
 
 const NotificationSettingsScreen = () => {
 	const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,7 @@ const NotificationSettingsScreen = () => {
 
 	return (
 		<View>
-			<Layout style={styles.topLevel}>
+			<CoolView style={styles.topLevel} yip>
 				<SettingsToggle
 					text="Global Notifications"
 					enabled={globalToggle}
@@ -33,16 +34,17 @@ const NotificationSettingsScreen = () => {
 						UserService.setGlobalNotificationsEnabled(state);
 					}}
 				/>
-			</Layout>
+			</CoolView>
 
-			<Layout>
-				<List
+			<CoolView yip>
+				<FlatList
 					data={clubToggles}
 					keyExtractor={(item) => item.clubId}
-					ItemSeparatorComponent={Divider}
+					ItemSeparatorComponent={CoolDivider}
 					renderItem={({ item, index }) => (
 						<SettingsToggle
 							text={item.name}
+							avatar={item.logo}
 							enabled={item.enabled}
 							onToggle={(state) => {
 								setClubToggles((oldToggles) => {
@@ -50,6 +52,7 @@ const NotificationSettingsScreen = () => {
 										enabled: state,
 										id: item.id,
 										name: item.name,
+										logo: item.logo,
 									};
 									return Array.from(oldToggles);
 								});
@@ -62,7 +65,7 @@ const NotificationSettingsScreen = () => {
 						/>
 					)}
 				/>
-			</Layout>
+			</CoolView>
 		</View>
 	);
 };

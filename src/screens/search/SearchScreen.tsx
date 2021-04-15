@@ -1,20 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, FlatList, StyleSheet, Text } from "react-native";
+import { Button, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-	Divider,
-	Icon,
-	IndexPath,
-	Input,
-	Layout,
-	Select,
-	SelectItem,
-} from "@ui-kitten/components";
+import { IndexPath, Text } from "@ui-kitten/components";
 import { Club } from "../../types";
 import ClubListItem from "../../components/ClubListItem";
 import ClubService from "../../services/ClubService";
 import { useNavigation } from "@react-navigation/native";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
+import { SearchIcon } from "../../components/Icons";
+import EmptyView from "../../components/EmptyView";
+import CoolDivider from "../../components/CoolDivider";
+import CoolInput from "../../components/CoolInput";
+import CoolSelect from "../../components/CoolSelect";
+import CoolSelectItem from "../../components/CoolSelectItem";
 
 const SearchScreen = () => {
 	const navigation = useNavigation();
@@ -62,31 +61,25 @@ const SearchScreen = () => {
 		return sorts[sortSelection?.row ?? 0];
 	};
 
-	if (isLoading) {
-		return <LoadingScreen />;
-	}
-
 	return (
-		<Layout style={styles.container}>
+		<CoolView style={styles.container}>
 			<SafeAreaView edges={["top"]} />
 
-			<Input
+			<CoolInput
 				placeholder="Search"
 				returnKeyType="search"
 				defaultValue={query.current}
 				clearButtonMode="while-editing"
-				accessoryRight={() => (
-					<Icon width={20} height={20} name="search-outline" />
-				)}
+				accessoryRight={SearchIcon}
 				onChangeText={(text) => (query.current = text)}
 				onSubmitEditing={(event) => {
 					handleSearch();
 				}}
 			/>
 
-			<Layout style={styles.selectContainer}>
-				<Select
-					placeholder="Select Filters"
+			<CoolView style={styles.selectContainer}>
+				<CoolSelect
+					placeholder={() => <Text>"Select Filters"</Text>}
 					multiSelect={true}
 					style={styles.select}
 					value={() => (
@@ -102,11 +95,11 @@ const SearchScreen = () => {
 				>
 					<Button title="Apply" onPress={() => handleSearch()} />
 					{filters.map((filter) => {
-						return <SelectItem title={filter} key={filter} />;
+						return <CoolSelectItem title={filter} key={filter} />;
 					})}
-				</Select>
+				</CoolSelect>
 
-				<Select
+				<CoolSelect
 					placeholder="Sort By"
 					style={styles.select}
 					value={mapSortSelection()}
@@ -117,35 +110,42 @@ const SearchScreen = () => {
 					}}
 				>
 					{sorts.map((filter) => {
-						return <SelectItem title={filter} key={filter} />;
+						return <CoolSelectItem title={filter} key={filter} />;
 					})}
-				</Select>
-			</Layout>
+				</CoolSelect>
+			</CoolView>
 
-			<FlatList
-				data={clubs}
-				keyExtractor={(item) => item.id}
-				keyboardDismissMode="on-drag"
-				contentContainerStyle={styles.clubList}
-				ItemSeparatorComponent={Divider}
-				renderItem={({ item }) => (
-					<ClubListItem
-						club={item}
-						onPress={() =>
-							navigation.navigate("ClubNavigator", {
-								title: item.name,
-								screen: "Club",
-								params: {
-									id: item.id,
+			{isLoading ? (
+				<LoadingScreen />
+			) : (
+				<FlatList
+					data={clubs}
+					keyExtractor={(item) => item.id}
+					keyboardDismissMode="on-drag"
+					contentContainerStyle={styles.clubList}
+					ItemSeparatorComponent={CoolDivider}
+					ListEmptyComponent={() => (
+						<EmptyView message="No clubs found" />
+					)}
+					renderItem={({ item }) => (
+						<ClubListItem
+							club={item}
+							onPress={() =>
+								navigation.navigate("ClubNavigator", {
 									title: item.name,
-									role: item.role,
-								},
-							})
-						}
-					/>
-				)}
-			/>
-		</Layout>
+									screen: "Club",
+									params: {
+										id: item.id,
+										title: item.name,
+										role: item.role,
+									},
+								})
+							}
+						/>
+					)}
+				/>
+			)}
+		</CoolView>
 	);
 };
 

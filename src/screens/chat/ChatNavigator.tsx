@@ -35,6 +35,7 @@ const ChatNavigator = () => (
 			component={ClubNavigator}
 			options={({ route }) => ({
 				title: route.params.title,
+				headerShown: false,
 			})}
 		/>
 	</Stack.Navigator>

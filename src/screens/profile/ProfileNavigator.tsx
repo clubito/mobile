@@ -4,10 +4,9 @@ import { Button } from "@ui-kitten/components";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "./ProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
-import { MaterialIcons } from "@expo/vector-icons";
 import ClubNavigator from "../clubs/ClubNavigator";
-import SettingsScreen from "../settings/SettingsScreen";
 import SettingsNavigator from "../settings/SettingsNavigator";
+import { EditIcon, SettingsIcon } from "../../components/Icons";
 
 export type ProfileParamList = {
 	Profile: undefined;
@@ -68,9 +67,5 @@ const ProfileNavigator = () => (
 		/>
 	</Stack.Navigator>
 );
-
-const EditIcon = () => <MaterialIcons name="edit" size={20} />;
-
-const SettingsIcon = () => <MaterialIcons name="settings" size={20} />;
 
 export default ProfileNavigator;

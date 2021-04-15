@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "@ui-kitten/components";
 import dayjs from "dayjs";
 import { ChatMessage } from "../types";
+import Colors from "../styles/Colors";
 
 interface Props {
 	messages: ChatMessage[];
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
 	},
 	body: {
 		color: "white",
-		backgroundColor: "#FC7572",
+		backgroundColor: Colors.primary,
 		padding: 8,
 		overflow: "hidden",
 		marginBottom: 2,

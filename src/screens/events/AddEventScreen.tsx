@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { Text, Layout, Button, CheckBox } from "@ui-kitten/components";
+import { Text, Button, CheckBox } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -19,6 +19,7 @@ import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
 import { getReadableDate } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -224,7 +225,7 @@ const AddEventScreen = (props: Props) => {
 					validateOnChange={submitted}
 				>
 					{({ handleSubmit }) => (
-						<Layout style={styles.form}>
+						<CoolView style={styles.form}>
 							<FormInput
 								id="name"
 								label="Name"
@@ -284,7 +285,7 @@ const AddEventScreen = (props: Props) => {
 							<Text style={TextStyle.error}>
 								{responseError!}
 							</Text>
-						</Layout>
+						</CoolView>
 					)}
 				</Formik>
 			</ScrollView>

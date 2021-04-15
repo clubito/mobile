@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView, ScrollView } from "react-native";
-import { Text, Button, Card, IndexPath } from "@ui-kitten/components";
+import { Text, Button, IndexPath } from "@ui-kitten/components";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { User } from "../../types";
 import UserService from "../../services/UserService";
@@ -20,6 +20,7 @@ import {
 } from "../../data/ChangePasswordData";
 import FormSecureInput from "../../components/FormSecureInput";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolCard from "../../components/CoolCard";
 
 const EditProfileScreen = () => {
 	const [profile, setProfile] = useState<User>({} as User);
@@ -132,7 +133,7 @@ const EditProfileScreen = () => {
 					enableReinitialize={true}
 				>
 					{({ handleSubmit }) => (
-						<Card style={ContainerStyles.extraMargin}>
+						<CoolCard style={ContainerStyles.extraMargin} yip>
 							<ProfilePicturePicker
 								functionOnConfirm={(image) =>
 									imageCallback(image)
@@ -159,7 +160,7 @@ const EditProfileScreen = () => {
 							</Button>
 
 							<Text status="danger">{responseError!}</Text>
-						</Card>
+						</CoolCard>
 					)}
 				</Formik>
 
@@ -170,7 +171,7 @@ const EditProfileScreen = () => {
 					validateOnChange={submitted1}
 				>
 					{({ handleSubmit }) => (
-						<Card style={ContainerStyles.extraMargin}>
+						<CoolCard style={ContainerStyles.extraMargin} yip>
 							<FormSecureInput
 								id="curPassword"
 								label="Current Password"
@@ -193,7 +194,7 @@ const EditProfileScreen = () => {
 							</Button>
 
 							<Text status="danger">{responseError1!}</Text>
-						</Card>
+						</CoolCard>
 					)}
 				</Formik>
 			</ScrollView>

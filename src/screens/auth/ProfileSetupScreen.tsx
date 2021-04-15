@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
-import { Button, IndexPath, Layout, Text } from "@ui-kitten/components";
+import { StyleSheet, View } from "react-native";
+import { Button, IndexPath, Text } from "@ui-kitten/components";
 import { Formik } from "formik";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { AuthContext } from "../../context/AuthContext";
@@ -15,6 +15,7 @@ import FormMultiSelect from "../../components/FormMultiSelect";
 import LoadingScreen from "../../components/LoadingScreen";
 import ClubService from "../../services/ClubService";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
+import CoolView from "../../components/CoolView";
 
 const ProfileSetupScreen = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -59,7 +60,7 @@ const ProfileSetupScreen = () => {
 	}
 
 	return (
-		<Layout style={ContainerStyles.flexContainer}>
+		<CoolView style={ContainerStyles.flexContainer}>
 			<Formik
 				initialValues={savedModel.current}
 				validationSchema={ProfileSetupSchema}
@@ -68,14 +69,14 @@ const ProfileSetupScreen = () => {
 			>
 				{({ handleSubmit, setFieldValue }) => (
 					<KeyboardAwareLayout>
-						<Layout style={ContainerStyles.center}>
-							<Layout style={[styles.pictureRow, styles.input]}>
+						<View style={ContainerStyles.center}>
+							<View style={[styles.pictureRow, styles.input]}>
 								<ProfilePicturePicker
 									functionOnConfirm={(image) => {
 										setFieldValue("profilePicture", image);
 									}}
 								/>
-							</Layout>
+							</View>
 
 							<FormInput
 								id="name"
@@ -103,11 +104,11 @@ const ProfileSetupScreen = () => {
 							<Text style={TextStyle.error}>
 								{responseError!}
 							</Text>
-						</Layout>
+						</View>
 					</KeyboardAwareLayout>
 				)}
 			</Formik>
-		</Layout>
+		</CoolView>
 	);
 };
 

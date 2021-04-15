@@ -1,13 +1,5 @@
-import React, { useState } from "react";
-import {
-	Icon,
-	IconProps,
-	Select,
-	SelectElement,
-	SelectItem,
-	SelectProps,
-	Text,
-} from "@ui-kitten/components";
+import React from "react";
+import { Text } from "@ui-kitten/components";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import EventService from "../services/EventService";
 import { StyleProp, View } from "react-native";

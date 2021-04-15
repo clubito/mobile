@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import ImageService from "./ImageService";
-import { Settings, User } from "../types";
+import { User } from "../types";
 
 export default class UserService {
 	/**
@@ -57,21 +57,25 @@ export default class UserService {
 					enabled: true,
 					id: "id1",
 					name: "LOL",
+					logo: "https://picsum.photos/200/200",
 				},
 				{
 					enabled: false,
 					id: "id2",
 					name: "LMAO",
+					logo: "https://picsum.photos/200/200",
 				},
 				{
 					enabled: true,
 					id: "id3",
 					name: "ROFL",
+					logo: "https://picsum.photos/200/200",
 				},
 				{
 					enabled: false,
 					id: "id4",
-					name: "FUCK",
+					name: "YOLO",
+					logo: "https://picsum.photos/200/200",
 				},
 			],
 		};

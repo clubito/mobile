@@ -1,12 +1,14 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { ContainerStyles } from "../../styles/CommonStyles";
-import { Text, List, ListItem, Divider } from "@ui-kitten/components";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Text } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ClubTabsParamList } from "./ClubScreen";
 import EmptyView from "../../components/EmptyView";
 import { getReadableDate } from "../../utils";
+import CoolView from "../../components/CoolView";
+import CoolListItem from "../../components/CoolListItem";
+import CoolDivider from "../../components/CoolDivider";
 
 type AnnouncementListRouteProp = RouteProp<
 	ClubTabsParamList,
@@ -25,15 +27,15 @@ type Props = {
 
 const AnnouncementList = (props: Props) => {
 	return props.route.params.announcementList.length > 0 ? (
-		<View style={ContainerStyles.horizMargin}>
-			<List
-				style={styles.list}
+		<CoolView>
+			<FlatList
 				data={props.route.params.announcementList}
-				ItemSeparatorComponent={Divider}
+				ItemSeparatorComponent={CoolDivider}
+				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
 					return (
-						<ListItem
-							style={styles.container}
+						<CoolListItem
+							style={styles.announcementContainer}
 							description={() => (
 								<View>
 									<Text style={styles.row}>
@@ -52,20 +54,15 @@ const AnnouncementList = (props: Props) => {
 					);
 				}}
 			/>
-		</View>
+		</CoolView>
 	) : (
 		<EmptyView message="Ain't nobody here :|" />
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
-		margin: 5,
-	},
-	list: {
-		backgroundColor: "white",
-		marginLeft: -10,
-		marginRight: -10,
+	announcementContainer: {
+		paddingHorizontal: 16,
 	},
 	icon: {
 		flex: 1,

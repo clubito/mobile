@@ -5,20 +5,21 @@ import { useState } from "react";
 import {
 	SafeAreaView,
 	View,
-	Image,
 	ImageBackground,
 	ScrollView,
 } from "react-native";
 import EventService from "../../services/EventService";
-import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
+import { ContainerStyles } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
 import { Club, Event, User } from "../../types";
-import { Text, Layout, Card, Button, Icon } from "@ui-kitten/components";
+import { Text, Button } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
 import { getReadableDate } from "../../utils";
 import MemberList from "../../components/MemberList";
 import LoadingScreen from "../../components/LoadingScreen";
+import { EditIcon } from "../../components/Icons";
+import CoolCard from "../../components/CoolCard";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -114,9 +115,6 @@ const EventScreen = (props: Props) => {
 			),
 		});
 	}
-	const EditIcon = () => (
-		<Icon name="edit-outline" style={{ width: 20, height: 20 }} />
-	);
 
 	const handleRSVP = () => {
 		if (!isRSVP)
@@ -204,13 +202,13 @@ const EventScreen = (props: Props) => {
 					/>
 				</View>
 				{rsvpButton}
-				<Card style={ContainerStyles.upperMargin}>
+				<CoolCard style={ContainerStyles.upperMargin} yip>
 					<Text category="s1" style={{ textAlign: "center" }}>
 						{getReadableDate(event.startTime)} to{" "}
 						{getReadableDate(event.endTime)}
 					</Text>
-				</Card>
-				<Card style={ContainerStyles.upperMargin}>
+				</CoolCard>
+				<CoolCard style={ContainerStyles.upperMargin} yip>
 					<Text>
 						<Text style={{ fontWeight: "bold" }}>
 							Description:{" "}
@@ -225,7 +223,7 @@ const EventScreen = (props: Props) => {
 							{event.shortLocation}
 						</Text>
 					) : null}
-				</Card>
+				</CoolCard>
 				{members}
 			</ScrollView>
 

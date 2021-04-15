@@ -1,7 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import { Text, Button, Modal, Card } from "@ui-kitten/components";
+import { Text, Button, Modal } from "@ui-kitten/components";
 import { ContainerStyles } from "../styles/CommonStyles";
+import CoolCard from "./CoolCard";
 
 interface ModalSettings {
 	visible: boolean;
@@ -20,7 +21,8 @@ const GeneralModal = (props: ModalSettings) => (
 		backdropStyle={ContainerStyles.modalBackdrop}
 		onBackdropPress={props.closeFunction}
 	>
-		<Card
+		<CoolCard
+			yip
 			header={() => (
 				<View style={{ margin: 10 }}>
 					<Text category="h6">{props.header}</Text>
@@ -53,7 +55,7 @@ const GeneralModal = (props: ModalSettings) => (
 			style={ContainerStyles.extraMargin}
 		>
 			<Text>{props.content}</Text>
-		</Card>
+		</CoolCard>
 	</Modal>
 );
 

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View } from "react-native";
-import { ContainerStyles } from "../../styles/CommonStyles";
 import { Text } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -9,6 +7,7 @@ import ClubService from "../../services/ClubService";
 import { ClubParamList } from "./ClubNavigator";
 import ApplicationList from "../../components/ApplicationList";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type ClubSettingsNavigationProp = StackNavigationProp<
@@ -81,22 +80,19 @@ const ClubSettings = (props: Props) => {
 	}
 
 	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<View style={ContainerStyles.horizMargin}>
-				<Text>Club settings for {clubInfo.name}</Text>
-				{applicants.length > 0 ? (
-					<ApplicationList
-						applicants={applicants}
-						role={clubInfo.role}
-						clubId={clubInfo.id}
-						clubName={clubInfo.name}
-						update={submit}
-					/>
-				) : (
-					<Text>No Applicants available</Text>
-				)}
-			</View>
-		</SafeAreaView>
+		<CoolView yip>
+			{applicants.length > 0 ? (
+				<ApplicationList
+					applicants={applicants}
+					role={clubInfo.role}
+					clubId={clubInfo.id}
+					clubName={clubInfo.name}
+					update={submit}
+				/>
+			) : (
+				<Text>No Applicants available</Text>
+			)}
+		</CoolView>
 	);
 };
 

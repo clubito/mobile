@@ -1,8 +1,10 @@
 import React from "react";
-import { StyleSheet, TouchableOpacityProps, View } from "react-native";
-import { Icon, ListItem } from "@ui-kitten/components";
+import { StyleSheet } from "react-native";
+import { Icon } from "@ui-kitten/components";
+import CoolView from "./CoolView";
+import CoolListItem from "./CoolListItem";
 
-interface SectionProps extends TouchableOpacityProps {
+interface SectionProps {
 	text: string;
 	icon?: string;
 	onPress: () => void;
@@ -10,19 +12,19 @@ interface SectionProps extends TouchableOpacityProps {
 
 const SettingsButton = (
 	props: SectionProps
-): React.ReactElement<TouchableOpacityProps> => {
+): React.ReactElement<SectionProps> => {
 	const { text, icon, onPress } = props;
 
 	return (
-		<View style={styles.container}>
-			<ListItem
+		<CoolView style={styles.container} yip>
+			<CoolListItem
 				title={text}
-				accessoryLeft={(props) => (
-					<Icon name="bell-outline" {...props} />
-				)}
+				accessoryLeft={(props) =>
+					icon ? <Icon name={icon} {...props} /> : <></>
+				}
 				onPress={onPress}
 			/>
-		</View>
+		</CoolView>
 	);
 };
 

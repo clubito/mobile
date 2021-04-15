@@ -2,12 +2,9 @@ import {
 	Button,
 	Calendar,
 	Text,
-	Layout,
 	DrawerGroup,
 	DrawerItem,
 	ButtonGroup,
-	Icon,
-	Input,
 } from "@ui-kitten/components";
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -19,6 +16,9 @@ import EmptyView from "../../components/EmptyView";
 import { useNavigation } from "@react-navigation/core";
 import { sameDay, isCurrent, isUpcoming } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
+import CoolView from "../../components/CoolView";
+import { SearchIcon } from "../../components/Icons";
+import CoolInput from "../../components/CoolInput";
 
 const EventListScreen = () => {
 	const [eventInfo, setEventInfo] = useState<Event[] | null>(null);
@@ -136,24 +136,25 @@ const EventListScreen = () => {
 	}
 
 	return (
-		<Layout style={styles.container}>
+		<CoolView style={styles.container}>
 			<SafeAreaView edges={["top"]} />
 
-			<Input
+			<CoolInput
 				placeholder="Search"
 				returnKeyType="search"
 				defaultValue={query}
 				clearButtonMode="while-editing"
-				accessoryRight={() => (
-					<Icon width={20} height={20} name="search-outline" />
-				)}
+				accessoryRight={SearchIcon}
 				onChangeText={(text) => (textInput.current = text)}
 				onSubmitEditing={(event) => {
 					setQuery(textInput.current);
 				}}
 			/>
 
-			<DrawerGroup title={() => <Text category="s1">Calendar</Text>}>
+			<DrawerGroup
+				style={{ backgroundColor: "transparent" }}
+				title={() => <Text category="s1">Calendar</Text>}
+			>
 				<DrawerItem
 					style={{
 						alignSelf: "center",
@@ -225,7 +226,7 @@ const EventListScreen = () => {
 			) : (
 				<EmptyView message="Nothing's happening nearby :/" />
 			)}
-		</Layout>
+		</CoolView>
 	);
 };
 

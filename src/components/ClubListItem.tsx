@@ -1,7 +1,8 @@
-import { Avatar, Button, ListItem, Text } from "@ui-kitten/components";
+import { Avatar, Button, Text } from "@ui-kitten/components";
 import React from "react";
 import { StyleProp, StyleSheet } from "react-native";
 import { Club } from "../types";
+import CoolListItem from "./CoolListItem";
 
 interface Props {
 	club: Club;
@@ -15,7 +16,7 @@ const ClubListItem = (props: Props) => {
 	const membershipTextColor = membership === "O" ? "danger" : "info";
 
 	return (
-		<ListItem
+		<CoolListItem
 			onPress={props.onPress}
 			title={() => (
 				<Text style={styles.title} category="s1">
@@ -42,12 +43,15 @@ const ClubListItem = (props: Props) => {
 					{membership}
 				</Button>
 			)}
-			style={[props.style, { width: "100%" }]}
+			style={[styles.container, props.style]}
 		/>
 	);
 };
 
 const styles = StyleSheet.create({
+	container: {
+		width: "100%",
+	},
 	title: {
 		marginLeft: 8,
 		fontSize: 16,
