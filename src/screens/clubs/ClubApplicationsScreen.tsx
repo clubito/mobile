@@ -1,31 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Text, Button, Icon, Avatar } from "@ui-kitten/components";
-import { JoinRequest } from "../types";
-import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import GeneralModal from "./GeneralModal";
-import { getReadableDate } from "../utils";
-import CoolListItem from "./CoolListItem";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { Text, Button, Icon, Avatar } from "@ui-kitten/components";
+import { Club, JoinRequest } from "../../types";
+import { getReadableDate } from "../../utils";
+import { ClubParamList } from "./ClubNavigator";
+import ClubService from "../../services/ClubService";
+import CoolListItem from "../../components/CoolListItem";
+import CoolView from "../../components/CoolView";
+import EmptyView from "../../components/EmptyView";
+import GeneralModal from "../../components/GeneralModal";
+import LoadingScreen from "../../components/LoadingScreen";
+
+type ClubApplicationsRouteProp = RouteProp<ClubParamList, "ClubApplications">;
+type ClubApplicationsNavigationProp = StackNavigationProp<
+	ClubParamList,
+	"ClubApplications"
+>;
 
 type Props = {
-	applicants: JoinRequest[];
-	clubId: string;
-	clubName: string;
-	update: Function;
+	route: ClubApplicationsRouteProp;
+	navigation: ClubApplicationsNavigationProp;
 };
 
-const ApplicationList = (props: Props) => {
+const ClubApplicationsScreen = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
+	const [isLoading, setIsLoading] = useState(true);
+	const [club, setClub] = useState({} as Club);
+	const [applicants, setApplicants] = useState({} as JoinRequest[]);
+
 	const [visible, setVisible] = useState(false);
 	const [approval, setApproval] = useState(false);
 	const [curUserName, setCurUserName] = useState("");
 	const [curUserId, setCurUserId] = useState("");
 
-	const submit = () => {
-		props.update(approval, props.clubId, curUserId);
-		setVisible(false);
-	};
+	useEffect(() => {
+		load();
+	}, []);
 
 	const triggerModal = (isApprove: boolean, name: string, id: string) => {
 		setApproval(isApprove);
@@ -34,10 +46,63 @@ const ApplicationList = (props: Props) => {
 		setVisible(true);
 	};
 
-	return (
-		<>
+	const load = () => {
+		Promise.all([
+			ClubService.getClub(props.route.params.clubId),
+			ClubService.getApplicants(props.route.params.clubId),
+		])
+			.then((result: [Club, JoinRequest[]]) => {
+				setClub(result[0]);
+				setApplicants(result[1]);
+			})
+			.catch((error) =>
+				toast?.show(error.message, {
+					type: "danger",
+				})
+			)
+			.finally(() => {
+				setIsLoading(false);
+			});
+	};
+
+	const submit = (approval: boolean, userId: string) => {
+		if (approval) {
+			ClubService.approveApplication(club.id, userId)
+				.then((data) => {
+					load();
+					toast?.show(data.message, {
+						type: "success",
+					});
+				})
+				.catch((error) =>
+					toast?.show(error.message, {
+						type: "danger",
+					})
+				);
+		} else {
+			ClubService.rejectApplication(club.id, userId)
+				.then((data) => {
+					load();
+					toast?.show(data.message, {
+						type: "success",
+					});
+				})
+				.catch((error) =>
+					toast?.show(error.message, {
+						type: "danger",
+					})
+				);
+		}
+	};
+
+	if (isLoading) {
+		return <LoadingScreen />;
+	}
+
+	return applicants.length > 0 ? (
+		<CoolView yip>
 			<FlatList
-				data={props.applicants}
+				data={applicants}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => {
 					return (
@@ -122,7 +187,7 @@ const ApplicationList = (props: Props) => {
 			<GeneralModal
 				visible={visible}
 				header={"Club Member " + (approval ? "Approval" : "Rejection")}
-				functionOnConfirm={() => submit()}
+				functionOnConfirm={() => submit(approval, curUserId)}
 				closeFunction={() => {
 					setVisible(false);
 				}}
@@ -131,12 +196,14 @@ const ApplicationList = (props: Props) => {
 					(approval ? "approve " : "reject ") +
 					curUserName +
 					"'s application into " +
-					props.clubName +
+					club.name +
 					"?"
 				}
 				modalType={approval ? "success" : "warning"}
 			/>
-		</>
+		</CoolView>
+	) : (
+		<EmptyView message="No applications available" />
 	);
 };
 
@@ -159,4 +226,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ApplicationList;
+export default ClubApplicationsScreen;

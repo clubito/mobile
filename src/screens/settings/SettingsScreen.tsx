@@ -34,6 +34,7 @@ const SettingsScreen = () => {
 				onPress={() => {
 					nav.navigate("NotificationSettings");
 				}}
+				hasChildScreen
 			/>
 
 			<CoolDivider />
