@@ -12,7 +12,6 @@ type Props = {
 	applicants: JoinRequest[];
 	clubId: string;
 	clubName: string;
-	role: string;
 	update: Function;
 };
 
@@ -119,6 +118,7 @@ const ApplicationList = (props: Props) => {
 					);
 				}}
 			/>
+
 			<GeneralModal
 				visible={visible}
 				header={"Club Member " + (approval ? "Approval" : "Rejection")}
@@ -139,6 +139,7 @@ const ApplicationList = (props: Props) => {
 		</>
 	);
 };
+
 const styles = StyleSheet.create({
 	button: {
 		width: 35,
@@ -157,4 +158,5 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 	},
 });
+
 export default ApplicationList;

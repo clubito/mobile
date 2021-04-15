@@ -80,7 +80,7 @@ const ClubNavigator = () => (
 		<Stack.Screen
 			name="Profile"
 			component={ProfileScreen}
-			options={{ title: "Profile Page" }}
+			options={{ title: "Profile" }}
 		/>
 
 		<Stack.Screen name="Event" component={EventScreen} />

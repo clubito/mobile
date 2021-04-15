@@ -49,7 +49,7 @@ const EventNavigator = () => (
 		<Stack.Screen
 			name="Profile"
 			component={ProfileScreen}
-			options={{ title: "Profile Page" }}
+			options={{ title: "Profile" }}
 		/>
 	</Stack.Navigator>
 );
