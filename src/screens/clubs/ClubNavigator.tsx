@@ -8,10 +8,12 @@ import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";
 import EventScreen from "../events/EventScreen";
 import { SettingsIcon } from "../../components/Icons";
+import ManageClubRoleScreen from "./ManageClubRoleScreen";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
 	ClubSettings: { clubId: string };
+	ManageClubRoleScreen: { roleId: string };
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; announcementId?: string };
 	Profile: { userId?: string };
@@ -47,26 +49,40 @@ const ClubNavigator = () => (
 				},
 			})}
 		/>
+
 		<Stack.Screen
 			name="ClubSettings"
 			component={ClubSettingsScreen}
 			options={{ title: "Club Settings" }}
 		/>
+
+		<Stack.Screen
+			name="ManageClubRoleScreen"
+			component={ManageClubRoleScreen}
+			options={({ route }) => ({
+				title:
+					route.params.roleId === "-" ? "Create Role" : "Edit Role",
+			})}
+		/>
+
 		<Stack.Screen
 			name="AddEvent"
 			component={AddEventScreen}
 			options={{ title: "Add Event" }}
 		/>
+
 		<Stack.Screen
 			name="AddAnnouncement"
 			component={AddAnnouncementScreen}
 			options={{ title: "Add Announcement" }}
 		/>
+
 		<Stack.Screen
 			name="Profile"
 			component={ProfileScreen}
 			options={{ title: "Profile Page" }}
 		/>
+
 		<Stack.Screen name="Event" component={EventScreen} />
 	</Stack.Navigator>
 );
