@@ -18,12 +18,12 @@ import ClubService from "../../services/ClubService";
 import GeneralModal from "../../components/GeneralModal";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
-import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
-import MemberTab from "./MemberTab";
 import { getReadableDate } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolCard from "../../components/CoolCard";
+import EventList from "../../components/EventList";
+import MemberList from "../../components/MemberList";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -35,7 +35,7 @@ type Props = {
 
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
-	EventList: { eventList: Event[], clubName: string };
+	EventList: { eventList: Event[]; clubName: string };
 	Members: {
 		members: User[];
 		role: string;
@@ -241,22 +241,25 @@ const ClubScreen = (props: Props) => {
 					/>
 					<Tab.Screen
 						name="EventList"
-						component={EventTab}
-						initialParams={{
-							eventList: clubInfo.events,
-							clubName: clubInfo.name,
-						}}
+						component={() => (
+							<EventList
+								events={clubInfo.events!}
+								clubName={clubInfo.name}
+								refresh={false}
+							/>
+						)}
 						options={{ title: "Events" }}
 					/>
 					<Tab.Screen
 						name="Members"
-						component={MemberTab}
-						initialParams={{
-							members: clubInfo.members,
-							role: clubInfo.role,
-							clubId: clubInfo.id,
-							update: removeClubMember,
-						}}
+						component={() => (
+							<MemberList
+								members={clubInfo.members!}
+								role={clubInfo.role}
+								clubId={clubInfo.id}
+								update={removeClubMember}
+							/>
+						)}
 						options={{ title: "Members" }}
 					/>
 				</Tab.Navigator>
