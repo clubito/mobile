@@ -35,13 +35,8 @@ type Props = {
 
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
-	EventList: { eventList: Event[], clubName: string };
-	Members: {
-		members: User[];
-		role: string;
-		clubId: string;
-		update: Function;
-	};
+	EventList: { eventList: Event[]; clubName: string };
+	Members: { members: User[] };
 };
 
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
@@ -109,27 +104,6 @@ const ClubScreen = (props: Props) => {
 			)}
 		/>
 	);
-	const removeClubMember = (
-		clubId: string,
-		userId: string,
-		reason: string
-	) => {
-		ClubService.removeMember(clubId, userId, reason)
-			.then((response) => {
-				if (toast)
-					toast.show(response.message, {
-						type: "success",
-					});
-				refresh();
-			})
-			.catch((error) => {
-				if (toast)
-					toast.show(error.message, {
-						type: "danger",
-					});
-				refresh();
-			});
-	};
 
 	const addAnEvButton =
 		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
@@ -253,9 +227,6 @@ const ClubScreen = (props: Props) => {
 						component={MemberTab}
 						initialParams={{
 							members: clubInfo.members,
-							role: clubInfo.role,
-							clubId: clubInfo.id,
-							update: removeClubMember,
 						}}
 						options={{ title: "Members" }}
 					/>
