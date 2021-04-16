@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";
 import ClubApplicationsScreen from "./ClubApplicationsScreen";
-import ManageClubRolesScreen from "./ManageClubRolesScreen";
+import ManageRolesScreen from "./ManageRolesScreen";
 import ManageMembersScreen from "./ManageMembersScreen";
 import AddEventScreen from "../events/AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
@@ -17,7 +17,7 @@ export type ClubParamList = {
 	ClubSettings: { clubId: string };
 	ClubApplications: { clubId: string };
 	ManageMembers: { clubId: string };
-	ManageClubRoles: { roleId: string };
+	ManageRoles: { clubId: string };
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; announcementId?: string };
 	Profile: { userId?: string };
@@ -73,8 +73,8 @@ const ClubNavigator = () => (
 		/>
 
 		<Stack.Screen
-			name="ManageClubRoles"
-			component={ManageClubRolesScreen}
+			name="ManageRoles"
+			component={ManageRolesScreen}
 			options={{ title: "Manage Roles" }}
 		/>
 

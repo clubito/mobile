@@ -6,10 +6,9 @@ import ClubService from "../../services/ClubService";
 import LoadingScreen from "../../components/LoadingScreen";
 import MemberList from "../../components/MemberList";
 
-type ClubScreenRouteProp = RouteProp<ClubParamList, "ManageMembers">;
-
+type Route = RouteProp<ClubParamList, "ManageMembers">;
 type Props = {
-	route: ClubScreenRouteProp;
+	route: Route;
 };
 
 const ManageMembersScreen = (props: Props) => {

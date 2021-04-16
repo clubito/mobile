@@ -46,7 +46,7 @@ const ClubSettingsScreen = (props: Props) => {
 				text="Manage Roles"
 				icon="options-outline"
 				onPress={() => {
-					nav.navigate("ManageClubRoles", {
+					nav.navigate("ManageRoles", {
 						clubId: props.route.params.clubId,
 					});
 				}}
