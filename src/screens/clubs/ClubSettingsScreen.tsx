@@ -17,10 +17,10 @@ const ClubSettingsScreen = (props: Props) => {
 		<View>
 			<SettingsButton
 				hasChildScreen
-				text="Manage Roles"
-				icon="options-outline"
+				text="Applications"
+				icon="layers-outline"
 				onPress={() => {
-					nav.navigate("ManageClubRoles", {
+					nav.navigate("ClubApplications", {
 						clubId: props.route.params.clubId,
 					});
 				}}
@@ -30,10 +30,23 @@ const ClubSettingsScreen = (props: Props) => {
 
 			<SettingsButton
 				hasChildScreen
-				text="Applications"
-				icon="layers-outline"
+				text="Manage Members"
+				icon="people-outline"
 				onPress={() => {
-					nav.navigate("ClubApplications", {
+					nav.navigate("ManageMembers", {
+						clubId: props.route.params.clubId,
+					});
+				}}
+			/>
+
+			<CoolDivider />
+
+			<SettingsButton
+				hasChildScreen
+				text="Manage Roles"
+				icon="options-outline"
+				onPress={() => {
+					nav.navigate("ManageClubRoles", {
 						clubId: props.route.params.clubId,
 					});
 				}}

@@ -4,6 +4,7 @@ import ClubScreen from "./ClubScreen";
 import ClubSettingsScreen from "./ClubSettingsScreen";
 import ClubApplicationsScreen from "./ClubApplicationsScreen";
 import ManageClubRolesScreen from "./ManageClubRolesScreen";
+import ManageMembersScreen from "./ManageMembersScreen";
 import AddEventScreen from "../events/AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
@@ -15,6 +16,7 @@ export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
 	ClubSettings: { clubId: string };
 	ClubApplications: { clubId: string };
+	ManageMembers: { clubId: string };
 	ManageClubRoles: { roleId: string };
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; announcementId?: string };
@@ -62,6 +64,12 @@ const ClubNavigator = () => (
 			name="ClubApplications"
 			component={ClubApplicationsScreen}
 			options={{ title: "Applications" }}
+		/>
+
+		<Stack.Screen
+			name="ManageMembers"
+			component={ManageMembersScreen}
+			options={{ title: "Manage Members" }}
 		/>
 
 		<Stack.Screen
