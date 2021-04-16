@@ -2,7 +2,7 @@ import React from "react";
 import { Text } from "@ui-kitten/components";
 import CoolView from "../../components/CoolView";
 
-const ManageClubRoleScreen = () => {
+const ManageClubRolesScreen = () => {
 	return (
 		<CoolView>
 			<Text>Add/Edit Club Role Screen</Text>
@@ -10,4 +10,4 @@ const ManageClubRoleScreen = () => {
 	);
 };
 
-export default ManageClubRoleScreen;
+export default ManageClubRolesScreen;

@@ -61,6 +61,12 @@ interface User {
 	settings?: Settings;
 }
 
+interface Role {
+	id: string;
+	name: string;
+	permissions: string[];
+}
+
 interface Settings {
 	notifications: NotificationSettings;
 }
@@ -96,6 +102,7 @@ interface ChatMessage {
 export {
 	Club,
 	User,
+	Role,
 	Settings,
 	NotificationSettings,
 	Announcement,

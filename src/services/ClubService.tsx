@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club, JoinRequest } from "../types";
+import { Club, JoinRequest, Role } from "../types";
 
 export default class ClubService {
 	/**
@@ -150,4 +150,109 @@ export default class ClubService {
 		return response.data;
 	}
 
+	/*
+	 *	Get all roles created for a club
+	 */
+	static async getRoles(clubId: string) {
+		const response: AxiosResponse<Role[]> = await API.get<Role[]>(
+			"/clubs/roles",
+			{
+				params: { clubId: clubId },
+			}
+		);
+		return response.data;
+	}
+
+	/*
+	 *	Create role in a club with given permissions
+	 */
+	static async createRole(clubId: string, name: string, perms: string[]) {
+		const response: AxiosResponse = await API.post("/clubs/roles/create", {
+			clubId: clubId,
+			role: {
+				name: name,
+				permissions: perms,
+			},
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/*
+	 *	Create role in a club with given permissions
+	 */
+	static async editRole(
+		clubId: string,
+		roleId: string,
+		name: string,
+		perms: string[]
+	) {
+		const response: AxiosResponse = await API.post("/clubs/roles/edit", {
+			clubId: clubId,
+			roleId: roleId,
+			role: {
+				name: name,
+				permissions: perms,
+			},
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/*
+	 *	Assign a role to a club member
+	 */
+	static async assignMemberRole(
+		clubId: string,
+		userId: string,
+		roleId: string
+	) {
+		const response: AxiosResponse = await API.post("/clubs/roles/assign", {
+			clubId: clubId,
+			userId: userId,
+			roleId: roleId,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/*
+	 *	Remove the role assigned to a club member
+	 */
+	static async removeMemberRole(clubId: string, userId: string) {
+		const response: AxiosResponse = await API.post("/clubs/roles/remove", {
+			clubId: clubId,
+			userId: userId,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
 }
