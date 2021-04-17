@@ -12,6 +12,7 @@ type Props = {
 };
 
 const ManageRolesScreen = (props: Props) => {
+	const clubId = props.route.params.clubId;
 	const navigation = useNavigation();
 
 	return (
@@ -20,7 +21,8 @@ const ManageRolesScreen = (props: Props) => {
 				icon={PlusIcon}
 				onPress={() =>
 					navigation.navigate("AddEditRole", {
-						clubId: undefined,
+						clubId: clubId,
+						roleId: undefined,
 					})
 				}
 			/>

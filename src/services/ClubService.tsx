@@ -153,7 +153,20 @@ export default class ClubService {
 	/*
 	 *	Get all roles created for a club
 	 */
-	static async getRoles(clubId: string) {
+	static async getRole(roleId: string) {
+		const response: AxiosResponse<Role> = await API.get<Role>(
+			"/clubs/role",
+			{
+				params: { roleId: roleId },
+			}
+		);
+		return response.data;
+	}
+
+	/*
+	 *	Get all roles created for a club
+	 */
+	static async getAllRoles(clubId: string) {
 		const response: AxiosResponse<Role[]> = await API.get<Role[]>(
 			"/clubs/roles",
 			{
@@ -169,10 +182,8 @@ export default class ClubService {
 	static async createRole(clubId: string, name: string, perms: string[]) {
 		const response: AxiosResponse = await API.post("/clubs/roles/create", {
 			clubId: clubId,
-			role: {
-				name: name,
-				permissions: perms,
-			},
+			roleName: name,
+			rolePermissions: perms,
 		});
 
 		if (response.status !== 200) {
@@ -188,19 +199,11 @@ export default class ClubService {
 	/*
 	 *	Create role in a club with given permissions
 	 */
-	static async editRole(
-		clubId: string,
-		roleId: string,
-		name: string,
-		perms: string[]
-	) {
+	static async editRole(roleId: string, name: string, perms: string[]) {
 		const response: AxiosResponse = await API.post("/clubs/roles/edit", {
-			clubId: clubId,
 			roleId: roleId,
-			role: {
-				name: name,
-				permissions: perms,
-			},
+			roleName: name,
+			rolePermissions: perms,
 		});
 
 		if (response.status !== 200) {

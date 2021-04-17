@@ -19,7 +19,7 @@ export type ClubParamList = {
 	ManageApplications: { clubId: string };
 	ManageMembers: { clubId: string };
 	ManageRoles: { clubId: string };
-	AddEditRole: { clubId: string };
+	AddEditRole: { clubId: string; roleId: string };
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; announcementId?: string };
 	Profile: { userId?: string };
@@ -84,7 +84,7 @@ const ClubNavigator = () => (
 			name="AddEditRole"
 			component={AddEditRoleScreen}
 			options={({ route }) => ({
-				title: route.params.clubId ? "Edit Role" : "Create Role",
+				title: route.params.roleId ? "Edit Role" : "Create Role",
 			})}
 		/>
 

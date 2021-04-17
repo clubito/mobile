@@ -39,7 +39,7 @@ const PlusIcon = (props: IconProps) => (
 			width: 24,
 			height: 24,
 		}}
-		fill={getColor()}
+		fill={"#EEEEEE"}
 	/>
 );
 
