@@ -1,9 +1,9 @@
 import React from "react";
 import { View } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import { ClubParamList } from "./ClubNavigator";
-import CoolDivider from "../../components/CoolDivider";
-import SettingsButton from "../../components/SettingsButton";
+import { ClubParamList } from "../ClubNavigator";
+import CoolDivider from "../../../components/CoolDivider";
+import SettingsButton from "../../../components/SettingsButton";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type Props = {
@@ -20,7 +20,7 @@ const ClubSettingsScreen = (props: Props) => {
 				text="Applications"
 				icon="layers-outline"
 				onPress={() => {
-					nav.navigate("ClubApplications", {
+					nav.navigate("ManageApplications", {
 						clubId: props.route.params.clubId,
 					});
 				}}

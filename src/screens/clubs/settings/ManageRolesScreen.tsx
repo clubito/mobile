@@ -1,8 +1,8 @@
 import React from "react";
 import { RouteProp } from "@react-navigation/native";
 import { Text } from "@ui-kitten/components";
-import { ClubParamList } from "./ClubNavigator";
-import CoolView from "../../components/CoolView";
+import { ClubParamList } from "../ClubNavigator";
+import CoolView from "../../../components/CoolView";
 
 type Route = RouteProp<ClubParamList, "ManageRoles">;
 type Props = {

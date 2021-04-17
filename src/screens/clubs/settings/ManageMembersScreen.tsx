@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { RouteProp } from "@react-navigation/native";
-import { ClubParamList } from "./ClubNavigator";
-import { Club } from "../../types";
-import ClubService from "../../services/ClubService";
-import LoadingScreen from "../../components/LoadingScreen";
-import MemberList from "../../components/MemberList";
+import { ClubParamList } from "../ClubNavigator";
+import { Club } from "../../../types";
+import ClubService from "../../../services/ClubService";
+import LoadingScreen from "../../../components/LoadingScreen";
+import MemberList from "../../../components/MemberList";
 
 type Route = RouteProp<ClubParamList, "ManageMembers">;
 type Props = {

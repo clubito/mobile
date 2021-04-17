@@ -3,28 +3,22 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { Text, Button, Icon, Avatar } from "@ui-kitten/components";
-import { Club, JoinRequest } from "../../types";
-import { getReadableDate } from "../../utils";
-import { ClubParamList } from "./ClubNavigator";
-import ClubService from "../../services/ClubService";
-import CoolListItem from "../../components/CoolListItem";
-import CoolView from "../../components/CoolView";
-import EmptyView from "../../components/EmptyView";
-import GeneralModal from "../../components/GeneralModal";
-import LoadingScreen from "../../components/LoadingScreen";
+import { Club, JoinRequest } from "../../../types";
+import { getReadableDate } from "../../../utils";
+import { ClubParamList } from "../ClubNavigator";
+import ClubService from "../../../services/ClubService";
+import CoolListItem from "../../../components/CoolListItem";
+import CoolView from "../../../components/CoolView";
+import EmptyView from "../../../components/EmptyView";
+import GeneralModal from "../../../components/GeneralModal";
+import LoadingScreen from "../../../components/LoadingScreen";
 
-type ClubApplicationsRouteProp = RouteProp<ClubParamList, "ClubApplications">;
-type ClubApplicationsNavigationProp = StackNavigationProp<
-	ClubParamList,
-	"ClubApplications"
->;
-
+type Route = RouteProp<ClubParamList, "ManageApplications">;
 type Props = {
-	route: ClubApplicationsRouteProp;
-	navigation: ClubApplicationsNavigationProp;
+	route: Route;
 };
 
-const ClubApplicationsScreen = (props: Props) => {
+const ManageApplicationsScreen = (props: Props) => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 	const [isLoading, setIsLoading] = useState(true);
 	const [club, setClub] = useState({} as Club);
@@ -226,4 +220,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default ClubApplicationsScreen;
+export default ManageApplicationsScreen;

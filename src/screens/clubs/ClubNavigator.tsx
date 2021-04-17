@@ -1,10 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ClubScreen from "./ClubScreen";
-import ClubSettingsScreen from "./ClubSettingsScreen";
-import ClubApplicationsScreen from "./ClubApplicationsScreen";
-import ManageRolesScreen from "./ManageRolesScreen";
-import ManageMembersScreen from "./ManageMembersScreen";
+import ClubSettingsScreen from "./settings/ClubSettingsScreen";
+import ManageApplicationsScreen from "./settings/ManageApplicationsScreen";
+import ManageRolesScreen from "./settings/ManageRolesScreen";
+import ManageMembersScreen from "./settings/ManageMembersScreen";
 import AddEventScreen from "../events/AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
@@ -15,7 +15,7 @@ import { SettingsIcon } from "../../components/Icons";
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
 	ClubSettings: { clubId: string };
-	ClubApplications: { clubId: string };
+	ManageApplications: { clubId: string };
 	ManageMembers: { clubId: string };
 	ManageRoles: { clubId: string };
 	AddEvent: { clubId: string; eventId?: string };
@@ -61,9 +61,9 @@ const ClubNavigator = () => (
 		/>
 
 		<Stack.Screen
-			name="ClubApplications"
-			component={ClubApplicationsScreen}
-			options={{ title: "Applications" }}
+			name="ManageApplications"
+			component={ManageApplicationsScreen}
+			options={{ title: "Manage Applications" }}
 		/>
 
 		<Stack.Screen
