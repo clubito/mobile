@@ -31,6 +31,18 @@ const EditIcon = (props: IconProps) => (
 	/>
 );
 
+const PlusIcon = (props: IconProps) => (
+	<Icon
+		name="plus-outline"
+		{...props}
+		style={{
+			width: 24,
+			height: 24,
+		}}
+		fill={getColor()}
+	/>
+);
+
 const SearchIcon = (props: IconProps) => (
 	<Icon
 		name="search-outline"
@@ -55,4 +67,4 @@ const SettingsIcon = (props: IconProps) => (
 	/>
 );
 
-export { ArrowRightIcon, EditIcon, SearchIcon, SettingsIcon };
+export { ArrowRightIcon, EditIcon, PlusIcon, SearchIcon, SettingsIcon };

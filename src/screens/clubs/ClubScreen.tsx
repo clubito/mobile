@@ -8,22 +8,22 @@ import {
 	Popover,
 	Menu,
 	MenuItem,
-	IconProps,
-	Icon,
 } from "@ui-kitten/components";
-import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { getReadableDate } from "../../utils";
 import { Announcement, Club, Event, User } from "../../types";
 import ClubService from "../../services/ClubService";
-import GeneralModal from "../../components/GeneralModal";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
 import MemberTab from "./MemberTab";
-import { getReadableDate } from "../../utils";
-import LoadingScreen from "../../components/LoadingScreen";
 import CoolCard from "../../components/CoolCard";
+import FloatingButton from "../../components/FloatingButton";
+import GeneralModal from "../../components/GeneralModal";
+import LoadingScreen from "../../components/LoadingScreen";
+import { PlusIcon } from "../../components/Icons";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -88,27 +88,17 @@ const ClubScreen = (props: Props) => {
 		</Button>
 	);
 
-	const renderToggleButton = () => (
-		<Button
-			style={{
-				position: "absolute",
-				bottom: 10,
-				right: 10,
-				width: 50,
-				height: 50,
-				borderRadius: 25,
-			}}
-			onPress={() => setAddVisible(true)}
-			accessoryLeft={(props: IconProps) => (
-				<Icon name="plus-outline" {...props} />
-			)}
-		/>
-	);
-
 	const addAnEvButton =
 		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
 			<Popover
-				anchor={renderToggleButton}
+				anchor={() => (
+					<FloatingButton
+						icon={PlusIcon}
+						onPress={() => {
+							setAddVisible(true);
+						}}
+					/>
+				)}
 				visible={addVisible}
 				placement={"top end"}
 				style={{ width: 150 }}
