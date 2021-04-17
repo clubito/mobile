@@ -153,27 +153,27 @@ export default class ClubService {
 	/*
 	 *	Get all roles created for a club
 	 */
-	static async getRole(roleId: string) {
-		const response: AxiosResponse<Role> = await API.get<Role>(
-			"/clubs/role",
-			{
-				params: { roleId: roleId },
-			}
-		);
-		return response.data;
-	}
-
-	/*
-	 *	Get all roles created for a club
-	 */
 	static async getAllRoles(clubId: string) {
-		const response: AxiosResponse<Role[]> = await API.get<Role[]>(
-			"/clubs/roles",
+		// const response: AxiosResponse<Role[]> = await API.get<Role[]>(
+		// 	"/clubs/roles",
+		// 	{
+		// 		params: { clubId: clubId },
+		// 	}
+		// );
+		// return response.data;
+
+		return [
 			{
-				params: { clubId: clubId },
-			}
-		);
-		return response.data;
+				id: "1",
+				name: "pres",
+				permissions: ["MANAGE_ROLES", "MANAGE_MEMBERS"],
+			},
+			{
+				id: "2",
+				name: "treasuer",
+				permissions: ["ADD_ANNOUNCEMENTS"],
+			},
+		];
 	}
 
 	/*

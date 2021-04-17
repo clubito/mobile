@@ -12,6 +12,7 @@ import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";
 import EventScreen from "../events/EventScreen";
 import { SettingsIcon } from "../../components/Icons";
+import { Role } from "../../types";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
@@ -19,7 +20,7 @@ export type ClubParamList = {
 	ManageApplications: { clubId: string };
 	ManageMembers: { clubId: string };
 	ManageRoles: { clubId: string };
-	AddEditRole: { clubId: string; roleId: string };
+	AddEditRole: { clubId: string; role: Role };
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; announcementId?: string };
 	Profile: { userId?: string };
@@ -84,7 +85,7 @@ const ClubNavigator = () => (
 			name="AddEditRole"
 			component={AddEditRoleScreen}
 			options={({ route }) => ({
-				title: route.params.roleId ? "Edit Role" : "Create Role",
+				title: route.params.role ? "Edit Role" : "Create Role",
 			})}
 		/>
 

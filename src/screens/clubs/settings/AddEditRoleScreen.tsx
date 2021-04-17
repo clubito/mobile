@@ -7,7 +7,6 @@ import { ClubParamList } from "../ClubNavigator";
 import CoolInput from "../../../components/CoolInput";
 import CoolDivider from "../../../components/CoolDivider";
 import CoolView from "../../../components/CoolView";
-import LoadingScreen from "../../../components/LoadingScreen";
 
 type Route = RouteProp<ClubParamList, "AddEditRole">;
 type Props = {
@@ -23,32 +22,30 @@ const permissionList = [
 
 const AddEditRoleScreen = (props: Props) => {
 	const clubId = props.route.params.clubId;
-	const roleId = props.route.params.roleId;
+	const role = props.route.params.role;
 	const navigation = useNavigation();
-	const [isLoading, setIsLoading] = useState(false);
 	const [roleName, setRoleName] = useState("");
 	const [rolePermissions, setRolePermissions] = useState(permissionList);
 
 	useEffect(() => {
-		if (roleId) {
-			setIsLoading(true);
-			ClubService.getRole(roleId)
-				.then((role) => {
-					setRoleName(role.name);
-					setRolePermissions((oldPermissions) => {
-						role.permissions.map((perm) => {
-							oldPermissions.map((oldPerm) => {
-								return perm === oldPerm.name
-									? { ...oldPerm, isChecked: true }
-									: oldPerm;
-							});
-						});
+		if (!role) return;
 
-						return oldPermissions.slice(0);
-					});
-				})
-				.finally(() => setIsLoading(false));
-		}
+		setRoleName(role.name);
+		setRolePermissions((oldPermissions) => {
+			return oldPermissions.map((oldPerm) => {
+				let update = oldPerm;
+				role.permissions.map((perm) => {
+					if (perm === oldPerm.name) {
+						update = {
+							...update,
+							isChecked: true,
+						};
+					}
+				});
+
+				return update;
+			});
+		});
 	}, []);
 
 	const handleCheck = (pos: number, checked: boolean) => {
@@ -57,8 +54,8 @@ const AddEditRoleScreen = (props: Props) => {
 	};
 
 	const handleSave = () => {
-		roleId
-			? ClubService.editRole(clubId, roleId, roleName, [])
+		role
+			? ClubService.editRole(role.id, roleName, [])
 					.then(() => {
 						toast?.show("", { type: "success" });
 						navigation.goBack();
@@ -76,10 +73,6 @@ const AddEditRoleScreen = (props: Props) => {
 					);
 	};
 
-	if (isLoading) {
-		return <LoadingScreen />;
-	}
-
 	return (
 		<View>
 			<CoolView style={styles.container} yip>
@@ -87,7 +80,11 @@ const AddEditRoleScreen = (props: Props) => {
 					Name
 				</Text>
 
-				<CoolInput placeholder="Name" onChangeText={setRoleName} />
+				<CoolInput
+					placeholder="Name"
+					value={roleName}
+					onChangeText={setRoleName}
+				/>
 			</CoolView>
 
 			<View style={styles.divider} />
