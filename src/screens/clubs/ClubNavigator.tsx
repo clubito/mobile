@@ -6,13 +6,14 @@ import ManageApplicationsScreen from "./settings/ManageApplicationsScreen";
 import ManageRolesScreen from "./settings/ManageRolesScreen";
 import ManageMembersScreen from "./settings/ManageMembersScreen";
 import AddEditRoleScreen from "./settings/AddEditRoleScreen";
+import ModifyMemberScreen from "./settings/ModifyMemberScreen";
 import AddEventScreen from "../events/AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";
 import EventScreen from "../events/EventScreen";
 import { SettingsIcon } from "../../components/Icons";
-import { Role } from "../../types";
+import { Role, User } from "../../types";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
@@ -21,6 +22,7 @@ export type ClubParamList = {
 	ManageMembers: { clubId: string };
 	ManageRoles: { clubId: string };
 	AddEditRole: { clubId: string; role: Role };
+	ModifyMember: { clubId: string; user: User };
 	AddEvent: { clubId: string; eventId?: string };
 	AddAnnouncement: { clubId: string; announcementId?: string };
 	Profile: { userId?: string };
@@ -87,6 +89,12 @@ const ClubNavigator = () => (
 			options={({ route }) => ({
 				title: route.params.role ? "Edit Role" : "Create Role",
 			})}
+		/>
+
+		<Stack.Screen
+			name="ModifyMember"
+			component={ModifyMemberScreen}
+			options={{ title: "Member" }}
 		/>
 
 		<Stack.Screen

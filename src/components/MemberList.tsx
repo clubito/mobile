@@ -1,6 +1,7 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, ViewProps } from "react-native";
 import { Avatar, Text } from "@ui-kitten/components";
+import { RenderProp } from "@ui-kitten/components/devsupport";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
@@ -13,6 +14,7 @@ import CoolDivider from "./CoolDivider";
 type Props = {
 	members: User[];
 	onPress?: (user: User) => void;
+	accessoryRight?: RenderProp<ViewProps>;
 };
 
 const MemberList = (props: Props) => {
@@ -50,6 +52,7 @@ const MemberList = (props: Props) => {
 									size="small"
 								/>
 							)}
+							accessoryRight={props.accessoryRight ?? undefined}
 						/>
 					);
 				}}
