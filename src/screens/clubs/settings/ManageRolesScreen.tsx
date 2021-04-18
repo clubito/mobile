@@ -37,6 +37,7 @@ const ManageRolesScreen = (props: Props) => {
 			})
 			.finally(() => setIsLoading(false));
 	};
+    
 	if (isLoading) {
 		return <LoadingScreen />;
 	}

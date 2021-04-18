@@ -18,11 +18,18 @@ const ManageMembersScreen = (props: Props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [club, setClub] = useState({} as Club);
 
+	useEffect(() => load(), []);
+
 	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => load());
+		return unsubscribe;
+	}, [navigation]);
+
+	const load = () => {
 		ClubService.getClub(clubId)
 			.then((data) => setClub(data))
 			.finally(() => setIsLoading(false));
-	}, []);
+	};
 
 	if (isLoading) {
 		return <LoadingScreen />;
