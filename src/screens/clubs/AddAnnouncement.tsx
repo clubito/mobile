@@ -116,10 +116,10 @@ const AddAnnouncementScreen = (props: Props) => {
 			<GeneralModal
 				visible={visible}
 				header={"Would you like to post this announcement?"}
-				functionOnConfirm={() => submitDetails(params)}
-				closeFunction={() => setVisible(false)}
+				onConfirm={() => submitDetails(params)}
+				onDismiss={() => setVisible(false)}
 				content={"\nMessage: " + params.message}
-				modalType="basic"
+				status="basic"
 			/>
 		</ScrollView>
 	);

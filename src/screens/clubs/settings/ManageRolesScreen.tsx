@@ -30,14 +30,13 @@ const ManageRolesScreen = (props: Props) => {
 	}, [navigation]);
 
 	const load = () => {
-		setIsLoading(true);
 		ClubService.getAllRoles(clubId)
 			.then((roles) => {
 				setRoles(roles);
 			})
 			.finally(() => setIsLoading(false));
 	};
-    
+
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
@@ -76,7 +75,7 @@ const ManageRolesScreen = (props: Props) => {
 				onPress={() =>
 					navigation.navigate("AddEditRole", {
 						clubId: clubId,
-						roleId: undefined,
+						role: undefined,
 					})
 				}
 			/>

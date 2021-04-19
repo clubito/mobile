@@ -296,8 +296,8 @@ const AddEventScreen = (props: Props) => {
 					(props.route.params.eventId ? "edit" : "create") +
 					" an event with these details?"
 				}
-				functionOnConfirm={() => submitDetails(params)}
-				closeFunction={() => setVisible(false)}
+				onConfirm={() => submitDetails(params)}
+				onDismiss={() => setVisible(false)}
 				content={
 					"Name: " +
 					(params.name ? params.name : "None") +

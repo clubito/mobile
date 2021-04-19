@@ -182,15 +182,15 @@ const ClubScreen = (props: Props) => {
 
 			<GeneralModal
 				visible={modalVisible}
-				closeFunction={() => setModalVisible(false)}
+				onDismiss={() => setModalVisible(false)}
 				header={"Would you like to join " + clubInfo.name + "?"}
-				functionOnConfirm={sendRequest}
+				onConfirm={sendRequest}
 				content={
 					"If you wish to join " +
 					clubInfo.name +
 					", confirm to send a request to the club owners and executives. They will confirm or deny your request."
 				}
-				modalType={"basic"}
+				status={"basic"}
 			/>
 
 			{isMember && (

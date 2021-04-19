@@ -75,13 +75,13 @@ const SettingsScreen = () => {
 
 			<GeneralModal
 				visible={modalVisible}
-				closeFunction={() => setModalVisible(false)}
+				onDismiss={() => setModalVisible(false)}
 				header={
 					modalType == 0
 						? "Are you sure you want to log out?"
 						: "Are you sure you want to delete your account?"
 				}
-				functionOnConfirm={
+				onConfirm={
 					modalType == 0
 						? () => {
 								AuthService.logout().then(() => {
@@ -112,7 +112,7 @@ const SettingsScreen = () => {
 						? "Are you sure you want to log out? Your user data will be removed from this device."
 						: "Are you sure you want to delete your account? Your user data will be removed from the database and you will no longer be able to log in. This action is irreversible."
 				}
-				modalType={modalType == 0 ? "warning" : "danger"}
+				status={modalType == 0 ? "warning" : "danger"}
 			/>
 		</View>
 	);

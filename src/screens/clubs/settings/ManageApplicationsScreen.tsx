@@ -181,10 +181,8 @@ const ManageApplicationsScreen = (props: Props) => {
 			<GeneralModal
 				visible={visible}
 				header={"Club Member " + (approval ? "Approval" : "Rejection")}
-				functionOnConfirm={() => submit(approval, curUserId)}
-				closeFunction={() => {
-					setVisible(false);
-				}}
+				onConfirm={() => submit(approval, curUserId)}
+				onDismiss={() => setVisible(false)}
 				content={
 					"Are you sure you want to " +
 					(approval ? "approve " : "reject ") +
@@ -193,7 +191,7 @@ const ManageApplicationsScreen = (props: Props) => {
 					club.name +
 					"?"
 				}
-				modalType={approval ? "success" : "warning"}
+				status={approval ? "success" : "warning"}
 			/>
 		</CoolView>
 	) : (

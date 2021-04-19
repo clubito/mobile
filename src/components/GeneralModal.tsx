@@ -4,22 +4,20 @@ import { Text, Button, Modal } from "@ui-kitten/components";
 import { ContainerStyles } from "../styles/CommonStyles";
 import CoolCard from "./CoolCard";
 
-interface ModalSettings {
+interface ModalProps {
 	visible: boolean;
 	header: string;
-	functionOnConfirm: FunctionNull;
-	closeFunction: FunctionNull;
+	onConfirm: () => void;
+	onDismiss: () => void;
 	content: string;
-	modalType?: string;
+	status?: string;
 }
 
-type FunctionNull = () => void;
-
-const GeneralModal = (props: ModalSettings) => (
+const GeneralModal = (props: ModalProps) => (
 	<Modal
 		visible={props.visible}
 		backdropStyle={ContainerStyles.modalBackdrop}
-		onBackdropPress={props.closeFunction}
+		onBackdropPress={props.onDismiss}
 	>
 		<CoolCard
 			yip
@@ -36,22 +34,22 @@ const GeneralModal = (props: ModalSettings) => (
 					}
 				>
 					<Button
-						onPress={props.closeFunction}
+						onPress={props.onDismiss}
 						style={{ flex: 1, margin: 10 }}
 						status="basic"
 					>
 						Cancel
 					</Button>
 					<Button
-						onPress={props.functionOnConfirm}
+						onPress={props.onConfirm}
 						style={{ flex: 1, margin: 10 }}
-						status={props.modalType ? props.modalType : "primary"}
+						status={props.status ? props.status : "primary"}
 					>
 						Confirm
 					</Button>
 				</View>
 			)}
-			status={props.modalType}
+			status={props.status}
 			style={ContainerStyles.extraMargin}
 		>
 			<Text>{props.content}</Text>

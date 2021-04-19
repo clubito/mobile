@@ -7,6 +7,7 @@ import { ClubParamList } from "../ClubNavigator";
 import CoolInput from "../../../components/CoolInput";
 import CoolDivider from "../../../components/CoolDivider";
 import CoolView from "../../../components/CoolView";
+import GeneralModal from "../../../components/GeneralModal";
 
 type Route = RouteProp<ClubParamList, "AddEditRole">;
 type Props = {
@@ -26,6 +27,7 @@ const AddEditRoleScreen = (props: Props) => {
 	const navigation = useNavigation();
 	const [roleName, setRoleName] = useState("");
 	const [rolePermissions, setRolePermissions] = useState(permissionList);
+	const [showRemoveModal, setShowRemoveModal] = useState(false);
 
 	useEffect(() => {
 		if (!role) return;
@@ -73,9 +75,25 @@ const AddEditRoleScreen = (props: Props) => {
 					);
 	};
 
+	const deleteRole = () => {
+		setShowRemoveModal(false);
+		ClubService.deleteRole(role.id)
+			.then((response) => {
+				toast?.show(response.message, {
+					type: "success",
+				});
+				navigation.goBack();
+			})
+			.catch((error) => {
+				toast?.show(error.message, {
+					type: "danger",
+				});
+			});
+	};
+
 	return (
-		<View>
-			<CoolView style={styles.container} yip>
+		<View style={styles.container}>
+			<CoolView style={styles.nameContainer} yip>
 				<Text category="s2" style={styles.label}>
 					Name
 				</Text>
@@ -115,12 +133,39 @@ const AddEditRoleScreen = (props: Props) => {
 			<View style={styles.buttonContainer}>
 				<Button onPress={handleSave}>Save</Button>
 			</View>
+
+			{role && (
+				<>
+					<View style={styles.removeContainer}>
+						<Button
+							status="danger"
+							onPress={() => setShowRemoveModal(true)}
+						>
+							Delete Role
+						</Button>
+					</View>
+
+					<GeneralModal
+						visible={showRemoveModal}
+						header="Delete Role"
+						content={
+							"Are you sure you want to delete " + role.name + "?"
+						}
+						onConfirm={deleteRole}
+						onDismiss={() => setShowRemoveModal(false)}
+						status="danger"
+					/>
+				</>
+			)}
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
+	},
+	nameContainer: {
 		paddingHorizontal: 16,
 		paddingVertical: 16,
 	},
@@ -131,6 +176,14 @@ const styles = StyleSheet.create({
 	},
 	buttonContainer: {
 		paddingHorizontal: 16,
+	},
+	removeContainer: {
+		paddingHorizontal: 16,
+		paddingVertical: 16,
+		position: "absolute",
+		left: 0,
+		right: 0,
+		bottom: 0,
 	},
 	divider: {
 		height: 16,

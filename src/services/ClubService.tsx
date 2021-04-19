@@ -217,16 +217,10 @@ export default class ClubService {
 	}
 
 	/*
-	 *	Assign a role to a club member
+	 *	Delete role in a club
 	 */
-	static async assignMemberRole(
-		clubId: string,
-		userId: string,
-		roleId: string
-	) {
-		const response: AxiosResponse = await API.post("/clubs/roles/assign", {
-			clubId: clubId,
-			userId: userId,
+	static async deleteRole(roleId: string) {
+		const response: AxiosResponse = await API.post("/clubs/roles/delete", {
 			roleId: roleId,
 		});
 
@@ -241,12 +235,17 @@ export default class ClubService {
 	}
 
 	/*
-	 *	Remove the role assigned to a club member
+	 *	Assign a role to a club member
 	 */
-	static async removeMemberRole(clubId: string, userId: string) {
-		const response: AxiosResponse = await API.post("/clubs/roles/remove", {
+	static async assignMemberRole(
+		clubId: string,
+		userId: string,
+		roleId: string
+	) {
+		const response: AxiosResponse = await API.post("/clubs/roles/assign", {
 			clubId: clubId,
 			userId: userId,
+			roleId: roleId,
 		});
 
 		if (response.status !== 200) {

@@ -31,6 +31,7 @@ const ModifyMemberScreen = (props: Props) => {
 	}, []);
 
 	const removeMember = (reason: string) => {
+		setShowRemoveModal(false);
 		ClubService.removeMember(clubId, user.id, reason)
 			.then((response) => {
 				toast?.show(response.message, {
