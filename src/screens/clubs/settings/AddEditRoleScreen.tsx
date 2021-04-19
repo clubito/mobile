@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { Button, CheckBox, Text } from "@ui-kitten/components";
 import ClubService from "../../../services/ClubService";
+import { getRoleLabel } from "../../../utils";
 import { ClubParamList } from "../ClubNavigator";
 import CoolInput from "../../../components/CoolInput";
 import CoolDivider from "../../../components/CoolDivider";
@@ -15,10 +16,10 @@ type Props = {
 };
 
 const permissionList = [
-	{ name: "ADD_ANNOUNCEMENTS", label: "Add Announcements", isChecked: false },
-	{ name: "ADD_EDIT_EVENTS", label: "Add/Edit Events", isChecked: false },
-	{ name: "MANAGE_MEMBERS", label: "Manage Members", isChecked: false },
-	{ name: "MANAGE_ROLES", label: "Manage Roles", isChecked: false },
+	{ name: "ADD_ANNOUNCEMENTS", isChecked: false },
+	{ name: "ADD_EDIT_EVENTS", isChecked: false },
+	{ name: "MANAGE_MEMBERS", isChecked: false },
+	{ name: "MANAGE_ROLES", isChecked: false },
 ];
 
 const AddEditRoleScreen = (props: Props) => {
@@ -123,7 +124,7 @@ const AddEditRoleScreen = (props: Props) => {
 							onChange={(checked) => handleCheck(index, checked)}
 						>
 							<Text style={styles.checkBoxText}>
-								{item.label}
+								{getRoleLabel(item.name)}
 							</Text>
 						</CheckBox>
 					)}
