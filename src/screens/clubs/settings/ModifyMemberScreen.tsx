@@ -6,6 +6,7 @@ import { ClubParamList } from "../ClubNavigator";
 import { Role } from "../../../types";
 import { getReadableDate } from "../../../utils";
 import ClubService from "../../../services/ClubService";
+import AssignRoleModal from "../../../components/AssignRoleModal";
 import CoolDivider from "../../../components/CoolDivider";
 import CoolView from "../../../components/CoolView";
 import LoadingScreen from "../../../components/LoadingScreen";
@@ -21,7 +22,9 @@ const ModifyMemberScreen = (props: Props) => {
 	const user = props.route.params.user;
 	const navigation = useNavigation();
 	const [isLoading, setIsLoading] = useState(true);
+	const [showAssignRoleModal, setShowAssignRoleModal] = useState(false);
 	const [showRemoveModal, setShowRemoveModal] = useState(false);
+	const [userRole, setUserRole] = useState<Role>();
 	const [roles, setRoles] = useState<Role[]>([]);
 
 	useEffect(() => {
@@ -29,6 +32,22 @@ const ModifyMemberScreen = (props: Props) => {
 			.then((roles) => setRoles(roles))
 			.finally(() => setIsLoading(false));
 	}, []);
+
+	const assignRole = (role: Role) => {
+		setShowAssignRoleModal(false);
+		ClubService.assignMemberRole(clubId, user.id, role.id)
+			.then((response) => {
+				setUserRole(role);
+				toast?.show(response.message, {
+					type: "success",
+				});
+			})
+			.catch((error) => {
+				toast?.show(error.message, {
+					type: "danger",
+				});
+			});
+	};
 
 	const removeMember = (reason: string) => {
 		setShowRemoveModal(false);
@@ -76,11 +95,18 @@ const ModifyMemberScreen = (props: Props) => {
 				<Text category="s2" appearance="hint">
 					Role
 				</Text>
-				<Text>{user.role}</Text>
+				<Text>
+					{userRole ? userRole.name : "TODO: set initial role"}
+				</Text>
 			</CoolView>
 
 			<View style={styles.botContainer}>
-				<Button status="info">Assign Role</Button>
+				<Button
+					status="info"
+					onPress={() => setShowAssignRoleModal(true)}
+				>
+					Assign Role
+				</Button>
 			</View>
 
 			<View style={styles.removeContainer}>
@@ -91,6 +117,13 @@ const ModifyMemberScreen = (props: Props) => {
 					Remove From Club
 				</Button>
 			</View>
+
+			<AssignRoleModal
+				roles={roles}
+				visible={showAssignRoleModal}
+				onConfirm={assignRole}
+				onDismiss={() => setShowAssignRoleModal(false)}
+			/>
 
 			<RemoveUserModal
 				userName={user.name}
