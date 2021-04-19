@@ -102,6 +102,7 @@ const AddEditRoleScreen = (props: Props) => {
 					placeholder="Name"
 					value={roleName}
 					onChangeText={setRoleName}
+					disabled={role && role.preset}
 				/>
 			</CoolView>
 
@@ -118,6 +119,7 @@ const AddEditRoleScreen = (props: Props) => {
 						<CheckBox
 							style={styles.checkBox}
 							checked={item.isChecked}
+							disabled={role && role.preset}
 							onChange={(checked) => handleCheck(index, checked)}
 						>
 							<Text style={styles.checkBoxText}>
@@ -130,11 +132,13 @@ const AddEditRoleScreen = (props: Props) => {
 
 			<View style={styles.divider} />
 
-			<View style={styles.buttonContainer}>
-				<Button onPress={handleSave}>Save</Button>
-			</View>
+			{(!role || !role.preset) && (
+				<View style={styles.buttonContainer}>
+					<Button onPress={handleSave}>Save</Button>
+				</View>
+			)}
 
-			{role && (
+			{role && !role.preset && (
 				<>
 					<View style={styles.removeContainer}>
 						<Button

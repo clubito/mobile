@@ -165,13 +165,15 @@ export default class ClubService {
 		return [
 			{
 				id: "1",
-				name: "pres",
+				name: "President",
 				permissions: ["MANAGE_ROLES", "MANAGE_MEMBERS"],
+				preset: true,
 			},
 			{
 				id: "2",
-				name: "treasuer",
+				name: "Group Manager",
 				permissions: ["ADD_ANNOUNCEMENTS"],
+				preset: false,
 			},
 		];
 	}
@@ -184,6 +186,7 @@ export default class ClubService {
 			clubId: clubId,
 			roleName: name,
 			rolePermissions: perms,
+			preset: false,
 		});
 
 		if (response.status !== 200) {

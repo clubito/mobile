@@ -65,6 +65,7 @@ interface Role {
 	id: string;
 	name: string;
 	permissions: string[];
+	preset: boolean;
 }
 
 interface Settings {
