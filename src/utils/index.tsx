@@ -32,6 +32,8 @@ const getRoleLabel = (roleName: string) => {
 			return "Add Announcements";
 		case "ADD_EDIT_EVENTS":
 			return "Add/Edit Events";
+		case "MANAGE_APPLICATIONS":
+			return "Manage Applications";
 		case "MANAGE_MEMBERS":
 			return "Manage Members";
 		case "MANAGE_ROLES":

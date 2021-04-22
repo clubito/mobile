@@ -17,7 +17,7 @@ import { Role, User } from "../../types";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: string };
-	ClubSettings: { clubId: string };
+	ClubSettings: { clubId: string; role: Role };
 	ManageApplications: { clubId: string };
 	ManageMembers: { clubId: string };
 	ManageRoles: { clubId: string };
@@ -49,6 +49,7 @@ const ClubNavigator = () => (
 							onPress={() =>
 								navigation.navigate("ClubSettings", {
 									clubId: route.params.id,
+									role: route.params.role,
 								})
 							}
 							accessoryLeft={SettingsIcon}

@@ -18,6 +18,7 @@ type Props = {
 const permissionList = [
 	{ name: "ADD_ANNOUNCEMENTS", isChecked: false },
 	{ name: "ADD_EDIT_EVENTS", isChecked: false },
+	{ name: "MANAGE_APPLICATIONS", isChecked: false },
 	{ name: "MANAGE_MEMBERS", isChecked: false },
 	{ name: "MANAGE_ROLES", isChecked: false },
 ];
