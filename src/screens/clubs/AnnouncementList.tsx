@@ -28,6 +28,7 @@ const AnnouncementList = (props: Props) => {
 		<CoolView>
 			<FlatList
 				data={props.route.params.announcementList}
+				keyExtractor={(item) => item.message}
 				ItemSeparatorComponent={CoolDivider}
 				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
