@@ -1,25 +1,20 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import {
-	Text,
-	List,
-	Button,
-	Icon,
-	ListItem,
-	Avatar,
-} from "@ui-kitten/components";
-import { JoinRequest, TimelineItem } from "../types";
+import React, { useEffect, useState } from "react";
+import { TimelineItem } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import UserService from "../services/UserService";
 import EventListItem from "./EventListItem";
 import ClubListItem from "./ClubListItem";
 import LoadingScreen from "./LoadingScreen";
-import TimelineListItem from "./TimelineListItem";
-import CoolDivider from "./CoolDivider";
-import { RefreshControl } from "react-native";
+import Timeline from "react-native-timeline-flatlist";
+import { Event, Announcement, Club } from "../types";
+import { getReadableDate } from "../utils";
+import AnnouncementListItem from "./AnnouncementListItem";
+import CoolText from "./CoolText";
+import EmptyView from "./EmptyView";
+import CoolRefreshControl from "./CoolRefreshControl";
 
-const Timeline = () => {
+const TimelineList = () => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
 	const [isLoading, setIsLoading] = useState(true);
 	const [timeline, setTimeline] = useState({} as TimelineItem[]);
@@ -48,21 +43,78 @@ const Timeline = () => {
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
-	console.log(timeline);
 
-	return (
-		<List
-			data={timeline}
-			renderItem={({ item }) => <TimelineListItem item={item} />}
-			ItemSeparatorComponent={CoolDivider}
-			refreshControl={
-				<RefreshControl
-					refreshing={refreshing}
-					onRefresh={pullAllData}
-				/>
-			}
+	const getComponents = (item: TimelineItem) => {
+		if (item.type === "EVENT") {
+			const event = item.item as Event;
+			return [
+				"Event occurred on " + getReadableDate(event.startTime),
+				getReadableDate(event.startTime),
+				<EventListItem event={event} />,
+			];
+		} else if (item.type === "ANNOUNCEMENT") {
+			const announcement = item.item as Announcement;
+			return [
+				"Announcement on " + getReadableDate(announcement.timestamp),
+				getReadableDate(announcement.timestamp),
+				<AnnouncementListItem
+					announcement={announcement}
+					pressable={true}
+				/>,
+			];
+		} else {
+			const club = item.item as Club;
+			return [
+				"Joined club on " +
+					getReadableDate(club.joinRequestStatus.approvalDate),
+				getReadableDate(club.joinRequestStatus.approvalDate),
+				<ClubListItem
+					club={club}
+					onPress={() => {
+						navigation.push("ClubNavigator", {
+							title: club.name,
+							screen: "Club",
+							params: {
+								id: club.id,
+								title: club.name,
+								role: club.role,
+							},
+						});
+					}}
+				/>,
+			];
+		}
+	};
+
+	const title = (message: string) => (
+		<CoolText appearance="hint">{message}</CoolText>
+	);
+
+	return timeline.length > 0 ? (
+		<Timeline
+			data={timeline.map((item) => {
+				const component = getComponents(item);
+				return {
+					time: component[1],
+					title: title(component[0] as string),
+					description: component[2],
+				};
+			})}
+			options={{
+				refreshControl: (
+					<CoolRefreshControl
+						refreshing={refreshing}
+						onRefresh={pullAllData}
+					/>
+				),
+			}}
+			showTime={false}
+			separator={true}
+			titleStyle={{ marginTop: -8 }}
 		/>
+	) : (
+		<EmptyView message="No activities" />
 	);
 };
 
-export default Timeline;
+export default TimelineList;

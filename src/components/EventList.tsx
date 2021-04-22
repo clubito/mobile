@@ -1,15 +1,11 @@
 import React from "react";
-import { FlatList, RefreshControl, View } from "react-native";
-import { Text, Avatar, Icon } from "@ui-kitten/components";
+import { FlatList } from "react-native";
 import { Event } from "../types";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { getReadableDate } from "../utils";
 import EmptyView from "./EmptyView";
 import CoolView from "./CoolView";
-import CoolListItem from "./CoolListItem";
 import CoolDivider from "./CoolDivider";
 import EventListItem from "./EventListItem";
+import CoolRefreshControl from "./CoolRefreshControl";
 
 type Props = {
 	events: Event[];
@@ -26,7 +22,7 @@ const EventList = (props: Props) => {
 				ItemSeparatorComponent={CoolDivider}
 				ListFooterComponent={CoolDivider}
 				refreshControl={
-					<RefreshControl
+					<CoolRefreshControl
 						refreshing={props.refresh}
 						onRefresh={props.onRefresh}
 					/>

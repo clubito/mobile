@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/core";
-import { Text } from "@ui-kitten/components";
 import NotificationService from "../../services/NotificationService";
 import CoolView from "../../components/CoolView";
-import { TextStyle } from "../../styles/CommonStyles";
-import Timeline from "../../components/Timeline";
-import { SafeAreaView } from "react-native-safe-area-context";
+import TimelineList from "../../components/Timeline";
 
 const HomeScreen = () => {
 	const navigation = useNavigation();
@@ -15,9 +12,14 @@ const HomeScreen = () => {
 	}, []);
 
 	return (
-		<SafeAreaView>
-			<Timeline />
-		</SafeAreaView>
+		<CoolView
+			style={{
+				flex: 1,
+			}}
+			safe
+		>
+			<TimelineList />
+		</CoolView>
 	);
 };
 
