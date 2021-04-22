@@ -4,6 +4,8 @@ import { Text } from "@ui-kitten/components";
 import NotificationService from "../../services/NotificationService";
 import CoolView from "../../components/CoolView";
 import { TextStyle } from "../../styles/CommonStyles";
+import Timeline from "../../components/Timeline";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
 	const navigation = useNavigation();
@@ -13,9 +15,9 @@ const HomeScreen = () => {
 	}, []);
 
 	return (
-		<CoolView style={TextStyle.center}>
-			<Text>Home Screen</Text>
-		</CoolView>
+		<SafeAreaView>
+			<Timeline />
+		</SafeAreaView>
 	);
 };
 

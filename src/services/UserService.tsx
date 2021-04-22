@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import ImageService from "./ImageService";
-import { User } from "../types";
+import { Announcement, Club, Event, TimelineItem, User } from "../types";
 
 export default class UserService {
 	/**
@@ -189,5 +189,81 @@ export default class UserService {
 		}
 
 		return response.data;
+	}
+
+	static async getTimeline() {
+		//temporary values for now
+		// const response: AxiosResponse<TimelineItem[]> = await API.get<
+		// 	TimelineItem[]
+		// >("/user/timeline");
+
+		// if (response.status !== 200) {
+		// 	throw {
+		// 		code: response.status,
+		// 	};
+		// }
+
+		// return response.data;
+
+		var ev1: Event = {
+			id: "606786f163466f001e0eb193",
+			name: "event1",
+			description: "Lorem ipsum dolor sin something",
+			startTime: new Date().toString(),
+			endTime: new Date().toString(),
+			longitude: 0,
+			latitude: 0,
+			shortLocation: "there",
+			picture: "https://picsum.photos/200",
+			clubId: "606776b33a6b40193d1d279d",
+			clubName: "club here",
+			lastUpdated: new Date().toString(),
+			isRsvp: false,
+		};
+		var ev2: Event = {
+			id: "606786f163466f001e0eb193",
+			name: "event2",
+			description: "Lorem ipsum dolor sin something",
+			startTime: new Date().toString(),
+			endTime: new Date().toString(),
+			longitude: 0,
+			latitude: 0,
+			shortLocation: "here",
+			picture: "https://picsum.photos/200",
+			clubId: "606776b33a6b40193d1d279d",
+			clubName: "club here",
+			lastUpdated: new Date().toString(),
+			isRsvp: false,
+		};
+		var an1: Announcement = {
+			clubId: "606776b33a6b40193d1d279d",
+			message: "announcement message here 1",
+			timestamp: new Date().toString(),
+		};
+		var an2: Announcement = {
+			clubId: "606776b33a6b40193d1d279d",
+			message: "announcement message here 2",
+			timestamp: new Date().toString(),
+		};
+		var cl1: Club = {
+			id: "606776b33a6b40193d1d279d",
+			name: "club1",
+			logo: "https://picsum.photos/200",
+			description: "lorem ipsum something something",
+			role: "MEMBER",
+			theme: "",
+			joinRequestStatus: {
+				status: "APPROVED",
+				approvalDate: new Date().toString(),
+			},
+		};
+		var tm: TimelineItem[] = [
+			{ item: ev1, type: "EVENT" },
+			{ item: an1, type: "ANNOUNCEMENT" },
+			{ item: ev2, type: "EVENT" },
+			{ item: an2, type: "ANNOUNCEMENT" },
+			{ item: cl1, type: "CLUB" },
+		];
+		return tm;
 	}
 }

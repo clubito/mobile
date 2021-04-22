@@ -5,6 +5,7 @@
 interface Announcement {
 	clubId: string;
 	message: string;
+	timestamp: string;
 }
 
 interface Event {
@@ -37,6 +38,12 @@ interface Club {
 		status: string;
 		approvalDate: string;
 	};
+}
+
+type TimelineListType = "ANNOUNCEMENT" | "EVENT" | "CLUB";
+interface TimelineItem {
+	item: Announcement | Event | Club;
+	type: TimelineListType;
 }
 
 interface JoinRequest {
@@ -111,4 +118,6 @@ export {
 	ChatThread,
 	ChatMessage,
 	JoinRequest,
+	TimelineItem,
+	TimelineListType,
 };
