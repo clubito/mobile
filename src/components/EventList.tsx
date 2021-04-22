@@ -25,6 +25,7 @@ const EventList = (props: Props) => {
 		<CoolView>
 			<FlatList
 				data={props.events}
+				keyExtractor={(item) => item.id}
 				ItemSeparatorComponent={CoolDivider}
 				ListFooterComponent={CoolDivider}
 				refreshControl={
