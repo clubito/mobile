@@ -15,6 +15,7 @@ type Props = {
 	members: User[];
 	onPress?: (user: User) => void;
 	accessoryRight?: RenderProp<ViewProps>;
+	emptyText?: string;
 };
 
 const MemberList = (props: Props) => {
@@ -25,7 +26,6 @@ const MemberList = (props: Props) => {
 			<FlatList
 				data={props.members}
 				ItemSeparatorComponent={CoolDivider}
-				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
 					return (
 						<CoolListItem
@@ -50,6 +50,7 @@ const MemberList = (props: Props) => {
 								<Avatar
 									source={{ uri: item.profilePicture }}
 									size="small"
+									style={styles.avatar}
 								/>
 							)}
 							accessoryRight={props.accessoryRight ?? undefined}
@@ -58,18 +59,27 @@ const MemberList = (props: Props) => {
 				}}
 			/>
 		</CoolView>
+	) : props.emptyText ? (
+		<Text style={styles.emptyText}>{props.emptyText}</Text>
 	) : (
 		<EmptyView message="Ain't nobody here :|" />
 	);
 };
 
 const styles = StyleSheet.create({
+	emptyText: {
+		paddingHorizontal: 16,
+		paddingBottom: 16,
+	},
 	memberContainer: {
 		paddingHorizontal: 16,
 	},
 	title: {
 		marginLeft: 8,
-		fontSize: 16,
+		fontSize: 14,
+	},
+	avatar: {
+		marginRight: 4,
 	},
 });
 
