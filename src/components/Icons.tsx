@@ -7,6 +7,18 @@ const getColor = () => {
 	return theme.theme === "light" ? "black" : "#EEEEEE";
 };
 
+const ArrowRightIcon = (props: IconProps) => (
+	<Icon
+		name="chevron-right-outline"
+		{...props}
+		style={{
+			width: 24,
+			height: 24,
+		}}
+		fill={getColor()}
+	/>
+);
+
 const EditIcon = (props: IconProps) => (
 	<Icon
 		name="edit-outline"
@@ -16,6 +28,18 @@ const EditIcon = (props: IconProps) => (
 			height: 24,
 		}}
 		fill={getColor()}
+	/>
+);
+
+const PlusIcon = (props: IconProps) => (
+	<Icon
+		name="plus-outline"
+		{...props}
+		style={{
+			width: 24,
+			height: 24,
+		}}
+		fill={"#EEEEEE"}
 	/>
 );
 
@@ -43,4 +67,4 @@ const SettingsIcon = (props: IconProps) => (
 	/>
 );
 
-export { EditIcon, SearchIcon, SettingsIcon };
+export { ArrowRightIcon, EditIcon, PlusIcon, SearchIcon, SettingsIcon };

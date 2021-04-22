@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
-import { Club, JoinRequest } from "../types";
+import { Club, JoinRequest, Role } from "../types";
 
 export default class ClubService {
 	/**
@@ -150,4 +150,114 @@ export default class ClubService {
 		return response.data;
 	}
 
+	/*
+	 *	Get all roles created for a club
+	 */
+	static async getAllRoles(clubId: string) {
+		// const response: AxiosResponse<Role[]> = await API.get<Role[]>(
+		// 	"/clubs/roles",
+		// 	{
+		// 		params: { clubId: clubId },
+		// 	}
+		// );
+		// return response.data;
+
+		return [
+			{
+				id: "1",
+				name: "President",
+				permissions: ["MANAGE_ROLES", "MANAGE_MEMBERS"],
+				preset: true,
+			},
+			{
+				id: "2",
+				name: "Group Manager",
+				permissions: ["ADD_ANNOUNCEMENTS"],
+				preset: false,
+			},
+		];
+	}
+
+	/*
+	 *	Create role in a club with given permissions
+	 */
+	static async createRole(clubId: string, name: string, perms: string[]) {
+		const response: AxiosResponse = await API.post("/clubs/roles/create", {
+			clubId: clubId,
+			roleName: name,
+			rolePermissions: perms,
+			preset: false,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/*
+	 *	Create role in a club with given permissions
+	 */
+	static async editRole(roleId: string, name: string, perms: string[]) {
+		const response: AxiosResponse = await API.post("/clubs/roles/edit", {
+			roleId: roleId,
+			roleName: name,
+			rolePermissions: perms,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/*
+	 *	Delete role in a club
+	 */
+	static async deleteRole(roleId: string) {
+		const response: AxiosResponse = await API.post("/clubs/roles/delete", {
+			roleId: roleId,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
+
+	/*
+	 *	Assign a role to a club member
+	 */
+	static async assignMemberRole(
+		clubId: string,
+		userId: string,
+		roleId: string
+	) {
+		const response: AxiosResponse = await API.post("/clubs/roles/assign", {
+			clubId: clubId,
+			userId: userId,
+			roleId: roleId,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
 }

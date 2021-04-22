@@ -8,22 +8,22 @@ import {
 	Popover,
 	Menu,
 	MenuItem,
-	IconProps,
-	Icon,
 } from "@ui-kitten/components";
-import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { getReadableDate } from "../../utils";
 import { Announcement, Club, Event, User } from "../../types";
 import ClubService from "../../services/ClubService";
-import GeneralModal from "../../components/GeneralModal";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AnnouncementList from "./AnnouncementList";
 import EventTab from "./EventTab";
 import { ClubParamList } from "./ClubNavigator";
 import MemberTab from "./MemberTab";
-import { getReadableDate } from "../../utils";
-import LoadingScreen from "../../components/LoadingScreen";
 import CoolCard from "../../components/CoolCard";
+import FloatingButton from "../../components/FloatingButton";
+import GeneralModal from "../../components/GeneralModal";
+import LoadingScreen from "../../components/LoadingScreen";
+import { PlusIcon } from "../../components/Icons";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -35,13 +35,8 @@ type Props = {
 
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
-	EventList: { eventList: Event[], clubName: string };
-	Members: {
-		members: User[];
-		role: string;
-		clubId: string;
-		update: Function;
-	};
+	EventList: { eventList: Event[]; clubName: string };
+	Members: { members: User[] };
 };
 
 const Tab = createMaterialTopTabNavigator<ClubTabsParamList>();
@@ -93,48 +88,17 @@ const ClubScreen = (props: Props) => {
 		</Button>
 	);
 
-	const renderToggleButton = () => (
-		<Button
-			style={{
-				position: "absolute",
-				bottom: 10,
-				right: 10,
-				width: 50,
-				height: 50,
-				borderRadius: 25,
-			}}
-			onPress={() => setAddVisible(true)}
-			accessoryLeft={(props: IconProps) => (
-				<Icon name="plus-outline" {...props} />
-			)}
-		/>
-	);
-	const removeClubMember = (
-		clubId: string,
-		userId: string,
-		reason: string
-	) => {
-		ClubService.removeMember(clubId, userId, reason)
-			.then((response) => {
-				if (toast)
-					toast.show(response.message, {
-						type: "success",
-					});
-				refresh();
-			})
-			.catch((error) => {
-				if (toast)
-					toast.show(error.message, {
-						type: "danger",
-					});
-				refresh();
-			});
-	};
-
 	const addAnEvButton =
 		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
 			<Popover
-				anchor={renderToggleButton}
+				anchor={() => (
+					<FloatingButton
+						icon={PlusIcon}
+						onPress={() => {
+							setAddVisible(true);
+						}}
+					/>
+				)}
 				visible={addVisible}
 				placement={"top end"}
 				style={{ width: 150 }}
@@ -218,15 +182,15 @@ const ClubScreen = (props: Props) => {
 
 			<GeneralModal
 				visible={modalVisible}
-				closeFunction={() => setModalVisible(false)}
+				onDismiss={() => setModalVisible(false)}
 				header={"Would you like to join " + clubInfo.name + "?"}
-				functionOnConfirm={sendRequest}
+				onConfirm={sendRequest}
 				content={
 					"If you wish to join " +
 					clubInfo.name +
 					", confirm to send a request to the club owners and executives. They will confirm or deny your request."
 				}
-				modalType={"basic"}
+				status={"basic"}
 			/>
 
 			{isMember && (
@@ -253,9 +217,6 @@ const ClubScreen = (props: Props) => {
 						component={MemberTab}
 						initialParams={{
 							members: clubInfo.members,
-							role: clubInfo.role,
-							clubId: clubInfo.id,
-							update: removeClubMember,
 						}}
 						options={{ title: "Members" }}
 					/>

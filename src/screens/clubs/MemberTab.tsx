@@ -17,14 +17,7 @@ type Props = {
 };
 
 const MemberTab = (props: Props) => {
-	return (
-		<MemberList
-			members={props.route.params.members}
-			role={props.route.params.role}
-			clubId={props.route.params.clubId}
-			update={props.route.params.update}
-		/>
-	);
+	return <MemberList members={props.route.params.members} />;
 };
 
 export default MemberTab;
