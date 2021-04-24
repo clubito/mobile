@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TimelineItem } from "../types";
+import { TimelineItem, TimelineListType } from "../types";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import UserService from "../services/UserService";
@@ -13,6 +13,7 @@ import AnnouncementListItem from "./AnnouncementListItem";
 import CoolText from "./CoolText";
 import EmptyView from "./EmptyView";
 import CoolRefreshControl from "./CoolRefreshControl";
+import { Icon } from "@ui-kitten/components";
 
 const TimelineList = () => {
 	const navigation = useNavigation<StackNavigationProp<any>>();
@@ -48,26 +49,32 @@ const TimelineList = () => {
 		if (item.type === "EVENT") {
 			const event = item.item as Event;
 			return [
-				"Event occurred on " + getReadableDate(event.startTime),
-				getReadableDate(event.startTime),
+				<CoolText appearance="hint">
+					{"Event occurred on " + getReadableDate(event.startTime)}
+				</CoolText>,
 				<EventListItem event={event} />,
+				calendarIcon,
 			];
 		} else if (item.type === "ANNOUNCEMENT") {
 			const announcement = item.item as Announcement;
 			return [
-				"Announcement on " + getReadableDate(announcement.timestamp),
-				getReadableDate(announcement.timestamp),
+				<CoolText appearance="hint">
+					{"Announcement on " +
+						getReadableDate(announcement.timestamp)}
+				</CoolText>,
 				<AnnouncementListItem
 					announcement={announcement}
 					pressable={true}
 				/>,
+				announcementIcon,
 			];
 		} else {
 			const club = item.item as Club;
 			return [
-				"Joined club on " +
-					getReadableDate(club.joinRequestStatus.approvalDate),
-				getReadableDate(club.joinRequestStatus.approvalDate),
+				<CoolText appearance="hint">
+					{"Joined club on " +
+						getReadableDate(club.joinRequestStatus.approvalDate)}
+				</CoolText>,
 				<ClubListItem
 					club={club}
 					onPress={() => {
@@ -82,12 +89,19 @@ const TimelineList = () => {
 						});
 					}}
 				/>,
+				clubIcon,
 			];
 		}
 	};
 
-	const title = (message: string) => (
-		<CoolText appearance="hint">{message}</CoolText>
+	const calendarIcon = (
+		<Icon name="calendar-outline" style={{ height: 30, width: 30 }} />
+	);
+	const announcementIcon = (
+		<Icon name="alert-circle-outline" style={{ height: 30, width: 30 }} />
+	);
+	const clubIcon = (
+		<Icon name="people-outline" style={{ height: 30, width: 30 }} />
 	);
 
 	return timeline.length > 0 ? (
@@ -95,9 +109,9 @@ const TimelineList = () => {
 			data={timeline.map((item) => {
 				const component = getComponents(item);
 				return {
-					time: component[1],
-					title: title(component[0] as string),
-					description: component[2],
+					title: component[0],
+					description: component[1],
+					icon: component[2],
 				};
 			})}
 			options={{
@@ -110,7 +124,9 @@ const TimelineList = () => {
 			}}
 			showTime={false}
 			separator={true}
-			titleStyle={{ marginTop: -8 }}
+			innerCircle={"icon"}
+			circleSize={40}
+			detailContainerStyle={{ marginLeft: 10 }}
 		/>
 	) : (
 		<EmptyView message="No activities" />
