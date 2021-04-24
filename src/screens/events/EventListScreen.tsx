@@ -219,7 +219,6 @@ const EventListScreen = () => {
 			{filteredEvents.length > 0 ? (
 				<EventList
 					events={filteredEvents}
-					renderClubInfo={true}
 					refresh={refreshing}
 					onRefresh={onRefresh}
 				/>

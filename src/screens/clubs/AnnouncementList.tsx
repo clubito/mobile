@@ -1,14 +1,12 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Text } from "@ui-kitten/components";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ClubTabsParamList } from "./ClubScreen";
 import EmptyView from "../../components/EmptyView";
-import { getReadableDate } from "../../utils";
 import CoolView from "../../components/CoolView";
-import CoolListItem from "../../components/CoolListItem";
 import CoolDivider from "../../components/CoolDivider";
+import AnnouncementListItem from "../../components/AnnouncementListItem";
 
 type AnnouncementListRouteProp = RouteProp<
 	ClubTabsParamList,
@@ -35,22 +33,9 @@ const AnnouncementList = (props: Props) => {
 				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
 					return (
-						<CoolListItem
-							style={styles.announcementContainer}
-							description={() => (
-								<View>
-									<Text style={styles.row}>
-										{item.message}
-									</Text>
-									<Text
-										style={styles.row}
-										appearance="hint"
-										numberOfLines={1}
-									>
-										{getReadableDate(item.timestamp)}
-									</Text>
-								</View>
-							)}
+						<AnnouncementListItem
+							announcement={item}
+							pressable={false}
 						/>
 					);
 				}}

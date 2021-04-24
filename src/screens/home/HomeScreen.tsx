@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/core";
-import { Text } from "@ui-kitten/components";
 import NotificationService from "../../services/NotificationService";
 import CoolView from "../../components/CoolView";
-import { TextStyle } from "../../styles/CommonStyles";
+import TimelineList from "../../components/Timeline";
 
 const HomeScreen = () => {
 	const navigation = useNavigation();
@@ -13,8 +12,13 @@ const HomeScreen = () => {
 	}, []);
 
 	return (
-		<CoolView style={TextStyle.center}>
-			<Text>Home Screen</Text>
+		<CoolView
+			style={{
+				flex: 1,
+			}}
+			safe
+		>
+			<TimelineList />
 		</CoolView>
 	);
 };
