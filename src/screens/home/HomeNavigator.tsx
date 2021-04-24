@@ -4,12 +4,14 @@ import HomeScreen from "./HomeScreen";
 import NotificationNavigator from "../notifications/NotificationNavigator";
 import ClubNavigator from "../clubs/ClubNavigator";
 import EventScreen from "../events/EventScreen";
+import ProfileScreen from "../profile/ProfileScreen";
 
 type HomeParams = {
 	Home: undefined;
 	NotificationNavigator: undefined;
 	Event: { id: string; title: string; role: string };
 	ClubNavigator: { title: string };
+	Profile: { userId?: string };
 };
 
 const Stack = createStackNavigator<HomeParams>();
@@ -34,6 +36,11 @@ const HomeNavigator = () => (
 				title: route.params.title,
 				headerShown: false,
 			})}
+		/>
+		<Stack.Screen
+			name="Profile"
+			component={ProfileScreen}
+			options={{ title: "Profile" }}
 		/>
 		<Stack.Screen
 			name="Event"
