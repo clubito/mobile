@@ -57,6 +57,7 @@ const EventScreen = (props: Props) => {
 			.then((data) => {
 				setEventInfo(data);
 				setRSVP(data.isRsvp);
+				navigation.setOptions({ title: data.name });
 				ClubService.getClub(data.clubId)
 					.then((clubData) => {
 						const officer =
