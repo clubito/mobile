@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
 import { Text, Button, CheckBox } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
@@ -17,9 +17,9 @@ import EventService from "../../services/EventService";
 import { EventParamList } from "./EventNavigator";
 import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
-import { getReadableDate } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
+import EventDetails from "../../components/EventDetails";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -290,22 +290,22 @@ const AddEventScreen = (props: Props) => {
 				onConfirm={() => submitDetails(param)}
 				onDismiss={() => setVisible(false)}
 				content={
-					"Name: " +
-					(param.name ? param.name : "None") +
-					"\nDescription: " +
-					(param.description ? param.description : "None") +
-					"\nStart Time: " +
-					(param.startTime
-						? getReadableDate(param.startTime)
-						: "None") +
-					"\nEnd Time: " +
-					(param.endTime ? getReadableDate(param.endTime) : "None") +
-					"\nLocation: " +
-					(param.shortLocation ? param.shortLocation : "None") +
-					(instanceofCreate(param)
-						? "\nOpen event to non-members of the club: " +
-						  param.openEvent
-						: "\nNotify Users: " + param.notifyUsers)
+					<EventDetails
+						name={param.name}
+						startTime={param.startTime}
+						endTime={param.endTime}
+						description={param.description}
+						shortLocation={param.shortLocation}
+						footer={
+							instanceofCreate(param)
+								? param.openEvent
+									? "Event is open to all members and non-members of the club"
+									: "Event is only available to club members"
+								: param.notifyUsers
+								? "Notify club members of this update"
+								: "Do not notify club members of this update"
+						}
+					/>
 				}
 			/>
 		</SafeAreaView>
