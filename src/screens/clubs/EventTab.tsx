@@ -21,14 +21,7 @@ type Props = {
 const EventTab = (props: Props) => {
 	const [events, setEvents] = useState<Event[]>(props.route.params.eventList);
 	if (events.length > 0) return <EventList events={events} refresh={false} />;
-	else
-		return (
-			<EmptyView
-				message={
-					"The club has no open events. \nJoin the club to participate instead."
-				}
-			/>
-		);
+	else return <EmptyView message={"The club has no events yet"} />;
 };
 
 export default EventTab;

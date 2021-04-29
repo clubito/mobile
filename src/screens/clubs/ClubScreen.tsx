@@ -25,6 +25,7 @@ import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import { PlusIcon } from "../../components/Icons";
 import { hasPermission, RolePermissions } from "../../utils/permissions";
+import EmptyView from "../../components/EmptyView";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -241,7 +242,7 @@ const ClubScreen = (props: Props) => {
 						options={{ title: "Members" }}
 					/>
 				</Tab.Navigator>
-			) : (
+			) : clubInfo.events && clubInfo.events.length > 0 ? (
 				<Tab.Navigator>
 					<Tab.Screen
 						name="EventList"
@@ -252,6 +253,12 @@ const ClubScreen = (props: Props) => {
 						options={{ title: "Open Events" }}
 					/>
 				</Tab.Navigator>
+			) : (
+				<EmptyView
+					message={
+						"The club has no events. \nJoin the club to participate instead."
+					}
+				/>
 			)}
 			{addAnEvButton}
 		</SafeAreaView>
