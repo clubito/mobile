@@ -29,7 +29,7 @@ interface Club {
 	name: string;
 	logo: string;
 	description: string;
-	role: string;
+	role: Role;
 	theme: string;
 	members?: User[];
 	announcements?: Announcement[];
@@ -64,7 +64,7 @@ interface User {
 	joinRequests: string[];
 	tags: string[];
 	approvalDate?: string;
-	role?: string;
+	role?: Role;
 	settings?: Settings;
 }
 
@@ -94,7 +94,7 @@ interface ChatThread {
 	clubName: string;
 	clubLogo: string;
 	messages: [ChatMessage[]];
-	role: string;
+	role: Role;
 }
 
 interface ChatMessage {

@@ -12,7 +12,11 @@ interface Props {
 
 const ClubListItem = (props: Props) => {
 	const membership =
-		props.club.role !== "NONMEMBER" ? props.club.role.substring(0, 1) : "";
+		props.club.role.name !== "Non-Member"
+			? props.club.role.name === "Member"
+				? "M"
+				: "O"
+			: "";
 	const membershipTextColor = membership === "O" ? "danger" : "info";
 
 	return (

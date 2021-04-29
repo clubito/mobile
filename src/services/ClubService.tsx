@@ -231,7 +231,7 @@ export default class ClubService {
 		userId: string,
 		roleId: string
 	) {
-		const response: AxiosResponse = await API.post("/clubs/roles/assign", {
+		const response: AxiosResponse = await API.post("/clubs/role/assign", {
 			clubId: clubId,
 			userId: userId,
 			roleId: roleId,

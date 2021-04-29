@@ -3,10 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ChatListScreen from "./ChatListScreen";
 import ChatScreen from "./ChatScreen";
 import ClubNavigator from "../clubs/ClubNavigator";
+import { Role } from "../../types";
 
 type ChatParams = {
 	ChatList: undefined;
-	Chat: { id: string; title: string; role: string };
+	Chat: { id: string; title: string; role: Role };
 	ClubNavigator: { title: string };
 };
 

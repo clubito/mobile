@@ -14,9 +14,10 @@ import AddAnnouncementScreen from "./AddAnnouncement";
 import EventScreen from "../events/EventScreen";
 import { SettingsIcon } from "../../components/Icons";
 import { Role, User } from "../../types";
+import { hasClubSettingsPermission } from "../../utils/permissions";
 
 export type ClubParamList = {
-	Club: { id: string; title: string; role: string };
+	Club: { id: string; title: string; role: Role };
 	ClubSettings: { clubId: string; role: Role };
 	ManageApplications: { clubId: string };
 	ManageMembers: { clubId: string };
@@ -29,7 +30,7 @@ export type ClubParamList = {
 	Event: {
 		id: string;
 		title: string;
-		role: string;
+		role: Role;
 	};
 };
 
@@ -43,8 +44,7 @@ const ClubNavigator = () => (
 			options={({ navigation, route }) => ({
 				title: route.params.title,
 				headerRight: () => {
-					return route.params.role === "OWNER" ||
-						route.params.role === "OFFICER" ? (
+					return hasClubSettingsPermission(route.params.role) ? (
 						<Button
 							onPress={() =>
 								navigation.navigate("ClubSettings", {

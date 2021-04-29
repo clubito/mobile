@@ -24,7 +24,7 @@ const ModifyMemberScreen = (props: Props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [showAssignRoleModal, setShowAssignRoleModal] = useState(false);
 	const [showRemoveModal, setShowRemoveModal] = useState(false);
-	const [userRole, setUserRole] = useState<Role>();
+	const [userRole, setUserRole] = useState<Role>(user.role!);
 	const [roles, setRoles] = useState<Role[]>([]);
 
 	useEffect(() => {
@@ -36,9 +36,9 @@ const ModifyMemberScreen = (props: Props) => {
 	const assignRole = (role: Role) => {
 		setShowAssignRoleModal(false);
 		ClubService.assignMemberRole(clubId, user.id, role.id)
-			.then((response) => {
+			.then(() => {
 				setUserRole(role);
-				toast?.show(response.message, {
+				toast?.show("Successfully assigned role", {
 					type: "success",
 				});
 			})
@@ -52,8 +52,8 @@ const ModifyMemberScreen = (props: Props) => {
 	const removeMember = (reason: string) => {
 		setShowRemoveModal(false);
 		ClubService.removeMember(clubId, user.id, reason)
-			.then((response) => {
-				toast?.show(response.message, {
+			.then(() => {
+				toast?.show("Successfully removed member", {
 					type: "success",
 				});
 				navigation.goBack();
@@ -95,9 +95,7 @@ const ModifyMemberScreen = (props: Props) => {
 				<Text category="s2" appearance="hint">
 					Role
 				</Text>
-				<Text>
-					{userRole ? userRole.name : "TODO: set initial role"}
-				</Text>
+				<Text>{userRole.name}</Text>
 			</CoolView>
 
 			<View style={styles.botContainer}>

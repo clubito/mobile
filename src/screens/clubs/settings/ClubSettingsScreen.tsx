@@ -11,6 +11,8 @@ type Props = {
 };
 
 const ClubSettingsScreen = (props: Props) => {
+	const clubId = props.route.params.clubId;
+	const role = props.route.params.role;
 	const nav = useNavigation();
 
 	return (
@@ -21,7 +23,7 @@ const ClubSettingsScreen = (props: Props) => {
 				icon="layers-outline"
 				onPress={() => {
 					nav.navigate("ManageApplications", {
-						clubId: props.route.params.clubId,
+						clubId: clubId,
 					});
 				}}
 			/>
@@ -34,7 +36,7 @@ const ClubSettingsScreen = (props: Props) => {
 				icon="people-outline"
 				onPress={() => {
 					nav.navigate("ManageMembers", {
-						clubId: props.route.params.clubId,
+						clubId: clubId,
 					});
 				}}
 			/>
@@ -47,7 +49,7 @@ const ClubSettingsScreen = (props: Props) => {
 				icon="options-outline"
 				onPress={() => {
 					nav.navigate("ManageRoles", {
-						clubId: props.route.params.clubId,
+						clubId: clubId,
 					});
 				}}
 			/>

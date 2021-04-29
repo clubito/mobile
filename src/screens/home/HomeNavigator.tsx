@@ -5,11 +5,12 @@ import NotificationNavigator from "../notifications/NotificationNavigator";
 import ClubNavigator from "../clubs/ClubNavigator";
 import EventScreen from "../events/EventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
+import { Role } from "../../types";
 
 type HomeParams = {
 	Home: undefined;
 	NotificationNavigator: undefined;
-	Event: { id: string; title: string; role: string };
+	Event: { id: string; title: string; role: Role };
 	ClubNavigator: { title: string };
 	Profile: { userId?: string };
 };
