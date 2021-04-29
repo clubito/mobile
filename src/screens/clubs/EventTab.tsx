@@ -4,6 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Event } from "../../types";
 import { ClubTabsParamList } from "./ClubScreen";
 import EventList from "../../components/EventList";
+import EmptyView from "../../components/EmptyView";
 
 type ProfileScreenRouteProp = RouteProp<ClubTabsParamList, "EventList">;
 
@@ -19,7 +20,15 @@ type Props = {
 
 const EventTab = (props: Props) => {
 	const [events, setEvents] = useState<Event[]>(props.route.params.eventList);
-	return <EventList events={events} clubName={props.route.params.clubName} refresh={false} />;
+	if (events.length > 0) return <EventList events={events} refresh={false} />;
+	else
+		return (
+			<EmptyView
+				message={
+					"The club has no open events. \nJoin the club to participate instead."
+				}
+			/>
+		);
 };
 
 export default EventTab;

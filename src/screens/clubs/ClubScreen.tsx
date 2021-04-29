@@ -35,7 +35,7 @@ type Props = {
 
 export type ClubTabsParamList = {
 	AnnouncementList: { announcementList: Announcement[] };
-	EventList: { eventList: Event[]; clubName: string };
+	EventList: { eventList: Event[] };
 	Members: { members: User[] };
 };
 
@@ -193,7 +193,7 @@ const ClubScreen = (props: Props) => {
 				status={"basic"}
 			/>
 
-			{isMember && (
+			{isMember ? (
 				<Tab.Navigator tabBarOptions={{ scrollEnabled: true }}>
 					<Tab.Screen
 						name="AnnouncementList"
@@ -208,7 +208,6 @@ const ClubScreen = (props: Props) => {
 						component={EventTab}
 						initialParams={{
 							eventList: clubInfo.events,
-							clubName: clubInfo.name,
 						}}
 						options={{ title: "Events" }}
 					/>
@@ -219,6 +218,17 @@ const ClubScreen = (props: Props) => {
 							members: clubInfo.members,
 						}}
 						options={{ title: "Members" }}
+					/>
+				</Tab.Navigator>
+			) : (
+				<Tab.Navigator>
+					<Tab.Screen
+						name="EventList"
+						component={EventTab}
+						initialParams={{
+							eventList: clubInfo.events,
+						}}
+						options={{ title: "Open Events" }}
 					/>
 				</Tab.Navigator>
 			)}
