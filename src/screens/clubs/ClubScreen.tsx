@@ -24,6 +24,7 @@ import FloatingButton from "../../components/FloatingButton";
 import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import { PlusIcon } from "../../components/Icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -65,6 +66,7 @@ const ClubScreen = (props: Props) => {
 	const refresh = () => {
 		setIsLoading(true);
 		ClubService.getClub(props.route.params.id).then((data) => {
+			console.log(data);
 			setClubInfo(data);
 			setIsMember(data.role !== "NONMEMBER");
 			setIsLoading(false);
@@ -141,22 +143,30 @@ const ClubScreen = (props: Props) => {
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
-			<View
-				style={{
-					width: "100%",
-					marginVertical: 10,
-				}}
+			<LinearGradient
+				colors={
+					clubInfo.theme
+						? [clubInfo.theme, "transparent"]
+						: ["#fff", "transparent"]
+				}
 			>
-				<Image
-					source={{ uri: clubInfo.logo }}
+				<View
 					style={{
-						width: 300,
-						height: 100,
-						resizeMode: "center",
-						alignSelf: "center",
+						width: "100%",
+						marginVertical: 10,
 					}}
-				/>
-			</View>
+				>
+					<Image
+						source={{ uri: clubInfo.logo }}
+						style={{
+							width: 300,
+							height: 100,
+							resizeMode: "center",
+							alignSelf: "center",
+						}}
+					/>
+				</View>
+			</LinearGradient>
 			{requestButton}
 			<CoolCard yip>
 				<Text>{clubInfo?.description}</Text>
@@ -174,6 +184,7 @@ const ClubScreen = (props: Props) => {
 					</Text>
 				) : null}
 			</CoolCard>
+
 			{message != "" ? (
 				<Card status={error ? "danger" : "success"}>
 					<Text>{message}</Text>
