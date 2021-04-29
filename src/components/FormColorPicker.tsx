@@ -10,14 +10,10 @@ import {
 import GeneralModal from "./GeneralModal";
 import { ColorPicker, toHsv, fromHsv } from "react-native-color-picker";
 
-import FormInput from "./FormInput";
 import { useFormikContext } from "formik";
 import CoolInput from "./CoolInput";
-import {
-	NativeSyntheticEvent,
-	TextInputChangeEventData,
-	View,
-} from "react-native";
+import { StyleSheet } from "react-native";
+import CoolView from "./CoolView";
 
 interface FormColorPickerProps extends InputProps {
 	id: string;
@@ -50,10 +46,10 @@ const FormColorPicker = ({
 
 	const [visible, setVisible] = React.useState(false);
 	const [color, setColor] = React.useState(initColor);
-	const [hsv, setHsv] = React.useState(toHsv(initColor));
+	// const [hsv, setHsv] = React.useState(toHsv(initColor));
 	const [oldColor, setOldColor] = React.useState(initColor);
 
-	const VisibilityIcon = (props: IconProps) => {
+	const ColorPickerButton = () => {
 		return (
 			<Button
 				style={{ backgroundColor: color }}
@@ -79,19 +75,22 @@ const FormColorPicker = ({
 				}}
 				onDismiss={() => setVisible(false)}
 				content={
-					<>
+					<CoolView style={styles.form}>
 						<CoolInput
 							{...inputProps}
-							{...fieldProps}
 							value={color}
 							caption={error}
 							onChangeText={setColor}
 						/>
-						<Text>
+						<Text
+							appearance="hint"
+							category="c2"
+							style={{ textAlign: "center", width: 300 }}
+						>
 							Tap on the left color to revert to the previous
 							color. Tap on the right color to confirm selection.
 						</Text>
-						<View style={{ width: 300, height: 300 }}>
+						<CoolView style={{ width: 300, height: 300 }}>
 							<ColorPicker
 								// color={hsv}
 								oldColor={oldColor}
@@ -100,8 +99,8 @@ const FormColorPicker = ({
 								onOldColorSelected={(col) => setColor(col)}
 								style={{ flex: 1 }}
 							/>
-						</View>
-					</>
+						</CoolView>
+					</CoolView>
 				}
 			/>
 			<CoolInput
@@ -110,10 +109,15 @@ const FormColorPicker = ({
 				value={value}
 				caption={error}
 				onChangeText={formContext.handleChange(id)}
-				accessoryRight={() => <VisibilityIcon />}
+				accessoryRight={() => <ColorPickerButton />}
 			/>
 		</>
 	);
 };
-
+const styles = StyleSheet.create({
+	form: {
+		alignItems: "center",
+		justifyContent: "center",
+	},
+});
 export default FormColorPicker;
