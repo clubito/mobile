@@ -32,7 +32,13 @@ const AddEditRoleScreen = (props: Props) => {
 	const [showRemoveModal, setShowRemoveModal] = useState(false);
 
 	useEffect(() => {
-		if (!role) return;
+		if (!role) {
+			permissionList.forEach((perm) => {
+				perm.isChecked = false;
+			});
+			setRolePermissions(permissionList.slice(0));
+			return;
+		}
 
 		setRoleName(role.name);
 		setRolePermissions((oldPermissions) => {
@@ -59,17 +65,21 @@ const AddEditRoleScreen = (props: Props) => {
 
 	const handleSave = () => {
 		role
-			? ClubService.editRole(role.id, roleName, [])
+			? ClubService.editRole(role.id, roleName, getPerms())
 					.then(() => {
-						toast?.show("", { type: "success" });
+						toast?.show("Role updated successfully", {
+							type: "success",
+						});
 						navigation.goBack();
 					})
-					.catch(() =>
-						toast?.show("Failed to save role", { type: "danger" })
+					.catch((error) =>
+						toast?.show("Failed to update role", { type: "danger" })
 					)
-			: ClubService.createRole(clubId, roleName, [])
+			: ClubService.createRole(clubId, roleName, getPerms())
 					.then(() => {
-						toast?.show("", { type: "success" });
+						toast?.show("Role created successfully", {
+							type: "success",
+						});
 						navigation.goBack();
 					})
 					.catch(() =>
@@ -91,6 +101,16 @@ const AddEditRoleScreen = (props: Props) => {
 					type: "danger",
 				});
 			});
+	};
+
+	const getPerms = (): string[] => {
+		const perms: string[] = [];
+		rolePermissions.forEach((perm) => {
+			if (perm.isChecked) {
+				perms.push(perm.name);
+			}
+		});
+		return perms;
 	};
 
 	return (
