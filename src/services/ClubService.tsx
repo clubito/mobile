@@ -154,39 +154,24 @@ export default class ClubService {
 	 *	Get all roles created for a club
 	 */
 	static async getAllRoles(clubId: string) {
-		// const response: AxiosResponse<Role[]> = await API.get<Role[]>(
-		// 	"/clubs/roles",
-		// 	{
-		// 		params: { clubId: clubId },
-		// 	}
-		// );
-		// return response.data;
-
-		return [
+		const response: AxiosResponse<Role[]> = await API.get<Role[]>(
+			"/clubs/roles",
 			{
-				id: "1",
-				name: "President",
-				permissions: ["MANAGE_ROLES", "MANAGE_MEMBERS"],
-				preset: true,
-			},
-			{
-				id: "2",
-				name: "Group Manager",
-				permissions: ["ADD_ANNOUNCEMENTS"],
-				preset: false,
-			},
-		];
+				params: { id: clubId },
+			}
+		);
+		return response.data;
 	}
 
 	/*
 	 *	Create role in a club with given permissions
 	 */
 	static async createRole(clubId: string, name: string, perms: string[]) {
-		const response: AxiosResponse = await API.post("/clubs/roles/create", {
-			clubId: clubId,
-			roleName: name,
-			rolePermissions: perms,
-			preset: false,
+		console.log(perms);
+		const response: AxiosResponse = await API.post("/clubs/role", {
+			id: clubId,
+			name: name,
+			permissions: perms,
 		});
 
 		if (response.status !== 200) {
@@ -203,10 +188,10 @@ export default class ClubService {
 	 *	Create role in a club with given permissions
 	 */
 	static async editRole(roleId: string, name: string, perms: string[]) {
-		const response: AxiosResponse = await API.post("/clubs/roles/edit", {
-			roleId: roleId,
-			roleName: name,
-			rolePermissions: perms,
+		const response: AxiosResponse = await API.put("/clubs/role", {
+			id: roleId,
+			name: name,
+			permissions: perms,
 		});
 
 		if (response.status !== 200) {
@@ -223,8 +208,8 @@ export default class ClubService {
 	 *	Delete role in a club
 	 */
 	static async deleteRole(roleId: string) {
-		const response: AxiosResponse = await API.post("/clubs/roles/delete", {
-			roleId: roleId,
+		const response: AxiosResponse = await API.delete("/clubs/role", {
+			params: { id: roleId },
 		});
 
 		if (response.status !== 200) {
