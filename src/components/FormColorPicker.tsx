@@ -76,12 +76,13 @@ const FormColorPicker = ({
 				onDismiss={() => setVisible(false)}
 				content={
 					<CoolView style={styles.form}>
-						<CoolInput
+						{/* <CoolInput
 							{...inputProps}
 							value={color}
 							caption={error}
 							onChangeText={setColor}
-						/>
+						/> */}
+						<Text category="h3">{color}</Text>
 						<Text
 							appearance="hint"
 							category="c2"
