@@ -9,7 +9,7 @@ interface ModalProps {
 	header: string;
 	onConfirm: () => void;
 	onDismiss: () => void;
-	content: string;
+	content: string | React.ReactNode;
 	status?: string;
 }
 
@@ -52,7 +52,11 @@ const GeneralModal = (props: ModalProps) => (
 			status={props.status}
 			style={ContainerStyles.extraMargin}
 		>
-			<Text>{props.content}</Text>
+			{typeof props.content === "string" ? (
+				<Text>{props.content}</Text>
+			) : (
+				props.content
+			)}
 		</CoolCard>
 	</Modal>
 );

@@ -10,6 +10,7 @@ interface SectionProps {
 	avatar?: string;
 	enabled: boolean;
 	onToggle: (state: boolean) => void;
+	yip?: boolean;
 }
 
 const SettingsToggle = (
@@ -18,7 +19,10 @@ const SettingsToggle = (
 	const { text, icon, avatar, enabled, onToggle } = props;
 
 	return (
-		<CoolView style={styles.container} yip>
+		<CoolView
+			style={styles.container}
+			yip={props.yip !== undefined ? props.yip : true}
+		>
 			<CoolListItem
 				title={text}
 				accessoryLeft={(props) =>

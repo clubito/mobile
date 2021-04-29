@@ -151,4 +151,12 @@ export default class EventService {
 		}
 		return response.data.users;
 	}
+
+	//Temporary until backend is done
+	static async getOpenEvents() {
+		const response: AxiosResponse<Event[]> = await API.get<Event[]>(
+			"/user/club/events"
+		);
+		return response.data;
+	}
 }

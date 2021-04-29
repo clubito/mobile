@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import API from "./API";
 import { Club, JoinRequest, Role } from "../types";
+import ImageService from "./ImageService";
 
 export default class ClubService {
 	/**
@@ -243,6 +244,31 @@ export default class ClubService {
 			};
 		}
 
+		return response.data;
+	}
+
+	static async createClub(params: {
+		name: string;
+		description: string;
+		picture: string;
+		tags: string[];
+		theme: string;
+	}) {
+		// if (params.picture && !params.picture.startsWith("https")) {
+		// 	params.picture = await ImageService.upload(params.picture);
+		// }
+		//const response: AxiosResponse = await API.post("/", params);
+		console.log(params);
+		const response = {
+			status: 200,
+			data: { message: "got this far", error: "none" },
+		};
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
 		return response.data;
 	}
 }

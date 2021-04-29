@@ -22,6 +22,7 @@ const TimelineList = () => {
 	const [refreshing, setRefreshing] = React.useState(false);
 
 	useEffect(() => {
+		setIsLoading(true);
 		pullAllData();
 	}, []);
 
@@ -34,10 +35,9 @@ const TimelineList = () => {
 				setRefreshing(false);
 			})
 			.catch((error) => {
-				if (toast)
-					toast.show(error.message, {
-						type: "danger",
-					});
+				toast?.show(error.message, {
+					type: "danger",
+				});
 			});
 	};
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { Text, Button, CheckBox } from "@ui-kitten/components";
+import { Text, Button, Toggle } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -17,9 +17,10 @@ import EventService from "../../services/EventService";
 import { EventParamList } from "./EventNavigator";
 import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
-import { getReadableDate } from "../../utils";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
+import EventDetails from "../../components/EventDetails";
+import SettingsToggle from "../../components/SettingsToggle";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -28,34 +29,30 @@ type Props = {
 	route: AddEventRouteProp;
 	navigation: AddEventNavigationProp;
 };
-interface CreateList {
+
+interface ParamList {
 	name: string;
 	startTime: Date;
 	endTime: Date;
-	clubId: string;
 	description?: string;
 	longitude?: number;
 	latitude?: number;
 	shortLocation?: string;
 	picture?: string;
 }
-interface EditList {
-	name: string;
-	startTime: Date;
-	endTime: Date;
+interface CreateList extends ParamList {
+	clubId: string;
+	openEvent: boolean;
+}
+interface EditList extends ParamList {
 	eventId: string;
-	description?: string;
-	longitude?: number;
-	latitude?: number;
-	shortLocation?: string;
-	picture?: string;
 	notifyUsers: boolean;
 }
 
-type ParamList = CreateList | EditList;
+type CreateEditList = CreateList | EditList;
 
 const AddEventScreen = (props: Props) => {
-	const [clubInfo, setClubInfo] = useState<Club | null>(null);
+	const [clubInfo, setClubInfo] = useState<Club>({} as Club);
 	const [loading, setLoading] = useState(true);
 	const [submitted, setSubmitted] = React.useState(false);
 	const [visible, setVisible] = React.useState(false);
@@ -65,134 +62,119 @@ const AddEventScreen = (props: Props) => {
 	const savedModel = React.useRef(CreateEventModel.empty());
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());
-	const [params, setParams] = useState({} as ParamList);
+	const [param, setParam] = useState({} as CreateEditList);
 	const [checked, setChecked] = React.useState(false);
 
 	useEffect(() => {
-		if (clubInfo === null) {
-			ClubService.getClub(props.route.params.clubId).then((data) => {
-				setClubInfo(data);
-				setLoading(false);
-				if (props.route.params.eventId) {
-					setLoading(true);
-					EventService.getEvent(props.route.params.eventId).then(
-						(eventInfo) => {
-							var params = {
-								name: eventInfo.name,
-								startTime: new Date(eventInfo.startTime),
-								endTime: new Date(eventInfo.endTime),
-							} as {
-								name: string;
-								startTime: Date;
-								endTime: Date;
-								clubId: string;
-								description?: string;
-								longitude?: number;
-								latitude?: number;
-								shortLocation?: string;
-								picture?: string;
-							};
-							if (eventInfo.description)
-								params.description = eventInfo.description;
-							if (eventInfo.longitude)
-								params.longitude = eventInfo.longitude;
-							if (eventInfo.latitude)
-								params.latitude = eventInfo.latitude;
-							if (eventInfo.shortLocation)
-								params.shortLocation = eventInfo.shortLocation;
-							if (eventInfo.picture && eventInfo.picture != "") {
-								setPFP(eventInfo.picture);
-								params.picture = eventInfo.picture;
-							}
-							savedModel.current = new CreateEventModel(
-								eventInfo.name,
-								eventInfo.description
-									? eventInfo.description
-									: "",
-								eventInfo.startTime
-									? new Date(eventInfo.startTime)
-									: new Date(),
-								eventInfo.endTime
-									? new Date(eventInfo.endTime)
-									: new Date(),
-								eventInfo.longitude ? eventInfo.longitude : 0,
-								eventInfo.latitude ? eventInfo.latitude : 0,
-								eventInfo.shortLocation
-									? eventInfo.shortLocation
-									: "",
-								eventInfo.picture
-									? eventInfo.picture
-									: "https://picsum.photos/200"
-							);
-							setStartDate(savedModel.current.startTime);
-							setEndDate(savedModel.current.endTime);
-							setLoading(false);
+		ClubService.getClub(props.route.params.clubId).then((data) => {
+			setClubInfo(data);
+			setLoading(false);
+			if (props.route.params.eventId) {
+				setLoading(true);
+				EventService.getEvent(props.route.params.eventId).then(
+					(eventInfo) => {
+						var params = {
+							name: eventInfo.name,
+							startTime: new Date(eventInfo.startTime),
+							endTime: new Date(eventInfo.endTime),
+						} as EditList;
+						params.description = eventInfo?.description;
+						params.longitude = eventInfo?.longitude;
+						params.latitude = eventInfo?.latitude;
+						params.shortLocation = eventInfo?.shortLocation;
+						if (eventInfo.picture && eventInfo.picture != "") {
+							setPFP(eventInfo.picture);
+							params.picture = eventInfo.picture;
 						}
-					);
-				}
-			});
-		}
+						savedModel.current = new CreateEventModel(
+							eventInfo.name,
+							eventInfo.description ? eventInfo.description : "",
+							eventInfo.startTime
+								? new Date(eventInfo.startTime)
+								: new Date(),
+							eventInfo.endTime
+								? new Date(eventInfo.endTime)
+								: new Date(),
+							eventInfo.longitude ? eventInfo.longitude : 0,
+							eventInfo.latitude ? eventInfo.latitude : 0,
+							eventInfo.shortLocation
+								? eventInfo.shortLocation
+								: "",
+							eventInfo.picture
+								? eventInfo.picture
+								: "https://picsum.photos/200"
+						);
+						setStartDate(savedModel.current.startTime);
+						setEndDate(savedModel.current.endTime);
+						setLoading(false);
+					}
+				);
+			}
+		});
 	}, []);
+
+	const instanceofCreate = (object: ParamList): object is CreateList => {
+		return "clubId" in object;
+	};
 
 	const triggerModal = (model: CreateEventModel) => {
 		savedModel.current = model;
 		// setLoading(true);
-		var params = {
-			name: model.name,
-			startTime: new Date(startDate),
-			endTime: new Date(endDate),
-		} as ParamList;
-		if (model.description) params.description = model.description;
-		if (model.longitude) params.longitude = model.longitude;
-		if (model.latitude) params.latitude = model.latitude;
-		if (model.shortLocation) params.shortLocation = model.shortLocation;
+		var params;
+		if (props.route.params.eventId) {
+			params = {} as EditList;
+			params.eventId = props.route.params.eventId;
+			params.notifyUsers = checked;
+		} else {
+			params = {} as CreateList;
+			params.clubId = clubInfo ? clubInfo.id : "";
+			// params.openEvent = checked;
+		}
+		params.name = model.name;
+		params.startTime = new Date(startDate);
+		params.endTime = new Date(endDate);
+		params.description = model?.description;
+		params.longitude = model?.longitude;
+		params.latitude = model?.latitude;
+		params.shortLocation = model?.shortLocation;
+
 		if (profilePic && savedModel.current.picture !== profilePic)
 			params.picture = profilePic;
-		if (props.route.params.eventId) {
-			(params as EditList).eventId = props.route.params.eventId;
-			(params as EditList).notifyUsers = checked;
-		} else {
-			(params as CreateList).clubId = clubInfo ? clubInfo.id : "";
-		}
-		setParams(params);
+		setParam(params);
 		setVisible(true);
 	};
 
-	const submitDetails = (params: ParamList) => {
-		if (props.route.params.eventId) {
-			//Edit event if eventID already exists
-			EventService.editEvent(params as EditList)
+	const submitDetails = (params: CreateEditList) => {
+		if (instanceofCreate(params)) {
+			//Create event if no eventID
+			EventService.createEvent(params)
 				.then((data) => {
 					setVisible(false);
-					if (toast)
-						toast.show(data.message, {
-							type: "success",
-						});
+					toast?.show(data.message, {
+						type: "success",
+					});
 					navigation.goBack();
 				})
 				.catch((error) => {
-					if (toast)
-						toast.show(error.message, {
-							type: "danger",
-						});
+					toast?.show(error.message, {
+						type: "danger",
+					});
 					setLoading(false);
 				});
 		} else {
-			//Create event if no eventID
-			EventService.createEvent(params as CreateList)
+			//Edit event if eventID already exists
+			EventService.editEvent(params)
 				.then((data) => {
 					setVisible(false);
-					if (toast)
-						toast.show(data.message, {
-							type: "success",
-						});
+					toast?.show(data.message, {
+						type: "success",
+					});
 					navigation.goBack();
 				})
 				.catch((error) => {
-					if (toast)
-						toast.show(error.message, {
-							type: "danger",
-						});
+					toast?.show(error.message, {
+						type: "danger",
+					});
 					setLoading(false);
 				});
 		}
@@ -261,17 +243,22 @@ const AddEventScreen = (props: Props) => {
 								style={{ marginBottom: 20 }}
 								isSquare={true}
 							/>
-							{props.route.params.eventId ? (
-								<CheckBox
-									checked={checked}
-									onChange={(nextChecked) =>
-										setChecked(nextChecked)
-									}
-									style={ContainerStyles.lowerMargin}
-								>
-									{`Notify Users of this update: ${checked}`}
-								</CheckBox>
-							) : null}
+
+							<SettingsToggle
+								enabled={checked}
+								onToggle={(nextChecked) =>
+									setChecked(nextChecked)
+								}
+								text={
+									props.route.params.eventId
+										? "Notify Users of this update "
+										: "Create open event "
+								}
+								yip={false}
+							/>
+
+							<View style={styles.divider} />
+
 							<Button
 								style={styles.submitButton}
 								onPress={() => {
@@ -296,26 +283,25 @@ const AddEventScreen = (props: Props) => {
 					(props.route.params.eventId ? "edit" : "create") +
 					" an event with these details?"
 				}
-				onConfirm={() => submitDetails(params)}
+				onConfirm={() => submitDetails(param)}
 				onDismiss={() => setVisible(false)}
 				content={
-					"Name: " +
-					(params.name ? params.name : "None") +
-					"\nDescription: " +
-					(params.description ? params.description : "None") +
-					"\nStart Time: " +
-					(params.startTime
-						? getReadableDate(params.startTime)
-						: "None") +
-					"\nEnd Time: " +
-					(params.endTime
-						? getReadableDate(params.endTime)
-						: "None") +
-					"\nLocation: " +
-					(params.shortLocation ? params.shortLocation : "None") +
-					(props.route.params.eventId
-						? "\nNotify Users: " + (params as EditList).notifyUsers
-						: "")
+					<EventDetails
+						name={param.name}
+						startTime={param.startTime}
+						endTime={param.endTime}
+						description={param.description}
+						shortLocation={param.shortLocation}
+						footer={
+							instanceofCreate(param)
+								? param.openEvent
+									? "Event is open to all members and non-members of the club"
+									: "Event is only available to club members"
+								: param.notifyUsers
+								? "Notify club members of this update"
+								: "Do not notify club members of this update"
+						}
+					/>
 				}
 			/>
 		</SafeAreaView>
@@ -336,6 +322,10 @@ const styles = StyleSheet.create({
 	form: {
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	divider: {
+		height: 20,
+		backgroundColor: "transparent",
 	},
 });
 export default AddEventScreen;

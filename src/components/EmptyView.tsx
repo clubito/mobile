@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { ContainerStyles } from "../styles/CommonStyles";
+import { ContainerStyles, TextStyle } from "../styles/CommonStyles";
 import Colors from "../styles/Colors";
 import CoolView from "./CoolView";
 
@@ -19,7 +19,9 @@ const EmptyView = (props: Props) => {
 			<Text style={styles.title} category="s1">
 				Oh... it's looking a little lonely in here
 			</Text>
-			<Text appearance="hint">{message}</Text>
+			<Text style={styles.desc} appearance="hint">
+				{message}
+			</Text>
 		</CoolView>
 	);
 };
@@ -35,8 +37,8 @@ const styles = StyleSheet.create({
 		marginBottom: 2,
 	},
 	desc: {
-		marginLeft: 8,
-		fontSize: 14,
+		textAlign: "center",
+		marginHorizontal: 10,
 	},
 });
 

@@ -6,7 +6,6 @@ import {
 	View,
 	ImageBackground,
 	ScrollView,
-	StyleSheet,
 } from "react-native";
 import EventService from "../../services/EventService";
 import { ContainerStyles } from "../../styles/CommonStyles";
@@ -15,12 +14,11 @@ import { Club, Event, User } from "../../types";
 import { Text, Button } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
-import { getReadableDate } from "../../utils";
 import MemberList from "../../components/MemberList";
 import LoadingScreen from "../../components/LoadingScreen";
 import { ArrowRightIcon, EditIcon } from "../../components/Icons";
 import CoolDivider from "../../components/CoolDivider";
-import CoolView from "../../components/CoolView";
+import EventDetails from "../../components/EventDetails";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -57,6 +55,7 @@ const EventScreen = (props: Props) => {
 			.then((data) => {
 				setEventInfo(data);
 				setRSVP(data.isRsvp);
+				navigation.setOptions({ title: data.name });
 				ClubService.getClub(data.clubId)
 					.then((clubData) => {
 						const officer =
@@ -204,46 +203,13 @@ const EventScreen = (props: Props) => {
 				</View>
 
 				{rsvpButton}
-
-				<CoolView style={styles.cardBorder} yip>
-					<View style={styles.timeContainer}>
-						<View style={styles.timeItem}>
-							<Text category="s2" appearance="hint">
-								Start
-							</Text>
-							<Text>{getReadableDate(event.startTime)}</Text>
-						</View>
-
-						<View style={styles.timeItem}>
-							<Text category="s2" appearance="hint">
-								End
-							</Text>
-							<Text>{getReadableDate(event.endTime)}</Text>
-						</View>
-					</View>
-
-					<CoolDivider />
-
-					<View style={styles.itemContainer}>
-						<Text category="s2" appearance="hint">
-							Description
-						</Text>
-						<Text>{event.description}</Text>
-					</View>
-
-					<CoolDivider />
-
-					{event.shortLocation ? (
-						<View style={styles.itemContainer}>
-							<Text category="s2" appearance="hint">
-								Location
-							</Text>
-							<Text>{event.shortLocation}</Text>
-						</View>
-					) : null}
-
-					{members}
-				</CoolView>
+				<EventDetails
+					startTime={event.startTime}
+					endTime={event.endTime}
+					description={event.description}
+					shortLocation={event.shortLocation}
+					footer={members}
+				/>
 			</ScrollView>
 
 			<ClubListItem
@@ -264,26 +230,5 @@ const EventScreen = (props: Props) => {
 		</SafeAreaView>
 	);
 };
-
-const styles = StyleSheet.create({
-	cardBorder: {
-		borderRadius: 5,
-	},
-	timeContainer: {
-		paddingHorizontal: 16,
-		paddingVertical: 16,
-		flexDirection: "row",
-	},
-	timeItem: {
-		flex: 1,
-	},
-	itemContainer: {
-		paddingHorizontal: 16,
-		paddingVertical: 16,
-	},
-	rsvpContainer: {
-		paddingVertical: 16,
-	},
-});
 
 export default EventScreen;
