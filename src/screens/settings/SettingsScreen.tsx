@@ -53,6 +53,17 @@ const SettingsScreen = () => {
 				}}
 			/>
 
+			<CoolDivider />
+
+			<SettingsButton
+				text="Create Club"
+				icon="people-outline"
+				onPress={() => {
+					nav.navigate("CreateClub");
+				}}
+				hasChildScreen
+			/>
+
 			<View style={styles.divider} />
 
 			<SettingsButton
