@@ -21,12 +21,12 @@ import { SearchIcon } from "../../components/Icons";
 import CoolInput from "../../components/CoolInput";
 
 const EventListScreen = () => {
-	const [eventInfo, setEventInfo] = useState<Event[] | null>(null);
+	const [eventInfo, setEventInfo] = useState<Event[]>({} as Event[]);
 	const [loading, setLoading] = useState(true);
-	const [loading1, setLoading1] = useState(true);
 	const [rsvps, setRsvps] = useState({} as Event[]);
+	const [openEvents, setOpenEvents] = useState({} as Event[]);
 	const [date, setDate] = React.useState(new Date());
-	//viewAll = 0 to view all components, = 1 to view current, = 2 to view upcoming, = 3 for RSVPs, = 4 for a specific day
+	//viewAll = 0 to view all components, = 1 to view current, = 2 to view upcoming, = 3 for RSVPs, = 4 for open events, = 5 for a specific day
 	const [viewAll, setViewAll] = useState(1);
 	const navigation = useNavigation();
 	const [refreshing, setRefreshing] = React.useState(false);
@@ -34,13 +34,13 @@ const EventListScreen = () => {
 	const textInput = useRef("");
 
 	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
 		pullAllData();
 	}, []);
 
 	useEffect(() => {
-		if (eventInfo === null) {
-			pullAllData();
-		}
+		setLoading(true);
+		pullAllData();
 	}, []);
 
 	useEffect(() => {
@@ -51,31 +51,25 @@ const EventListScreen = () => {
 	}, [navigation]);
 
 	const pullAllData = () => {
-		EventService.getAllEvents()
-			.then((data) => {
-				setEventInfo(data);
+		const fetch1 = EventService.getAllEvents();
+		const fetch2 = EventService.getAllRSVPs();
+		const fetch3 = EventService.getOpenEvents();
+		Promise.all([fetch1, fetch2, fetch3])
+			.then((responses) => {
+				setEventInfo(responses[0]);
+				setRsvps(responses[1]);
+				setOpenEvents(responses[2]);
 				setLoading(false);
+				setRefreshing(false);
 			})
 			.catch((error) => {
-				if (toast)
-					toast.show(error.message, {
-						type: "danger",
-					});
-			});
-		EventService.getAllRSVPs()
-			.then((data) => {
-				setRsvps(data);
-				setLoading1(false);
-			})
-			.catch((error) => {
-				if (toast)
-					toast.show(error.message, {
-						type: "danger",
-					});
+				toast?.show(error.message, {
+					type: "danger",
+				});
 			});
 	};
 
-	if (eventInfo === null || loading || loading1) {
+	if (loading) {
 		return <LoadingScreen />;
 	}
 
@@ -107,6 +101,13 @@ const EventListScreen = () => {
 			);
 			break;
 		case 4:
+			filteredEvents = openEvents.filter(
+				(item) =>
+					item.name.toLowerCase().includes(query.toLowerCase()) ||
+					item.clubName.toLowerCase().includes(query.toLowerCase())
+			);
+			break;
+		case 5:
 			filteredEvents = eventInfo.filter(
 				(item) =>
 					sameDay(item.startTime, date) &&
@@ -166,7 +167,7 @@ const EventListScreen = () => {
 							style={{ alignSelf: "center", height: 370 }}
 							onSelect={(nextDate) => {
 								setDate(nextDate);
-								setViewAll(4);
+								setViewAll(5);
 							}}
 							filter={(d: Date) => {
 								return eventInfo.some((ev) => {
@@ -209,6 +210,13 @@ const EventListScreen = () => {
 					disabled={viewAll === 3}
 				>
 					RSVPs
+				</Button>
+				<Button
+					style={{ flex: 1 }}
+					onPress={() => setViewAll(4)}
+					disabled={viewAll === 4}
+				>
+					Open
 				</Button>
 			</ButtonGroup>
 			{listTitle ? (
