@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { Text, Button, Toggle, IndexPath } from "@ui-kitten/components";
-import { RouteProp, useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Club } from "../../types";
+import { Text, Button, IndexPath } from "@ui-kitten/components";
+import { useNavigation } from "@react-navigation/native";
 import ClubService from "../../services/ClubService";
 import { Formik } from "formik";
 import { CreateClubModel, CreateClubSchema } from "../../data/CreateClubData";
 import FormInput from "../../components/FormInput";
 import ProfilePicturePicker from "../../components/ProfilePicturePicker";
-import EventService from "../../services/EventService";
-import DateTimePickerForm from "../../components/DateTimePickerForm";
 import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
-import SettingsToggle from "../../components/SettingsToggle";
-import EventDetails from "../../components/EventDetails";
 import ClubDetails from "../../components/ClubDetails";
 import FormMultiSelect from "../../components/FormMultiSelect";
+import FormColorPicker from "../../components/FormColorPicker";
+import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 
 interface ParamList {
 	name: string;
@@ -90,7 +86,7 @@ const CreateClubScreen = () => {
 	}
 
 	return (
-		<SafeAreaView
+		<KeyboardAwareLayout
 			style={[ContainerStyles.flexContainer, ContainerStyles.horizMargin]}
 		>
 			<ScrollView>
@@ -126,10 +122,14 @@ const CreateClubScreen = () => {
 								style={styles.input}
 								data={tags}
 							/>
-							<FormInput
+							<FormColorPicker
 								id="theme"
-								label="Theme"
+								initColor={"#ffffff"}
+								label="Select Theme Color"
 								style={styles.input}
+								functionOnConfirm={(str) =>
+									setFieldValue("theme", str)
+								}
 							/>
 							<Button
 								style={styles.submitButton}
@@ -163,7 +163,7 @@ const CreateClubScreen = () => {
 					/>
 				}
 			/>
-		</SafeAreaView>
+		</KeyboardAwareLayout>
 	);
 };
 

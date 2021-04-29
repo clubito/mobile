@@ -16,7 +16,7 @@ class CreateClubModel {
 			"",
 			"https://picsum.photos/200",
 			[],
-			"ffffff"
+			"#ffffff"
 		);
 	}
 }
@@ -30,7 +30,10 @@ const CreateClubSchema = Yup.object().shape({
 	tags: Yup.array()
 		.min(1, "Please choose at least one tag for the club")
 		.required("Please choose at least one tag for the club"),
-	theme: Yup.string().min(6, "Invalid format for theme hex"),
+	theme: Yup.string().matches(
+		/^#([0-9a-f]{3}|[0-9a-f]{6})$/i,
+		"Invalid format for theme hex"
+	),
 });
 
 export { CreateClubModel, CreateClubSchema };
