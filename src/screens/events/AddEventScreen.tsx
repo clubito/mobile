@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
 import { ContainerStyles, TextStyle } from "../../styles/CommonStyles";
-import { Text, Button, CheckBox } from "@ui-kitten/components";
+import { Text, Button, Toggle } from "@ui-kitten/components";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Club } from "../../types";
@@ -20,6 +20,7 @@ import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import EventDetails from "../../components/EventDetails";
+import SettingsToggle from "../../components/SettingsToggle";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -242,27 +243,22 @@ const AddEventScreen = (props: Props) => {
 								style={{ marginBottom: 20 }}
 								isSquare={true}
 							/>
-							{props.route.params.eventId ? (
-								<CheckBox
-									checked={checked}
-									onChange={(nextChecked) =>
-										setChecked(nextChecked)
-									}
-									style={ContainerStyles.lowerMargin}
-								>
-									{`Notify Users of this update: ${checked}`}
-								</CheckBox>
-							) : (
-								<CheckBox
-									checked={checked}
-									onChange={(nextChecked) =>
-										setChecked(nextChecked)
-									}
-									style={ContainerStyles.lowerMargin}
-								>
-									{`Create open event: ${checked}`}
-								</CheckBox>
-							)}
+
+							<SettingsToggle
+								enabled={checked}
+								onToggle={(nextChecked) =>
+									setChecked(nextChecked)
+								}
+								text={
+									props.route.params.eventId
+										? "Notify Users of this update "
+										: "Create open event "
+								}
+								yip={false}
+							/>
+
+							<View style={styles.divider} />
+
 							<Button
 								style={styles.submitButton}
 								onPress={() => {
@@ -326,6 +322,10 @@ const styles = StyleSheet.create({
 	form: {
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	divider: {
+		height: 20,
+		backgroundColor: "transparent",
 	},
 });
 export default AddEventScreen;
