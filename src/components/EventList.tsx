@@ -21,12 +21,12 @@ const EventList = (props: Props) => {
 				keyExtractor={(item) => item.id}
 				ItemSeparatorComponent={CoolDivider}
 				ListFooterComponent={CoolDivider}
-				refreshControl={
-					<CoolRefreshControl
-						refreshing={props.refresh}
-						onRefresh={props.onRefresh}
-					/>
-				}
+				// refreshControl={
+				// 	<CoolRefreshControl
+				// 		refreshing={props.refresh}
+				// 		onRefresh={props.onRefresh}
+				// 	/>
+				// }
 				renderItem={({ item }) => {
 					return <EventListItem event={item} />;
 				}}

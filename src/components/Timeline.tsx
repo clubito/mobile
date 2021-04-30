@@ -111,14 +111,14 @@ const TimelineList = () => {
 					icon: component[2],
 				};
 			})}
-			options={{
-				refreshControl: (
-					<CoolRefreshControl
-						refreshing={refreshing}
-						onRefresh={pullAllData}
-					/>
-				),
-			}}
+			// options={{
+			// 	refreshControl: (
+			// 		<CoolRefreshControl
+			// 			refreshing={refreshing}
+			// 			onRefresh={pullAllData}
+			// 		/>
+			// 	),
+			// }}
 			showTime={false}
 			separator={true}
 			innerCircle={"icon"}
