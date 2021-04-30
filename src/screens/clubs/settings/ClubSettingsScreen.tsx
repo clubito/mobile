@@ -4,6 +4,7 @@ import { RouteProp, useNavigation } from "@react-navigation/native";
 import { ClubParamList } from "../ClubNavigator";
 import CoolDivider from "../../../components/CoolDivider";
 import SettingsButton from "../../../components/SettingsButton";
+import { hasPermission, RolePermissions } from "../../../utils/permissions";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type Props = {
@@ -17,42 +18,54 @@ const ClubSettingsScreen = (props: Props) => {
 
 	return (
 		<View>
-			<SettingsButton
-				hasChildScreen
-				text="Applications"
-				icon="layers-outline"
-				onPress={() => {
-					nav.navigate("ManageApplications", {
-						clubId: clubId,
-					});
-				}}
-			/>
+			{hasPermission(role, RolePermissions.MANAGE_APPLICATIONS) && (
+				<>
+					<SettingsButton
+						hasChildScreen
+						text="Manage Applications"
+						icon="layers-outline"
+						onPress={() => {
+							nav.navigate("ManageApplications", {
+								clubId: clubId,
+							});
+						}}
+					/>
 
-			<CoolDivider />
+					<CoolDivider />
+				</>
+			)}
 
-			<SettingsButton
-				hasChildScreen
-				text="Manage Members"
-				icon="people-outline"
-				onPress={() => {
-					nav.navigate("ManageMembers", {
-						clubId: clubId,
-					});
-				}}
-			/>
+			{hasPermission(role, RolePermissions.MANAGE_MEMBERS) && (
+				<>
+					<SettingsButton
+						hasChildScreen
+						text="Manage Members"
+						icon="people-outline"
+						onPress={() => {
+							nav.navigate("ManageMembers", {
+								clubId: clubId,
+							});
+						}}
+					/>
 
-			<CoolDivider />
+					<CoolDivider />
+				</>
+			)}
 
-			<SettingsButton
-				hasChildScreen
-				text="Manage Roles"
-				icon="options-outline"
-				onPress={() => {
-					nav.navigate("ManageRoles", {
-						clubId: clubId,
-					});
-				}}
-			/>
+			{hasPermission(role, RolePermissions.MANAGE_ROLES) && (
+				<>
+					<SettingsButton
+						hasChildScreen
+						text="Manage Roles"
+						icon="options-outline"
+						onPress={() => {
+							nav.navigate("ManageRoles", {
+								clubId: clubId,
+							});
+						}}
+					/>
+				</>
+			)}
 		</View>
 	);
 };
