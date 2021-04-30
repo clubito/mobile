@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, View } from "react-native";
+import { Dimensions, Image, Platform, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import {
 	Text,
@@ -26,6 +26,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import { PlusIcon } from "../../components/Icons";
 import { hasPermission, RolePermissions } from "../../utils/permissions";
 import EmptyView from "../../components/EmptyView";
+import Carousel from "react-native-snap-carousel";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -52,6 +53,7 @@ const ClubScreen = (props: Props) => {
 	const [message, setMessage] = useState("");
 	const [error, setError] = useState(false);
 	const [isMember, setIsMember] = useState(false);
+	const [viewPortWidth, setWidth] = useState();
 
 	useEffect(() => {
 		refresh();
@@ -160,25 +162,56 @@ const ClubScreen = (props: Props) => {
 				setError(true);
 			});
 	};
-
-	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
+	const _renderItem = (item: { item: any; index: number }) => {
+		return (
 			<View
 				style={{
-					width: "100%",
-					marginVertical: 10,
+					alignSelf: "center",
 				}}
 			>
 				<Image
 					source={{ uri: clubInfo.logo }}
 					style={{
-						width: 300,
-						height: 100,
-						resizeMode: "center",
-						alignSelf: "center",
+						width: 250,
+						height: 250,
 					}}
 				/>
 			</View>
+		);
+	};
+
+	const { width: viewportWidth } = Dimensions.get("window");
+
+	return (
+		<SafeAreaView style={ContainerStyles.flexContainer}>
+			{Platform.OS === "web" ? (
+				<View
+					style={{
+						width: "100%",
+						marginVertical: 10,
+					}}
+				>
+					<Image
+						source={{ uri: clubInfo.logo }}
+						style={{
+							width: 300,
+							height: 100,
+							resizeMode: "center",
+							alignSelf: "center",
+						}}
+					/>
+				</View>
+			) : (
+				<Carousel
+					data={[clubInfo.logo, clubInfo.logo, clubInfo.logo]}
+					renderItem={_renderItem}
+					sliderWidth={viewportWidth}
+					sliderHeight={300}
+					itemWidth={300}
+					containerCustomStyle={{ flexGrow: 0, marginVertical: 10 }}
+					style={{ alignSelf: "center" }}
+				/>
+			)}
 			{requestButton}
 			<CoolCard yip>
 				<Text>{clubInfo?.description}</Text>
