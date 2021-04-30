@@ -290,4 +290,20 @@ export default class ClubService {
 
 		return { status: 200, message: "Didn't delete club" };
 	}
+
+	static async changeTheme(clubId: string, theme: string) {
+		const response: AxiosResponse = await API.post("/clubs/theme", {
+			id: clubId,
+			theme: theme,
+		});
+
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+
+		return response.data;
+	}
 }

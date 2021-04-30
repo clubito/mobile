@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { ClubParamList } from "../ClubNavigator";
@@ -7,6 +7,9 @@ import SettingsButton from "../../../components/SettingsButton";
 import GeneralModal from "../../../components/GeneralModal";
 import ClubService from "../../../services/ClubService";
 import { hasPermission, RolePermissions } from "../../../utils/permissions";
+import FormColorPicker from "../../../components/FormColorPicker";
+import ColorPicker from "../../../components/ColorPicker";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type Props = {
@@ -17,8 +20,40 @@ const ClubSettingsScreen = (props: Props) => {
 	const clubId = props.route.params.clubId;
 	const role = props.route.params.role;
 	const nav = useNavigation();
+	const [theme, setTheme] = useState("");
+	const [isLoading, setIsLoading] = useState(true);
 
-	const [modalVisible, setModalVisible] = useState(false);
+	useEffect(() => {
+		ClubService.getClub(props.route.params.clubId)
+			.then((data) => {
+				setTheme(data.theme);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				toast?.show(error.message, {
+					type: "danger",
+				});
+			});
+	}, []);
+
+	const updateTheme = (newTheme: string) => {
+		ClubService.changeTheme(props.route.params.clubId, newTheme)
+			.then((data) => {
+				toast?.show(data.message, {
+					type: "success",
+				});
+			})
+			.catch((error) => {
+				toast?.show(error.message, {
+					type: "danger",
+				});
+			});
+	};
+
+	if (isLoading) {
+		return <LoadingScreen />;
+	}
+
 	return (
 		<View>
 			{hasPermission(role, RolePermissions.MANAGE_APPLICATIONS) && (
@@ -69,6 +104,19 @@ const ClubSettingsScreen = (props: Props) => {
 					/>
 				</>
 			)}
+
+			<View style={styles.divider} />
+
+			<ColorPicker
+				id="theme"
+				initColor={theme ? theme : "#ffffff"}
+				label="Select Theme Color"
+				functionOnConfirm={(str) => {
+					setTheme(str);
+					updateTheme(str);
+				}}
+			/>
+
 			{/* TODO: Add Conditional to ensure only club president can see button 
 			<SettingsButton
 				text="Delete Club"
@@ -101,7 +149,7 @@ const ClubSettingsScreen = (props: Props) => {
 };
 const styles = StyleSheet.create({
 	divider: {
-		height: 16,
+		height: 24,
 		backgroundColor: "transparent",
 	},
 });
