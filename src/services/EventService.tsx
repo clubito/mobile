@@ -39,6 +39,7 @@ export default class EventService {
 		latitude?: number;
 		shortLocation?: string;
 		picture?: string;
+		isOpen: boolean;
 	}) {
 		if (params.picture && !params.picture.startsWith("https")) {
 			params.picture = await ImageService.upload(params.picture);

@@ -42,7 +42,7 @@ interface ParamList {
 }
 interface CreateList extends ParamList {
 	clubId: string;
-	openEvent: boolean;
+	isOpen: boolean;
 }
 interface EditList extends ParamList {
 	eventId: string;
@@ -128,7 +128,7 @@ const AddEventScreen = (props: Props) => {
 		} else {
 			params = {} as CreateList;
 			params.clubId = clubInfo ? clubInfo.id : "";
-			params.openEvent = checked;
+			params.isOpen = checked;
 		}
 		params.name = model.name;
 		params.startTime = new Date(startDate);
@@ -244,7 +244,9 @@ const AddEventScreen = (props: Props) => {
 								isSquare={true}
 							/>
 
-							<CoolView style={{ paddingVertical: 4 }}>
+							<CoolView
+								style={[{ paddingVertical: 4 }, styles.input]}
+							>
 								<CoolListItem
 									title={
 										props.route.params.eventId
@@ -299,7 +301,7 @@ const AddEventScreen = (props: Props) => {
 						shortLocation={param.shortLocation}
 						footer={
 							instanceofCreate(param)
-								? param.openEvent
+								? param.isOpen
 									? "Event is open to all members and non-members of the club"
 									: "Event is only available to club members"
 								: param.notifyUsers

@@ -22,6 +22,7 @@ interface Event {
 	clubName: string;
 	lastUpdated: string;
 	isRsvp: boolean;
+	isOpen: boolean;
 }
 
 interface Club {
