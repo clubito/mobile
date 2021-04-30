@@ -43,6 +43,18 @@ const PlusIcon = (props: IconProps) => (
 	/>
 );
 
+const PlusIcon1 = (props: IconProps) => (
+	<Icon
+		name="plus-outline"
+		{...props}
+		style={{
+			width: 24,
+			height: 24,
+		}}
+		fill={getColor()}
+	/>
+);
+
 const SearchIcon = (props: IconProps) => (
 	<Icon
 		name="search-outline"
@@ -85,4 +97,5 @@ export {
 	SearchIcon,
 	SettingsIcon,
 	GalleryIcon,
+	PlusIcon1,
 };
