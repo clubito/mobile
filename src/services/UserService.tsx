@@ -2,7 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import API from "./API";
 import ImageService from "./ImageService";
-import { Announcement, Club, Event, TimelineItem, User } from "../types";
+import {
+	Announcement,
+	Club,
+	Event,
+	NotificationSettings,
+	TimelineItem,
+	User,
+} from "../types";
 import EventService from "./EventService";
 import ClubService from "./ClubService";
 
@@ -40,47 +47,26 @@ export default class UserService {
 	 * Get current user settings from backend
 	 */
 	static async getCurrentUserNotificationSettings() {
-		// const response: AxiosResponse<NotificationSettings> = await API.get<NotificationSettings>(
-		// 	"/user/settings"
-		// );
-		// if (response.status !== 200) {
-		// 	throw {
-		// 		code: response.status,
-		// 		message: response.statusText,
-		// 	};
-		// }
-		// return response.data;
+		const user: User = await this.getCurrentUser();
+		const notificationSettings: NotificationSettings = user.settings!
+			.notifications;
+		notificationSettings.clubs = [];
 
-		// Dummy return until backend is setup
-		return {
-			enabled: true,
-			clubs: [
-				{
-					enabled: true,
-					id: "id1",
-					name: "LOL",
-					logo: "https://picsum.photos/200/200",
-				},
-				{
-					enabled: false,
-					id: "id2",
-					name: "LMAO",
-					logo: "https://picsum.photos/200/200",
-				},
-				{
-					enabled: true,
-					id: "id3",
-					name: "ROFL",
-					logo: "https://picsum.photos/200/200",
-				},
-				{
-					enabled: false,
-					id: "id4",
-					name: "YOLO",
-					logo: "https://picsum.photos/200/200",
-				},
-			],
-		};
+		user.clubs.forEach((club) => {
+			let isEnabled =
+				notificationSettings.disabledClubs.find(
+					(disabledId) => disabledId === club.id
+				) === undefined;
+
+			notificationSettings.clubs.push({
+				enabled: isEnabled,
+				id: club.id,
+				name: club.name,
+				logo: club.logo,
+			});
+		});
+
+		return notificationSettings;
 	}
 
 	/**
@@ -128,7 +114,7 @@ export default class UserService {
 	 * Disable all notfications for current user
 	 */
 	static async setGlobalNotificationsEnabled(state: boolean) {
-		const response: AxiosResponse = await API.post("/user/settings", {
+		const response: AxiosResponse = await API.put("/user/settings", {
 			settings: {
 				notifications: {
 					enabled: state,
@@ -147,18 +133,13 @@ export default class UserService {
 	}
 
 	/**
-	 * Disable all notfications for current user
+	 * Set club notfications for current user
 	 */
-	static async setClubNotificationsEnabled(clubId: string, state: boolean) {
+	static async setClubNotifications(disabledClubs: string[]) {
 		const response: AxiosResponse = await API.put("/user/settings", {
 			settings: {
 				notifications: {
-					clubs: [
-						{
-							enabled: state,
-							id: clubId,
-						},
-					],
+					disabledClubs: disabledClubs,
 				},
 			},
 		});
