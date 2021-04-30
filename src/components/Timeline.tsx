@@ -62,10 +62,7 @@ const TimelineList = () => {
 					{"Announcement on " +
 						getReadableDate(announcement.timestamp)}
 				</CoolText>,
-				<AnnouncementListItem
-					announcement={announcement}
-					pressable={true}
-				/>,
+				<AnnouncementListItem announcement={announcement} />,
 				announcementIcon,
 			];
 		} else {
