@@ -5,18 +5,22 @@ import { RenderProp } from "@ui-kitten/components/devsupport";
 
 interface FloatingButtonProps extends ButtonProps {
 	icon: RenderProp<Partial<ImageProps>>;
+	color?: string;
 }
 
 const FloatingButton = (
 	props: FloatingButtonProps,
 	ref: any
 ): React.ReactElement<FloatingButtonProps> => {
-	const { icon, ...stuff } = props;
+	const { icon, color, ...stuff } = props;
 
 	return (
 		<Button
 			ref={ref}
-			style={styles.button}
+			style={[
+				styles.button,
+				color ? { backgroundColor: color, borderColor: color } : {},
+			]}
 			accessoryLeft={icon}
 			{...stuff}
 		/>

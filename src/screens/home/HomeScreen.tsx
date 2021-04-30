@@ -12,12 +12,7 @@ const HomeScreen = () => {
 	}, []);
 
 	return (
-		<CoolView
-			style={{
-				flex: 1,
-			}}
-			safe
-		>
+		<CoolView safe>
 			<TimelineList />
 		</CoolView>
 	);

@@ -195,7 +195,9 @@ const ManageApplicationsScreen = (props: Props) => {
 			/>
 		</CoolView>
 	) : (
-		<EmptyView message="No applications available" />
+		<CoolView yip>
+			<EmptyView message="No applications available" />
+		</CoolView>
 	);
 };
 

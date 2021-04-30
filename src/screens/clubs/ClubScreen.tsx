@@ -28,7 +28,6 @@ import { PlusIcon } from "../../components/Icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { hasPermission, RolePermissions } from "../../utils/permissions";
 import EmptyView from "../../components/EmptyView";
-import Carousel from "react-native-snap-carousel";
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
@@ -117,6 +116,7 @@ const ClubScreen = (props: Props) => {
 				anchor={() => (
 					<FloatingButton
 						icon={PlusIcon}
+						color={clubInfo.theme ? clubInfo.theme : undefined}
 						onPress={() => {
 							setAddVisible(true);
 						}}
@@ -201,7 +201,7 @@ const ClubScreen = (props: Props) => {
 	};
 
 	return (
-		<SafeAreaView style={ContainerStyles.flexContainer}>
+		<View style={ContainerStyles.flexContainer}>
 			<LinearGradient
 				colors={
 					clubInfo.theme
@@ -349,7 +349,7 @@ const ClubScreen = (props: Props) => {
 				/>
 			)}
 			{addAnEvButton}
-		</SafeAreaView>
+		</View>
 	);
 };
 
