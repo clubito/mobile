@@ -66,5 +66,23 @@ const SettingsIcon = (props: IconProps) => (
 		fill={getColor()}
 	/>
 );
+const GalleryIcon = (props: IconProps) => (
+	<Icon
+		name="image-outline"
+		{...props}
+		style={{
+			width: 20,
+			height: 20,
+		}}
+		fill={getColor()}
+	/>
+);
 
-export { ArrowRightIcon, EditIcon, PlusIcon, SearchIcon, SettingsIcon };
+export {
+	ArrowRightIcon,
+	EditIcon,
+	PlusIcon,
+	SearchIcon,
+	SettingsIcon,
+	GalleryIcon,
+};

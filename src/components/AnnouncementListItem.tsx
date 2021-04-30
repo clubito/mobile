@@ -9,7 +9,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
 	announcement: Announcement;
-	pressable: boolean;
+	onPress?: () => void;
 	style?: StyleProp<ViewStyle>;
 };
 
@@ -31,16 +31,7 @@ const EventListItem = (props: Props) => {
 					</Text>
 				</View>
 			)}
-			onPress={() => {
-				props.pressable
-					? navigation.push("ClubNavigator", {
-							screen: "Club",
-							params: {
-								id: props.announcement.clubId,
-							},
-					  })
-					: null;
-			}}
+			onPress={props?.onPress}
 		/>
 	);
 };

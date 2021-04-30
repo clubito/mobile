@@ -32,12 +32,7 @@ const AnnouncementList = (props: Props) => {
 				ItemSeparatorComponent={CoolDivider}
 				ListFooterComponent={CoolDivider}
 				renderItem={({ item }) => {
-					return (
-						<AnnouncementListItem
-							announcement={item}
-							pressable={false}
-						/>
-					);
+					return <AnnouncementListItem announcement={item} />;
 				}}
 			/>
 		</CoolView>

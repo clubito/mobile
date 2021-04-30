@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, View } from "react-native";
+import { Dimensions, Image, Platform, SafeAreaView, View } from "react-native";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import {
 	Text,
@@ -8,6 +8,7 @@ import {
 	Popover,
 	Menu,
 	MenuItem,
+	Modal,
 } from "@ui-kitten/components";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useNavigation } from "@react-navigation/native";
@@ -27,6 +28,8 @@ import { PlusIcon } from "../../components/Icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { hasPermission, RolePermissions } from "../../utils/permissions";
 import EmptyView from "../../components/EmptyView";
+import Carousel from "react-native-snap-carousel";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -50,14 +53,17 @@ const ClubScreen = (props: Props) => {
 	const [clubInfo, setClubInfo] = useState({} as Club);
 	const [isLoading, setIsLoading] = useState(true);
 	const [modalVisible, setModalVisible] = useState(false);
+	const [viewImage, setViewImage] = useState(0);
+	const [imageModal, setImageModal] = useState(false);
+	const [images, setImages] = useState([] as string[]);
 	const [message, setMessage] = useState("");
 	const [error, setError] = useState(false);
 	const [isMember, setIsMember] = useState(false);
-
+	const [viewportWidth, setWidth] = useState(Dimensions.get("window"));
+	const [wh, setWH] = useState([0, 0]);
 	useEffect(() => {
 		refresh();
 	}, []);
-
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
 			refresh();
@@ -67,11 +73,16 @@ const ClubScreen = (props: Props) => {
 
 	const refresh = () => {
 		setIsLoading(true);
-		ClubService.getClub(props.route.params.id).then((club) => {
-			setClubInfo(club);
-			setIsMember(club.role.name !== "Non-Member");
-			setIsLoading(false);
-		});
+		ClubService.getClub(props.route.params.id)
+			.then((club) => {
+				setClubInfo(club);
+				setImages([club.logo, club.logo, club.logo]);
+				setIsMember(club.role.name !== "Non-Member");
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				toast?.show(error.message, { type: "danger" });
+			});
 	};
 
 	if (isLoading) {
@@ -161,6 +172,34 @@ const ClubScreen = (props: Props) => {
 			});
 	};
 
+	const _renderItem1 = (item: { item: any; index: number }) => {
+		return (
+			<TouchableHighlight
+				style={{ alignSelf: "center" }}
+				onPress={() => triggerModal(item.index)}
+			>
+				<Image
+					source={{ uri: item.item }}
+					style={{
+						width: 200,
+						height: 200,
+					}}
+				/>
+			</TouchableHighlight>
+		);
+	};
+	const triggerModal = (index: number) => {
+		setViewImage(index);
+		Image.getSize(images[viewImage], (width, height) => {
+			// calculate image width and height
+			const screenWidth = Dimensions.get("window").width - 80;
+			const scaleFactor = width / screenWidth;
+			const imageHeight = height / scaleFactor;
+			setWH([screenWidth, imageHeight]);
+		});
+		setImageModal(true);
+	};
+
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			<LinearGradient
@@ -222,6 +261,47 @@ const ClubScreen = (props: Props) => {
 				}
 				status={"basic"}
 			/>
+			<Modal
+				visible={imageModal}
+				backdropStyle={ContainerStyles.modalBackdrop}
+				onBackdropPress={() => setImageModal(false)}
+			>
+				<CoolCard
+					yip
+					style={ContainerStyles.extraMargin}
+					footer={() => (
+						<View
+							style={
+								(ContainerStyles.flexContainer,
+								{ flexDirection: "row" })
+							}
+						>
+							<Button
+								onPress={() => setImageModal(false)}
+								style={{ flex: 1, margin: 10 }}
+								status="basic"
+							>
+								Cancel
+							</Button>
+							<Button
+								onPress={() => {}}
+								style={{ flex: 1, margin: 10 }}
+								status={"danger"}
+							>
+								Delete Image
+							</Button>
+						</View>
+					)}
+				>
+					<Image
+						source={{ uri: images[viewImage] }}
+						style={{
+							width: wh[0],
+							height: wh[1],
+						}}
+					/>
+				</CoolCard>
+			</Modal>
 
 			{isMember ? (
 				<Tab.Navigator tabBarOptions={{ scrollEnabled: true }}>

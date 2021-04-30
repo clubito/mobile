@@ -13,15 +13,13 @@ import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import ClubDetails from "../../components/ClubDetails";
 import FormMultiSelect from "../../components/FormMultiSelect";
-import FormColorPicker from "../../components/FormColorPicker";
 import KeyboardAwareLayout from "../../components/KeyboardAwareLayout";
 
 interface ParamList {
 	name: string;
 	description: string;
-	picture: string;
+	logo: string;
 	tags: string[];
-	theme: string;
 }
 
 const CreateClubScreen = () => {
@@ -56,9 +54,8 @@ const CreateClubScreen = () => {
 		var params = {} as ParamList;
 		params.name = model.name;
 		params.description = model.description;
-		params.picture = image ? image : model.picture;
-		params.tags = mapTagSelections(model.tags);
-		params.theme = model.theme;
+		params.logo = image ? image : model.logo;
+		params.tags = mapTagSelections(model.tags).map((x) => x.toUpperCase());
 		setParam(params);
 
 		setVisible(true);
@@ -97,7 +94,7 @@ const CreateClubScreen = () => {
 					onSubmit={triggerModal}
 					validateOnChange={submitted}
 				>
-					{({ handleSubmit, setFieldValue }) => (
+					{({ handleSubmit }) => (
 						<CoolView style={styles.form}>
 							<FormInput
 								id="name"
@@ -121,15 +118,6 @@ const CreateClubScreen = () => {
 								label="Select Interests"
 								style={styles.input}
 								data={tags}
-							/>
-							<FormColorPicker
-								id="theme"
-								initColor={"#ffffff"}
-								label="Select Theme Color"
-								style={styles.input}
-								functionOnConfirm={(str) =>
-									setFieldValue("theme", str)
-								}
 							/>
 							<Button
 								style={styles.submitButton}
@@ -157,9 +145,8 @@ const CreateClubScreen = () => {
 					<ClubDetails
 						name={param.name}
 						description={param.description}
-						picture={param.picture}
+						logo={param.logo}
 						tags={param.tags}
-						theme={param.theme}
 					/>
 				}
 			/>
@@ -169,6 +156,7 @@ const CreateClubScreen = () => {
 
 const styles = StyleSheet.create({
 	submitButton: {
+		marginTop: 15,
 		width: 300,
 	},
 	input: {

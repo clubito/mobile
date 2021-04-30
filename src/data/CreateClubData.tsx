@@ -5,35 +5,24 @@ class CreateClubModel {
 	constructor(
 		readonly name: string,
 		readonly description: string,
-		readonly picture: string,
-		readonly tags: IndexPath[],
-		readonly theme: string
+		readonly logo: string,
+		readonly tags: IndexPath[]
 	) {}
 
 	static empty(): CreateClubModel {
-		return new CreateClubModel(
-			"",
-			"",
-			"https://picsum.photos/200",
-			[],
-			"#ffffff"
-		);
+		return new CreateClubModel("", "", "https://picsum.photos/200", []);
 	}
 }
 
 const CreateClubSchema = Yup.object().shape({
-	name: Yup.string().required("Please enter a name for the club"),
-	description: Yup.string().required(
+	name: Yup.string().min(3, "The name must be at least 3 characters long").required("Please enter a name for the club"),
+	description: Yup.string().min(20, "The description must be at least 20 characters").required(
 		"Please enter a description for the club"
 	),
-	picture: Yup.string(),
+	logo: Yup.string(),
 	tags: Yup.array()
 		.min(1, "Please choose at least one tag for the club")
-		.required("Please choose at least one tag for the club"),
-	theme: Yup.string().matches(
-		/^#([0-9a-f]{3}|[0-9a-f]{6})$/i,
-		"Invalid format for theme hex"
-	),
+		.required("Please choose at least one tag for the club")
 });
 
 export { CreateClubModel, CreateClubSchema };
