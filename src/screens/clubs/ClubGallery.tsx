@@ -28,17 +28,12 @@ const ClubScreen = (props: Props) => {
 	const navigation = useNavigation();
 	const [isLoading, setIsLoading] = useState(true);
 	const [viewImage, setViewImage] = useState(0);
-	const [imageModal, setImageModal] = useState(false);
 	const [images, setImages] = useState([] as string[]);
 	const [viewportWidth, setWidth] = useState(Dimensions.get("window").width);
 	const [imageWidth, setImageWidth] = useState(
 		Dimensions.get("window").width - 50
 	);
 	const [imageHeight, setImageHeight] = useState(0);
-	const [modalDims, setModalDims] = useState([0, 0]);
-	const [newImage, setNewImage] = useState("");
-	const [curImage, setCurImage] = useState("");
-	const [modalType, setModalType] = useState(false);
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -61,37 +56,33 @@ const ClubScreen = (props: Props) => {
 
 	const refresh = () => {
 		setIsLoading(true);
-		ClubService.getGallery(props.route.params.clubId).then((images) => {
-			setImages(images);
-			setIsLoading(false);
-		});
+		ClubService.getGallery(props.route.params.clubId)
+			.then((images) => {
+				console.log(images[0]);
+				const imagesArr1 = images[0].split(",").map(String);
+				const images1 = imagesArr1.map((i: String) => i.trim());
+				setImages(images1);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				toast?.show(error.message, {
+					type: "danger",
+				});
+			});
 	};
 
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
-	const pickImage = async () => {
-		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
-			quality: 1,
-			exif: false,
-		});
 
-		if (!result.cancelled) {
-			setNewImage(result.uri);
-			triggerAddModal(result.uri);
-		}
-	};
 	const _renderItem1 = (item: { item: any; index: number }) => {
 		Image.getSize(item.item, (width, height) => {
-			// setImageHeight(height / (width / imageWidth));
-			setImageHeight(300);
+			setImageHeight(height / (width / imageWidth));
 		});
 		return (
 			<View>
 				<Image
-					source={{ uri: images[viewImage] }}
+					source={{ uri: item.item }}
 					style={{
 						width: imageWidth,
 						height: imageHeight,
@@ -101,69 +92,16 @@ const ClubScreen = (props: Props) => {
 		);
 	};
 
-	const triggerDeleteModal = (index: number) => {
-		setCurImage(images[index]);
-		Image.getSize(images[index], (width, height) => {
-			// calculate image width and height
-			const screenWidth = Dimensions.get("window").width - 80;
-			const scaleFactor = width / screenWidth;
-			const imageHeight = height / scaleFactor;
-			setModalDims([screenWidth, imageHeight]);
-		});
-		setModalType(false);
-		setImageModal(true);
-	};
-
-	const triggerAddModal = (uri: string) => {
-		setCurImage(uri);
-		Image.getSize(uri, (width, height) => {
-			// calculate image width and height
-			const screenWidth = Dimensions.get("window").width - 80;
-			const scaleFactor = width / screenWidth;
-			const imageHeight = height / scaleFactor;
-			setModalDims([screenWidth, imageHeight]);
-		});
-		setModalType(true);
-		setImageModal(true);
-	};
-
-	const deleteItem = () => {
-		var deleted = images;
-		deleted.splice(viewImage, 1);
-		ClubService.updateGallery(props.route.params.clubId, deleted);
-	};
-	const addItem = () => {
-		if (newImage !== "") {
-			console.log("IM", images);
-			ClubService.updateGallery(
-				props.route.params.clubId,
-				images.length > 0 ? images.concat(newImage) : [newImage]
-			)
-				.then((data) => {
-					toast?.show(data.message, {
-						type: "success",
-					});
-					refresh();
-				})
-				.catch((error) => {
-					toast?.show(error.message, {
-						type: "danger",
-					});
-				});
-		}
-	};
-
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
 			{images.length > 0 ? (
 				<>
-					{/* <Carousel
+					<Carousel
 						data={images}
 						renderItem={_renderItem1}
 						sliderWidth={viewportWidth}
-						itemHeight={300}
+						itemHeight={imageHeight}
 						itemWidth={imageWidth}
-						sliderHeight={300}
 						containerCustomStyle={{
 							flexGrow: 0,
 							marginVertical: 10,
@@ -171,74 +109,11 @@ const ClubScreen = (props: Props) => {
 						onSnapToItem={(e) => {
 							setViewImage(e);
 						}}
-					/> */}
-					<Button
-						onPress={() => triggerDeleteModal(viewImage)}
-						style={{ width: 100 }}
-						status={"danger"}
-					>
-						{"Delete Image"}
-					</Button>
+					/>
 				</>
 			) : (
 				<EmptyView message="This club doesn't have any images" />
 			)}
-			<Modal
-				visible={imageModal}
-				backdropStyle={ContainerStyles.modalBackdrop}
-				onBackdropPress={() => setImageModal(false)}
-			>
-				<CoolCard
-					yip
-					style={ContainerStyles.extraMargin}
-					footer={() => (
-						<View
-							style={
-								(ContainerStyles.flexContainer,
-								{ flexDirection: "row" })
-							}
-						>
-							<Button
-								onPress={() => setImageModal(false)}
-								style={{ flex: 1, margin: 10 }}
-								status="basic"
-							>
-								Cancel
-							</Button>
-							{modalType ? (
-								<Button
-									onPress={() => addItem()}
-									style={{ flex: 1, margin: 10 }}
-									status={"success"}
-								>
-									Add Image
-								</Button>
-							) : (
-								<Button
-									onPress={deleteItem}
-									style={{ flex: 1, margin: 10 }}
-									status={"danger"}
-								>
-									Delete Image
-								</Button>
-							)}
-						</View>
-					)}
-				>
-					<Image
-						source={{ uri: curImage }}
-						style={{
-							width: modalDims[0],
-							height: modalDims[1],
-						}}
-					/>
-				</CoolCard>
-			</Modal>
-			<Button
-				appearance="ghost"
-				onPress={pickImage}
-				accessoryLeft={PlusIcon1}
-			/>
 		</SafeAreaView>
 	);
 };
