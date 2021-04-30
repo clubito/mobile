@@ -92,17 +92,17 @@ const ClubScreen = (props: Props) => {
 		</Button>
 	);
 
-	const addAnEvButton = () => {
-		const canAnnouncement = hasPermission(
-			clubInfo.role,
-			RolePermissions.ADD_ANNOUNCEMENTS
-		);
-		const canEvent = hasPermission(
-			clubInfo.role,
-			RolePermissions.ADD_EDIT_EVENTS
-		);
+	const canAnnouncement = hasPermission(
+		clubInfo.role,
+		RolePermissions.ADD_ANNOUNCEMENTS
+	);
+	const canEvent = hasPermission(
+		clubInfo.role,
+		RolePermissions.ADD_EDIT_EVENTS
+	);
 
-		return canAnnouncement || canEvent ? (
+	const addAnEvButton =
+		canAnnouncement || canEvent ? (
 			<Popover
 				anchor={() => (
 					<FloatingButton
@@ -131,7 +131,7 @@ const ClubScreen = (props: Props) => {
 					) : (
 						<></>
 					)}
-					{canAnnouncement ? (
+					{canEvent ? (
 						<MenuItem
 							title="Add Event"
 							onPress={() => {
@@ -149,7 +149,6 @@ const ClubScreen = (props: Props) => {
 		) : (
 			<></>
 		);
-	};
 
 	const sendRequest = () => {
 		setModalVisible(false);

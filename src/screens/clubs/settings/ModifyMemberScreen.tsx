@@ -11,6 +11,7 @@ import CoolDivider from "../../../components/CoolDivider";
 import CoolView from "../../../components/CoolView";
 import LoadingScreen from "../../../components/LoadingScreen";
 import RemoveUserModal from "../../../components/RemoveUserModal";
+import { getRoleLabel } from "../../../utils/permissions";
 
 type Route = RouteProp<ClubParamList, "ModifyMember">;
 type Props = {
@@ -96,6 +97,11 @@ const ModifyMemberScreen = (props: Props) => {
 					Role
 				</Text>
 				<Text>{userRole.name}</Text>
+				{userRole.permissions.map((perm) => (
+					<Text appearance="hint">
+						{"  \u2022 " + getRoleLabel(perm)}
+					</Text>
+				))}
 			</CoolView>
 
 			<View style={styles.botContainer}>

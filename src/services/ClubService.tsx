@@ -168,7 +168,6 @@ export default class ClubService {
 	 *	Create role in a club with given permissions
 	 */
 	static async createRole(clubId: string, name: string, perms: string[]) {
-		console.log(perms);
 		const response: AxiosResponse = await API.post("/clubs/role", {
 			id: clubId,
 			name: name,
