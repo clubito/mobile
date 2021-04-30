@@ -16,6 +16,7 @@ type Props = {
 	onPress?: (user: User) => void;
 	accessoryRight?: RenderProp<ViewProps>;
 	emptyText?: string;
+	yup?: boolean;
 };
 
 const MemberList = (props: Props) => {
@@ -43,8 +44,10 @@ const MemberList = (props: Props) => {
 								</Text>
 							)}
 							description={() =>
-								item.role &&
-								item.role.permissions.length > 0 ? (
+								props.yup ? (
+									<></>
+								) : item.role &&
+								  item.role.permissions.length > 0 ? (
 									<View
 										style={[
 											styles.descContainer,

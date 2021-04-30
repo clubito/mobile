@@ -167,6 +167,7 @@ const EventScreen = (props: Props) => {
 					members={users}
 					emptyText="No RSVPs"
 					accessoryRight={ArrowRightIcon}
+					yup
 				/>
 			</View>
 		</>

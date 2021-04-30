@@ -11,7 +11,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import EmptyView from "../../components/EmptyView";
 import Carousel from "react-native-snap-carousel";
 import * as ImagePicker from "expo-image-picker";
-import { PlusIcon } from "../../components/Icons";
+import { PlusIcon1 } from "../../components/Icons";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "ClubGallery">;
 type ClubScreenNavigationProp = StackNavigationProp<
@@ -63,17 +63,7 @@ const ClubScreen = (props: Props) => {
 		setIsLoading(true);
 		ClubService.getGallery(props.route.params.clubId).then((images) => {
 			setImages(images);
-			console.log(images);
 			setIsLoading(false);
-			navigation.setOptions({
-				headerRight: () => (
-					<Button
-						appearance="ghost"
-						onPress={pickImage}
-						accessoryLeft={PlusIcon}
-					/>
-				),
-			});
 		});
 	};
 
@@ -183,7 +173,7 @@ const ClubScreen = (props: Props) => {
 						}}
 					/> */}
 					<Button
-						onPress={() => {}}
+						onPress={() => triggerDeleteModal(viewImage)}
 						style={{ width: 100 }}
 						status={"danger"}
 					>
@@ -247,7 +237,7 @@ const ClubScreen = (props: Props) => {
 			<Button
 				appearance="ghost"
 				onPress={pickImage}
-				accessoryLeft={PlusIcon}
+				accessoryLeft={PlusIcon1}
 			/>
 		</SafeAreaView>
 	);

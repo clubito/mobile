@@ -103,8 +103,11 @@ const EventListScreen = () => {
 		case 4:
 			filteredEvents = openEvents.filter(
 				(item) =>
-					item.name.toLowerCase().includes(query.toLowerCase()) ||
-					item.clubName.toLowerCase().includes(query.toLowerCase())
+					item.isOpen &&
+					(item.name.toLowerCase().includes(query.toLowerCase()) ||
+						item.clubName
+							.toLowerCase()
+							.includes(query.toLowerCase()))
 			);
 			break;
 		case 5:
@@ -180,39 +183,39 @@ const EventListScreen = () => {
 			</DrawerGroup>
 			<ButtonGroup
 				appearance="outline"
-				style={{ borderRadius: 0 }}
+				style={{ borderRadius: 0, width: "100%" }}
 				size="small"
 			>
 				<Button
-					style={{ flex: 1 }}
+					style={{ flex: 1, paddingHorizontal: -15 }}
 					onPress={() => setViewAll(0)}
 					disabled={viewAll === 0}
 				>
 					All
 				</Button>
 				<Button
-					style={{ flex: 1 }}
+					style={{ flex: 1, paddingHorizontal: -15 }}
 					onPress={() => setViewAll(1)}
 					disabled={viewAll === 1}
 				>
 					Ongoing
 				</Button>
 				<Button
-					style={{ flex: 1 }}
+					style={{ flex: 1, paddingHorizontal: -15 }}
 					onPress={() => setViewAll(2)}
 					disabled={viewAll === 2}
 				>
 					Upcoming
 				</Button>
 				<Button
-					style={{ flex: 1 }}
+					style={{ flex: 1, paddingHorizontal: -15 }}
 					onPress={() => setViewAll(3)}
 					disabled={viewAll === 3}
 				>
 					RSVPs
 				</Button>
 				<Button
-					style={{ flex: 1 }}
+					style={{ flex: 1, paddingHorizontal: -15 }}
 					onPress={() => setViewAll(4)}
 					disabled={viewAll === 4}
 				>
@@ -239,7 +242,7 @@ const EventListScreen = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		paddingHorizontal: 16,
+		paddingHorizontal: 10,
 		flexGrow: 1,
 	},
 });
