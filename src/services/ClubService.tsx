@@ -299,20 +299,18 @@ export default class ClubService {
 	 *	Delete club
 	 */
 	static async deleteClub(clubId: string) {
-		// const response: AxiosResponse = await API.delete("/clubs", {
-		// 	params: { id: clubId },
-		// });
+		const response: AxiosResponse = await API.delete("/clubs/delete", {
+			params: { id: clubId },
+		});
 
-		// if (response.status !== 200) {
-		// 	throw {
-		// 		code: response.status,
-		// 		message: response.data.error,
-		// 	};
-		// }
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
 
-		// return response.data;
-
-		return { status: 200, message: "Didn't delete club" };
+		return response.data;
 	}
 
 	static async changeTheme(clubId: string, theme: string) {

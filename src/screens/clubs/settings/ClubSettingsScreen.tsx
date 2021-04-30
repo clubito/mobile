@@ -137,14 +137,18 @@ const ClubSettingsScreen = (props: Props) => {
 				onDismiss={() => setModalVisible(false)}
 				header={"Are you sure you want to delete this club?"}
 				onConfirm={() => {
-					ClubService.deleteClub(props.route.params.clubId).then(
-						(data) => {
+					ClubService.deleteClub(props.route.params.clubId)
+						.then((data) => {
 							nav.navigate("Home");
 							toast?.show(data.message, {
 								type: "success",
 							});
-						}
-					);
+						})
+						.catch((error) => {
+							toast?.show(error.message, {
+								type: "danger",
+							});
+						});
 				}}
 				content={
 					"Are you sure you want to delete this club? Your club data will be removed from the database and club members will no longer be able to access this club. This action is irreversible."
