@@ -46,6 +46,12 @@ export default class ClubService {
 				params: { id: clubID },
 			}
 		);
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data,
+			};
+		}
 		return response.data;
 	}
 
@@ -249,19 +255,16 @@ export default class ClubService {
 	static async createClub(params: {
 		name: string;
 		description: string;
-		picture: string;
+		logo: string;
 		tags: string[];
-		theme: string;
 	}) {
-		// if (params.picture && !params.picture.startsWith("https")) {
-		// 	params.picture = await ImageService.upload(params.picture);
-		// }
-		//const response: AxiosResponse = await API.post("/", params);
-		console.log(params);
-		const response = {
-			status: 200,
-			data: { message: "got this far", error: "none" },
-		};
+		if (params.logo && !params.logo.startsWith("https")) {
+			params.logo = await ImageService.upload(params.logo);
+		}
+		const response: AxiosResponse = await API.post(
+			"/clubs/request",
+			params
+		);
 		if (response.status !== 200) {
 			throw {
 				code: response.status,
@@ -272,16 +275,18 @@ export default class ClubService {
 	}
 
 	static async getGallery(clubId: string) {
-		const response: AxiosResponse<string[]> = await API.get<string[]>(
-			"/clubs/gallery",
-			{
-				params: { id: clubId },
-			}
-		);
-		return response.data;
+		const response: AxiosResponse = await API.get("/clubs/gallery", {
+			params: { id: clubId },
+		});
+		return response.data.pictures;
 	}
 
 	static async updateGallery(clubId: string, images: string[]) {
+		for (var i = 0; i < images.length; i++) {
+			if (images[i] && !images[i].startsWith("https")) {
+				images[i] = await ImageService.upload(images[i]);
+			}
+		}
 		const response: AxiosResponse = await API.post("/clubs/gallery", {
 			id: clubId,
 			pictures: images,
@@ -289,7 +294,7 @@ export default class ClubService {
 
 		return response.data;
 	}
-	
+
 	/*
 	 *	Delete club
 	 */

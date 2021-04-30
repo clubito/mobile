@@ -73,12 +73,16 @@ const ClubScreen = (props: Props) => {
 
 	const refresh = () => {
 		setIsLoading(true);
-		ClubService.getClub(props.route.params.id).then((club) => {
-			setClubInfo(club);
-			setImages([club.logo, club.logo, club.logo]);
-			setIsMember(club.role.name !== "Non-Member");
-			setIsLoading(false);
-		});
+		ClubService.getClub(props.route.params.id)
+			.then((club) => {
+				setClubInfo(club);
+				setImages([club.logo, club.logo, club.logo]);
+				setIsMember(club.role.name !== "Non-Member");
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				toast?.show(error.message, { type: "danger" });
+			});
 	};
 
 	if (isLoading) {

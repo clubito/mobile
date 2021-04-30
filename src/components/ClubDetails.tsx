@@ -8,9 +8,8 @@ import CoolDivider from "./CoolDivider";
 interface ClubDetailsProps {
 	name: string;
 	description: string;
-	picture: string;
+	logo: string;
 	tags: string[];
-	theme: string;
 }
 
 const ClubDetails = (props: ClubDetailsProps) => {
@@ -40,14 +39,14 @@ const ClubDetails = (props: ClubDetailsProps) => {
 				</>
 			) : null}
 
-			{props.picture ? (
+			{props.logo ? (
 				<>
 					<View style={styles.itemContainer}>
 						<Text category="s2" appearance="hint">
 							Picture
 						</Text>
 						<Image
-							source={{ uri: props.picture }}
+							source={{ uri: props.logo }}
 							style={styles.imageStyle}
 						/>
 					</View>
@@ -61,14 +60,6 @@ const ClubDetails = (props: ClubDetailsProps) => {
 						Tags
 					</Text>
 					<Text>{props.tags.join(", ")}</Text>
-				</View>
-			) : null}
-			{props.theme ? (
-				<View style={styles.itemContainer}>
-					<Text category="s2" appearance="hint">
-						Theme
-					</Text>
-					<Text>{props.theme}</Text>
 				</View>
 			) : null}
 		</CoolView>
