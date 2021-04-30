@@ -179,9 +179,8 @@ const ClubScreen = (props: Props) => {
 					<Image
 						source={{ uri: clubInfo.logo }}
 						style={{
-							width: 300,
-							height: 100,
-							resizeMode: "center",
+							width: 150,
+							height: 150,
 							alignSelf: "center",
 						}}
 					/>
