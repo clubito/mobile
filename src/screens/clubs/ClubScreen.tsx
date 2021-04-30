@@ -25,6 +25,7 @@ import FloatingButton from "../../components/FloatingButton";
 import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import { PlusIcon } from "../../components/Icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { hasPermission, RolePermissions } from "../../utils/permissions";
 import EmptyView from "../../components/EmptyView";
 import Carousel from "react-native-snap-carousel";
@@ -197,7 +198,13 @@ const ClubScreen = (props: Props) => {
 
 	return (
 		<SafeAreaView style={ContainerStyles.flexContainer}>
-			{Platform.OS === "web" ? (
+			<LinearGradient
+				colors={
+					clubInfo.theme
+						? [clubInfo.theme, "transparent"]
+						: ["#fff", "transparent"]
+				}
+			>
 				<View
 					style={{
 						width: "100%",
@@ -207,24 +214,13 @@ const ClubScreen = (props: Props) => {
 					<Image
 						source={{ uri: clubInfo.logo }}
 						style={{
-							width: 300,
-							height: 100,
-							resizeMode: "center",
+							width: 150,
+							height: 150,
 							alignSelf: "center",
 						}}
 					/>
 				</View>
-			) : (
-				<Carousel
-					data={images}
-					renderItem={_renderItem1}
-					sliderWidth={viewportWidth.width}
-					sliderHeight={300}
-					itemWidth={200}
-					containerCustomStyle={{ flexGrow: 0, marginVertical: 10 }}
-					style={{ alignSelf: "center" }}
-				/>
-			)}
+			</LinearGradient>
 			{requestButton}
 			<CoolCard yip>
 				<Text>{clubInfo?.description}</Text>
@@ -242,6 +238,7 @@ const ClubScreen = (props: Props) => {
 					</Text>
 				) : null}
 			</CoolCard>
+
 			{message != "" ? (
 				<Card status={error ? "danger" : "success"}>
 					<Text>{message}</Text>

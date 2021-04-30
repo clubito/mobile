@@ -81,12 +81,15 @@ interface Settings {
 
 interface NotificationSettings {
 	enabled: boolean;
-	clubs: {
-		enabled: boolean;
-		id: string;
-		name: string;
-		logo: string;
-	}[];
+	clubs: ClubNotificationSetting[];
+	disabledClubs: string[];
+}
+
+interface ClubNotificationSetting {
+	enabled: boolean;
+	id: string;
+	name: string;
+	logo: string;
 }
 
 interface ChatThread {
@@ -113,6 +116,7 @@ export {
 	Role,
 	Settings,
 	NotificationSettings,
+	ClubNotificationSetting,
 	Announcement,
 	Event,
 	ChatThread,
