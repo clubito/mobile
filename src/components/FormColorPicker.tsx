@@ -2,15 +2,12 @@ import React from "react";
 import {
 	Button,
 	Icon,
-	IconProps,
 	InputElement,
 	InputProps,
 	Text,
 } from "@ui-kitten/components";
 import GeneralModal from "./GeneralModal";
 import { ColorPicker, toHsv, fromHsv } from "react-native-color-picker";
-
-import { useFormikContext } from "formik";
 import CoolInput from "./CoolInput";
 import { StyleSheet } from "react-native";
 import CoolView from "./CoolView";
@@ -21,35 +18,18 @@ interface FormColorPickerProps extends InputProps {
 	functionOnConfirm: (arg0: string) => void;
 }
 
-const ErrorIcon = (props: IconProps) => (
-	<Icon name="alert-triangle-outline" {...props} />
-);
-
 const FormColorPicker = ({
 	id,
 	initColor,
 	functionOnConfirm,
 	...inputProps
 }: FormColorPickerProps): InputElement => {
-	const formContext = useFormikContext();
-
-	// @ts-ignore
-	const { [id]: value } = formContext.values;
-
-	// @ts-ignore
-	const { [id]: error } = formContext.errors;
-
-	const fieldProps: Partial<InputProps> = {
-		status: error && "danger",
-		captionIcon: error && ErrorIcon,
-	};
-
 	const [visible, setVisible] = React.useState(false);
 	const [color, setColor] = React.useState(initColor);
-	// const [hsv, setHsv] = React.useState(toHsv(initColor));
 	const [oldColor, setOldColor] = React.useState(initColor);
 
 	const ColorPickerButton = () => {
+		console.log(initColor);
 		return (
 			<Button
 				style={{ backgroundColor: color }}
@@ -76,12 +56,6 @@ const FormColorPicker = ({
 				onDismiss={() => setVisible(false)}
 				content={
 					<CoolView style={styles.form}>
-						{/* <CoolInput
-							{...inputProps}
-							value={color}
-							caption={error}
-							onChangeText={setColor}
-						/> */}
 						<Text category="h3">{color}</Text>
 						<Text
 							appearance="hint"
@@ -94,7 +68,7 @@ const FormColorPicker = ({
 						<CoolView style={{ width: 300, height: 300 }}>
 							<ColorPicker
 								// color={hsv}
-								oldColor={oldColor}
+								oldColor={oldColor ? oldColor : "white"}
 								// onColorChange={(col) => setHsv(col)}
 								onColorSelected={(col) => setColor(col)}
 								onOldColorSelected={(col) => setColor(col)}
@@ -106,10 +80,12 @@ const FormColorPicker = ({
 			/>
 			<CoolInput
 				{...inputProps}
-				{...fieldProps}
-				value={value}
-				caption={error}
-				onChangeText={formContext.handleChange(id)}
+				value={color}
+				onChangeText={(text) => setColor(text)}
+				onSubmitEditing={(text) => {
+					functionOnConfirm(color);
+					setOldColor(color);
+				}}
 				accessoryRight={() => <ColorPickerButton />}
 			/>
 		</>

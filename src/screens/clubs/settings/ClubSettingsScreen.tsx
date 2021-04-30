@@ -8,7 +8,6 @@ import GeneralModal from "../../../components/GeneralModal";
 import ClubService from "../../../services/ClubService";
 import { hasPermission, RolePermissions } from "../../../utils/permissions";
 import FormColorPicker from "../../../components/FormColorPicker";
-import ColorPicker from "../../../components/ColorPicker";
 import LoadingScreen from "../../../components/LoadingScreen";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
@@ -22,6 +21,7 @@ const ClubSettingsScreen = (props: Props) => {
 	const nav = useNavigation();
 	const [theme, setTheme] = useState("");
 	const [isLoading, setIsLoading] = useState(true);
+	const [modalVisible, setModalVisible] = useState(false);
 
 	useEffect(() => {
 		ClubService.getClub(props.route.params.clubId)
@@ -37,16 +37,21 @@ const ClubSettingsScreen = (props: Props) => {
 	}, []);
 
 	const updateTheme = (newTheme: string) => {
-		ClubService.changeTheme(props.route.params.clubId, newTheme)
-			.then((data) => {
-				toast?.show(data.message, {
-					type: "success",
+		if (newTheme.match(/^#([0-9a-f]{6}|[0-9a-f]{3})$/i))
+			ClubService.changeTheme(props.route.params.clubId, newTheme)
+				.then((data) => {
+					toast?.show(data.message, {
+						type: "success",
+					});
+				})
+				.catch((error) => {
+					toast?.show(error.message, {
+						type: "danger",
+					});
 				});
-			})
-			.catch((error) => {
-				toast?.show(error.message, {
-					type: "danger",
-				});
+		else
+			toast?.show("Invalid color hex format", {
+				type: "danger",
 			});
 	};
 
@@ -107,7 +112,7 @@ const ClubSettingsScreen = (props: Props) => {
 
 			<View style={styles.divider} />
 
-			<ColorPicker
+			<FormColorPicker
 				id="theme"
 				initColor={theme ? theme : "#ffffff"}
 				label="Select Theme Color"
@@ -117,7 +122,9 @@ const ClubSettingsScreen = (props: Props) => {
 				}}
 			/>
 
-			{/* TODO: Add Conditional to ensure only club president can see button 
+			<View style={styles.divider} />
+
+			{/* TODO: Add Conditional to ensure only club president can see button  */}
 			<SettingsButton
 				text="Delete Club"
 				onPress={() => {
@@ -143,7 +150,7 @@ const ClubSettingsScreen = (props: Props) => {
 					"Are you sure you want to delete this club? Your club data will be removed from the database and club members will no longer be able to access this club. This action is irreversible."
 				}
 				status={"danger"}
-			/> */}
+			/>
 		</View>
 	);
 };
