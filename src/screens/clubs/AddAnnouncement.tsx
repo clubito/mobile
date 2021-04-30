@@ -72,12 +72,10 @@ const AddAnnouncementScreen = (props: Props) => {
 		// Create announcement
 		ClubService.createAnnouncement(params as CreateList)
 			.then((message) => {
-				console.log(message);
 				setVisible(false);
 				navigation.goBack();
 			})
 			.catch((error) => {
-				console.log(error);
 				setLoading(false);
 			});
 	};

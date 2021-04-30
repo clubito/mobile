@@ -26,21 +26,4 @@ const isUpcoming = (d: datestring) => {
 	return dayjs(d).isAfter(dayjs());
 };
 
-const getRoleLabel = (roleName: string) => {
-	switch (roleName) {
-		case "ADD_ANNOUNCEMENTS":
-			return "Add Announcements";
-		case "ADD_EDIT_EVENTS":
-			return "Add/Edit Events";
-		case "MANAGE_APPLICATIONS":
-			return "Manage Applications";
-		case "MANAGE_MEMBERS":
-			return "Manage Members";
-		case "MANAGE_ROLES":
-			return "Manage Roles";
-		default:
-			return "-";
-	}
-};
-
-export { getReadableDate, sameDay, isCurrent, isUpcoming, getRoleLabel };
+export { getReadableDate, sameDay, isCurrent, isUpcoming };

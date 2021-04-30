@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList, StyleSheet, ViewProps } from "react-native";
-import { Avatar, Text } from "@ui-kitten/components";
+import { FlatList, StyleSheet, View, ViewProps } from "react-native";
+import { Avatar, Icon, Text } from "@ui-kitten/components";
 import { RenderProp } from "@ui-kitten/components/devsupport";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -42,9 +42,35 @@ const MemberList = (props: Props) => {
 									{item.name}
 								</Text>
 							)}
-							description={
-								"Member since " +
-								dayjs(item.approvalDate).format("MM/DD/YYYY")
+							description={() =>
+								item.role &&
+								item.role.permissions.length > 0 ? (
+									<View
+										style={[
+											styles.descContainer,
+											styles.roleRow,
+										]}
+									>
+										<Icon
+											name="award-outline"
+											{...props}
+											style={styles.icon}
+											fill="grey"
+										/>
+										<Text appearance="hint" category="c1">
+											{item.role.name}
+										</Text>
+									</View>
+								) : (
+									<View style={styles.descContainer}>
+										<Text appearance="hint" category="c1">
+											{"Member since " +
+												dayjs(item.approvalDate).format(
+													"MM/DD/YYYY"
+												)}
+										</Text>
+									</View>
+								)
 							}
 							accessoryLeft={() => (
 								<Avatar
@@ -80,6 +106,18 @@ const styles = StyleSheet.create({
 	},
 	avatar: {
 		marginRight: 4,
+	},
+	descContainer: {
+		marginLeft: 8,
+	},
+	roleRow: {
+		marginTop: 1,
+		flexDirection: "row",
+	},
+	icon: {
+		marginRight: 3,
+		height: 14,
+		width: 14,
 	},
 });
 

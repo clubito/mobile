@@ -29,7 +29,7 @@ interface Club {
 	name: string;
 	logo: string;
 	description: string;
-	role: string;
+	role: Role;
 	theme: string;
 	members?: User[];
 	announcements?: Announcement[];
@@ -64,7 +64,7 @@ interface User {
 	joinRequests: string[];
 	tags: string[];
 	approvalDate?: string;
-	role?: string;
+	role?: Role;
 	settings?: Settings;
 }
 
@@ -81,12 +81,15 @@ interface Settings {
 
 interface NotificationSettings {
 	enabled: boolean;
-	clubs: {
-		enabled: boolean;
-		id: string;
-		name: string;
-		logo: string;
-	}[];
+	clubs: ClubNotificationSetting[];
+	disabledClubs: string[];
+}
+
+interface ClubNotificationSetting {
+	enabled: boolean;
+	id: string;
+	name: string;
+	logo: string;
 }
 
 interface ChatThread {
@@ -94,7 +97,7 @@ interface ChatThread {
 	clubName: string;
 	clubLogo: string;
 	messages: [ChatMessage[]];
-	role: string;
+	role: Role;
 }
 
 interface ChatMessage {
@@ -113,6 +116,7 @@ export {
 	Role,
 	Settings,
 	NotificationSettings,
+	ClubNotificationSetting,
 	Announcement,
 	Event,
 	ChatThread,

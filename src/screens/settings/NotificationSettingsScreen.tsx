@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import { ClubNotificationSetting } from "../../types";
 import UserService from "../../services/UserService";
 import SettingsToggle from "../../components/SettingsToggle";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -9,7 +10,9 @@ import CoolDivider from "../../components/CoolDivider";
 const NotificationSettingsScreen = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [globalToggle, setGlobalToggle] = useState(true);
-	const [clubToggles, setClubToggles] = useState([{}]);
+	const [clubToggles, setClubToggles] = useState(
+		[] as ClubNotificationSetting[]
+	);
 
 	useEffect(() => {
 		UserService.getCurrentUserNotificationSettings().then((data) => {
@@ -19,6 +22,13 @@ const NotificationSettingsScreen = () => {
 		});
 	}, []);
 
+	const setClubNotifications = () => {
+		const disabledClubs: string[] = [];
+		clubToggles.forEach((clubToggle) => {
+			if (!clubToggle.enabled) disabledClubs.push(clubToggle.id);
+		});
+		UserService.setClubNotifications(disabledClubs);
+	};
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
@@ -39,7 +49,7 @@ const NotificationSettingsScreen = () => {
 			<CoolView yip>
 				<FlatList
 					data={clubToggles}
-					keyExtractor={(item) => item.clubId}
+					keyExtractor={(item) => item.id}
 					ItemSeparatorComponent={CoolDivider}
 					renderItem={({ item, index }) => (
 						<SettingsToggle
@@ -57,10 +67,7 @@ const NotificationSettingsScreen = () => {
 									return Array.from(oldToggles);
 								});
 
-								UserService.setClubNotificationsEnabled(
-									item.id,
-									state
-								);
+								setClubNotifications();
 							}}
 						/>
 					)}

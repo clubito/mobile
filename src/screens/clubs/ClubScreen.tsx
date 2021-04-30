@@ -25,6 +25,8 @@ import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import { PlusIcon } from "../../components/Icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { hasPermission, RolePermissions } from "../../utils/permissions";
+import EmptyView from "../../components/EmptyView";
 
 type ClubScreenRouteProp = RouteProp<ClubParamList, "Club">;
 type ClubScreenNavigationProp = StackNavigationProp<ClubParamList, "Club">;
@@ -65,10 +67,9 @@ const ClubScreen = (props: Props) => {
 
 	const refresh = () => {
 		setIsLoading(true);
-		ClubService.getClub(props.route.params.id).then((data) => {
-			console.log(data);
-			setClubInfo(data);
-			setIsMember(data.role !== "NONMEMBER");
+		ClubService.getClub(props.route.params.id).then((club) => {
+			setClubInfo(club);
+			setIsMember(club.role.name !== "Non-Member");
 			setIsLoading(false);
 		});
 	};
@@ -90,8 +91,17 @@ const ClubScreen = (props: Props) => {
 		</Button>
 	);
 
+	const canAnnouncement = hasPermission(
+		clubInfo.role,
+		RolePermissions.ADD_ANNOUNCEMENTS
+	);
+	const canEvent = hasPermission(
+		clubInfo.role,
+		RolePermissions.ADD_EDIT_EVENTS
+	);
+
 	const addAnEvButton =
-		clubInfo.role === "OWNER" || clubInfo.role === "OFFICER" ? (
+		canAnnouncement || canEvent ? (
 			<Popover
 				anchor={() => (
 					<FloatingButton
@@ -107,27 +117,37 @@ const ClubScreen = (props: Props) => {
 				onBackdropPress={() => setAddVisible(false)}
 			>
 				<Menu>
-					<MenuItem
-						title="Add Announcement"
-						onPress={() => {
-							setAddVisible(false);
-							navigation.navigate("AddAnnouncement", {
-								clubId: clubInfo.id,
-							});
-						}}
-					/>
-					<MenuItem
-						title="Add Event"
-						onPress={() => {
-							setAddVisible(false);
-							navigation.navigate("AddEvent", {
-								clubId: clubInfo.id,
-							});
-						}}
-					/>
+					{canAnnouncement ? (
+						<MenuItem
+							title="Add Announcement"
+							onPress={() => {
+								setAddVisible(false);
+								navigation.navigate("AddAnnouncement", {
+									clubId: clubInfo.id,
+								});
+							}}
+						/>
+					) : (
+						<></>
+					)}
+					{canEvent ? (
+						<MenuItem
+							title="Add Event"
+							onPress={() => {
+								setAddVisible(false);
+								navigation.navigate("AddEvent", {
+									clubId: clubInfo.id,
+								});
+							}}
+						/>
+					) : (
+						<></>
+					)}
 				</Menu>
 			</Popover>
-		) : null;
+		) : (
+			<></>
+		);
 
 	const sendRequest = () => {
 		setModalVisible(false);
@@ -231,7 +251,7 @@ const ClubScreen = (props: Props) => {
 						options={{ title: "Members" }}
 					/>
 				</Tab.Navigator>
-			) : (
+			) : clubInfo.events && clubInfo.events.length > 0 ? (
 				<Tab.Navigator>
 					<Tab.Screen
 						name="EventList"
@@ -242,6 +262,12 @@ const ClubScreen = (props: Props) => {
 						options={{ title: "Open Events" }}
 					/>
 				</Tab.Navigator>
+			) : (
+				<EmptyView
+					message={
+						"The club has no events. \nJoin the club to participate instead."
+					}
+				/>
 			)}
 			{addAnEvButton}
 		</SafeAreaView>

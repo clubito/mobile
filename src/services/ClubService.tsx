@@ -168,7 +168,6 @@ export default class ClubService {
 	 *	Create role in a club with given permissions
 	 */
 	static async createRole(clubId: string, name: string, perms: string[]) {
-		console.log(perms);
 		const response: AxiosResponse = await API.post("/clubs/role", {
 			id: clubId,
 			name: name,
@@ -231,7 +230,7 @@ export default class ClubService {
 		userId: string,
 		roleId: string
 	) {
-		const response: AxiosResponse = await API.post("/clubs/roles/assign", {
+		const response: AxiosResponse = await API.post("/clubs/role/assign", {
 			clubId: clubId,
 			userId: userId,
 			roleId: roleId,

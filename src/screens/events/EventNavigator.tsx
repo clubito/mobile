@@ -5,10 +5,11 @@ import EventScreen from "./EventScreen";
 import ClubNavigator from "../clubs/ClubNavigator";
 import AddEventScreen from "./AddEventScreen";
 import ProfileScreen from "../profile/ProfileScreen";
+import { Role } from "../../types";
 
 export type EventParamList = {
 	EventList: undefined;
-	Event: { id: string; title: string; role: string };
+	Event: { id: string; title: string; role: Role };
 	ClubNavigator: { title: string };
 	AddEvent: { clubId: string; eventId?: string };
 	Profile: { userId?: string };

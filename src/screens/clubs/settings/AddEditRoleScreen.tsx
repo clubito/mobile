@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { Button, CheckBox, Text } from "@ui-kitten/components";
 import ClubService from "../../../services/ClubService";
-import { getRoleLabel } from "../../../utils";
+import { getRoleLabel } from "../../../utils/permissions";
 import { ClubParamList } from "../ClubNavigator";
 import CoolInput from "../../../components/CoolInput";
 import CoolDivider from "../../../components/CoolDivider";

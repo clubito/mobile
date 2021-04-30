@@ -1,16 +1,11 @@
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import {
-	SafeAreaView,
-	View,
-	ImageBackground,
-	ScrollView,
-} from "react-native";
+import { SafeAreaView, View, ImageBackground, ScrollView } from "react-native";
 import EventService from "../../services/EventService";
 import { ContainerStyles } from "../../styles/CommonStyles";
 import { EventParamList } from "./EventNavigator";
-import { Club, Event, User } from "../../types";
+import { Club, Event, Role, User } from "../../types";
 import { Text, Button } from "@ui-kitten/components";
 import ClubService from "../../services/ClubService";
 import ClubListItem from "../../components/ClubListItem";
@@ -19,6 +14,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import { ArrowRightIcon, EditIcon } from "../../components/Icons";
 import CoolDivider from "../../components/CoolDivider";
 import EventDetails from "../../components/EventDetails";
+import { hasPermission, RolePermissions } from "../../utils/permissions";
 
 type EventScreenRouteProp = RouteProp<EventParamList, "Event">;
 type EventScreenNavigationProp = StackNavigationProp<EventParamList, "Event">;
@@ -32,7 +28,7 @@ const EventScreen = (props: Props) => {
 	const [event, setEventInfo] = useState<Event | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [club, setClub] = useState({} as Club);
-	const [isOfficer, setIsOfficer] = useState(false);
+	const [userRole, setUserRole] = useState({} as Role);
 	const [isRSVP, setRSVP] = useState(false);
 	const [users, setUsers] = useState({} as User[]);
 	const navigation = useNavigation<StackNavigationProp<any>>();
@@ -58,25 +54,20 @@ const EventScreen = (props: Props) => {
 				navigation.setOptions({ title: data.name });
 				ClubService.getClub(data.clubId)
 					.then((clubData) => {
-						const officer =
-							clubData.role === "OFFICER" ||
-							clubData.role === "OWNER";
 						setClub(clubData);
-						setIsOfficer(officer);
-						if (officer) {
-							EventService.getRSVPMembers(props.route.params.id)
-								.then((data) => {
-									setUsers(data);
-									setLoading(false);
-								})
-								.catch((error) => {
-									if (toast)
-										toast.show(error.message, {
-											type: "danger",
-										});
-									setLoading(false);
-								});
-						} else setLoading(false);
+						setUserRole(clubData.role);
+						EventService.getRSVPMembers(props.route.params.id)
+							.then((data) => {
+								setUsers(data);
+								setLoading(false);
+							})
+							.catch((error) => {
+								if (toast)
+									toast.show(error.message, {
+										type: "danger",
+									});
+								setLoading(false);
+							});
 					})
 					.catch((error) => {
 						if (toast)
@@ -99,7 +90,7 @@ const EventScreen = (props: Props) => {
 		return <LoadingScreen />;
 	}
 
-	if (isOfficer) {
+	if (hasPermission(userRole, RolePermissions.ADD_EDIT_EVENTS)) {
 		navigation.setOptions({
 			headerRight: () => (
 				<Button
@@ -159,7 +150,7 @@ const EventScreen = (props: Props) => {
 		</Button>
 	);
 
-	const members = isOfficer ? (
+	const members = (
 		<>
 			<CoolDivider />
 
@@ -179,8 +170,6 @@ const EventScreen = (props: Props) => {
 				/>
 			</View>
 		</>
-	) : (
-		<></>
 	);
 
 	return (

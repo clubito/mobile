@@ -6,6 +6,7 @@ import CoolDivider from "../../../components/CoolDivider";
 import SettingsButton from "../../../components/SettingsButton";
 import GeneralModal from "../../../components/GeneralModal";
 import ClubService from "../../../services/ClubService";
+import { hasPermission, RolePermissions } from "../../../utils/permissions";
 
 type ClubSettingsRouteProp = RouteProp<ClubParamList, "ClubSettings">;
 type Props = {
@@ -13,50 +14,62 @@ type Props = {
 };
 
 const ClubSettingsScreen = (props: Props) => {
+	const clubId = props.route.params.clubId;
+	const role = props.route.params.role;
 	const nav = useNavigation();
 
 	const [modalVisible, setModalVisible] = useState(false);
 	return (
 		<View>
-			<SettingsButton
-				hasChildScreen
-				text="Applications"
-				icon="layers-outline"
-				onPress={() => {
-					nav.navigate("ManageApplications", {
-						clubId: props.route.params.clubId,
-					});
-				}}
-			/>
+			{hasPermission(role, RolePermissions.MANAGE_APPLICATIONS) && (
+				<>
+					<SettingsButton
+						hasChildScreen
+						text="Manage Applications"
+						icon="layers-outline"
+						onPress={() => {
+							nav.navigate("ManageApplications", {
+								clubId: clubId,
+							});
+						}}
+					/>
 
-			<CoolDivider />
+					<CoolDivider />
+				</>
+			)}
 
-			<SettingsButton
-				hasChildScreen
-				text="Manage Members"
-				icon="people-outline"
-				onPress={() => {
-					nav.navigate("ManageMembers", {
-						clubId: props.route.params.clubId,
-					});
-				}}
-			/>
+			{hasPermission(role, RolePermissions.MANAGE_MEMBERS) && (
+				<>
+					<SettingsButton
+						hasChildScreen
+						text="Manage Members"
+						icon="people-outline"
+						onPress={() => {
+							nav.navigate("ManageMembers", {
+								clubId: clubId,
+							});
+						}}
+					/>
 
-			<CoolDivider />
+					<CoolDivider />
+				</>
+			)}
 
-			<SettingsButton
-				hasChildScreen
-				text="Manage Roles"
-				icon="options-outline"
-				onPress={() => {
-					nav.navigate("ManageRoles", {
-						clubId: props.route.params.clubId,
-					});
-				}}
-			/>
-			<View style={styles.divider} />
-
-			{/* TODO: Add Conditional to ensure only club president can see button */}
+			{hasPermission(role, RolePermissions.MANAGE_ROLES) && (
+				<>
+					<SettingsButton
+						hasChildScreen
+						text="Manage Roles"
+						icon="options-outline"
+						onPress={() => {
+							nav.navigate("ManageRoles", {
+								clubId: clubId,
+							});
+						}}
+					/>
+				</>
+			)}
+			{/* TODO: Add Conditional to ensure only club president can see button 
 			<SettingsButton
 				text="Delete Club"
 				onPress={() => {
@@ -82,7 +95,7 @@ const ClubSettingsScreen = (props: Props) => {
 					"Are you sure you want to delete this club? Your club data will be removed from the database and club members will no longer be able to access this club. This action is irreversible."
 				}
 				status={"danger"}
-			/>
+			/> */}
 		</View>
 	);
 };
