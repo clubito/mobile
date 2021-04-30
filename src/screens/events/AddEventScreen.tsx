@@ -20,7 +20,7 @@ import GeneralModal from "../../components/GeneralModal";
 import LoadingScreen from "../../components/LoadingScreen";
 import CoolView from "../../components/CoolView";
 import EventDetails from "../../components/EventDetails";
-import SettingsToggle from "../../components/SettingsToggle";
+import CoolListItem from "../../components/CoolListItem";
 
 type AddEventRouteProp = RouteProp<EventParamList, "AddEvent">;
 type AddEventNavigationProp = StackNavigationProp<EventParamList, "AddEvent">;
@@ -128,7 +128,7 @@ const AddEventScreen = (props: Props) => {
 		} else {
 			params = {} as CreateList;
 			params.clubId = clubInfo ? clubInfo.id : "";
-			// params.openEvent = checked;
+			params.openEvent = checked;
 		}
 		params.name = model.name;
 		params.startTime = new Date(startDate);
@@ -244,18 +244,23 @@ const AddEventScreen = (props: Props) => {
 								isSquare={true}
 							/>
 
-							<SettingsToggle
-								enabled={checked}
-								onToggle={(nextChecked) =>
-									setChecked(nextChecked)
-								}
-								text={
-									props.route.params.eventId
-										? "Notify Users of this update "
-										: "Create open event "
-								}
-								yip={false}
-							/>
+							<CoolView style={{ paddingVertical: 4 }}>
+								<CoolListItem
+									title={
+										props.route.params.eventId
+											? "Notify Users of this update "
+											: "Create open event "
+									}
+									accessoryRight={() => (
+										<Toggle
+											checked={checked}
+											onChange={(nextChecked) => {
+												setChecked(nextChecked);
+											}}
+										/>
+									)}
+								/>
+							</CoolView>
 
 							<View style={styles.divider} />
 
