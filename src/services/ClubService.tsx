@@ -270,4 +270,28 @@ export default class ClubService {
 		}
 		return response.data;
 	}
+
+	static async getGallery(clubId: string) {
+		const response: AxiosResponse<string[]> = await API.get<string[]>(
+			"/clubs/gallery",
+			{
+				params: { id: clubId },
+			}
+		);
+		return response.data;
+	}
+
+	static async updateGallery(clubId: string, images: string[]) {
+		const response: AxiosResponse = await API.post("/clubs/gallery", {
+			id: clubId,
+			pictures: images,
+		});
+		if (response.status !== 200) {
+			throw {
+				code: response.status,
+				message: response.data.error,
+			};
+		}
+		return response.data;
+	}
 }

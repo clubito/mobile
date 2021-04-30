@@ -12,9 +12,11 @@ import ProfileScreen from "../profile/ProfileScreen";
 import { Button } from "@ui-kitten/components";
 import AddAnnouncementScreen from "./AddAnnouncement";
 import EventScreen from "../events/EventScreen";
-import { SettingsIcon } from "../../components/Icons";
+import { GalleryIcon, SettingsIcon } from "../../components/Icons";
 import { Role, User } from "../../types";
 import { hasClubSettingsPermission } from "../../utils/permissions";
+import { View } from "react-native";
+import ClubGallery from "./ClubGallery";
 
 export type ClubParamList = {
 	Club: { id: string; title: string; role: Role };
@@ -32,6 +34,7 @@ export type ClubParamList = {
 		title: string;
 		role: Role;
 	};
+	ClubGallery: { clubId: string };
 };
 
 const Stack = createStackNavigator<ClubParamList>();
@@ -45,16 +48,27 @@ const ClubNavigator = () => (
 				title: route.params.title,
 				headerRight: () => {
 					return hasClubSettingsPermission(route.params.role) ? (
-						<Button
-							onPress={() =>
-								navigation.navigate("ClubSettings", {
-									clubId: route.params.id,
-									role: route.params.role,
-								})
-							}
-							accessoryLeft={SettingsIcon}
-							appearance="ghost"
-						/>
+						<View style={{ flexDirection: "row" }}>
+							<Button
+								onPress={() =>
+									navigation.navigate("ClubGallery", {
+										clubId: route.params.id,
+									})
+								}
+								accessoryLeft={GalleryIcon}
+								appearance="ghost"
+							/>
+							<Button
+								onPress={() =>
+									navigation.navigate("ClubSettings", {
+										clubId: route.params.id,
+										role: route.params.role,
+									})
+								}
+								accessoryLeft={SettingsIcon}
+								appearance="ghost"
+							/>
+						</View>
 					) : null;
 				},
 			})}
@@ -114,6 +128,11 @@ const ClubNavigator = () => (
 			name="Profile"
 			component={ProfileScreen}
 			options={{ title: "Profile" }}
+		/>
+		<Stack.Screen
+			name="ClubGallery"
+			component={ClubGallery}
+			options={{ title: "Gallery" }}
 		/>
 
 		<Stack.Screen name="Event" component={EventScreen} />
